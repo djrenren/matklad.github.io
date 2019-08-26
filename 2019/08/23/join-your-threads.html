@@ -52,7 +52,7 @@ It&#8217;s not really specific to Rust, but I get to advertise my new <a href="h
 <div class="paragraph">
 <p>Let&#8217;s say you&#8217;ve created a fresh new thread with <code>std::thread::spawn</code>, but haven&#8217;t call <code>JoinHandle::join</code> anywhere in your program.
 What can go wrong in this situation?
-As a remainder, <code>join</code> blocks until the thread represented by handle completes successfully or with a panic.</p>
+As a reminder, <code>join</code> blocks until the thread represented by handle completes successfully or with a panic.</p>
 </div>
 <div class="paragraph">
 <p><em>First</em>, if the <code>main</code> function finishes earlier, some destructors on that other thread&#8217;s stack might not run.
