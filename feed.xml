@@ -6,9 +6,16 @@
 </description>
     <link>https://matklad.github.io//</link>
     <atom:link href="https://matklad.github.io//feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 13 Nov 2019 15:40:50 +0000</pubDate>
-    <lastBuildDate>Wed, 13 Nov 2019 15:40:50 +0000</lastBuildDate>
+    <pubDate>Sat, 16 Nov 2019 12:45:57 +0000</pubDate>
+    <lastBuildDate>Sat, 16 Nov 2019 12:45:57 +0000</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>A Better Shell</title>
+        <pubDate>Sat, 16 Nov 2019 00:00:00 +0000</pubDate>
+        <link>https://matklad.github.io//2019/11/16/a-better-shell.html</link>
+        <guid isPermaLink="true">https://matklad.github.io//2019/11/16/a-better-shell.html</guid>
+      </item>
     
       <item>
         <title>rust-analyzer Blog</title>
@@ -71,13 +78,6 @@
         <pubDate>Mon, 18 Jun 2018 00:00:00 +0000</pubDate>
         <link>https://matklad.github.io//2018/06/18/a-trick-for-test-maintenance.html</link>
         <guid isPermaLink="true">https://matklad.github.io//2018/06/18/a-trick-for-test-maintenance.html</guid>
-      </item>
-    
-      <item>
-        <title>Modern Parser Generator</title>
-        <pubDate>Wed, 06 Jun 2018 00:00:00 +0000</pubDate>
-        <link>https://matklad.github.io//2018/06/06/modern-parser-generator.html</link>
-        <guid isPermaLink="true">https://matklad.github.io//2018/06/06/modern-parser-generator.html</guid>
       </item>
     
   </channel>
