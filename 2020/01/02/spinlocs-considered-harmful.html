@@ -486,7 +486,7 @@ For example, std may continue using a thread local (<a href="https://github.com/
 The primary use case here I think is WASM. A solution for this case is to assume that blocking just doesn&#8217;t happen, and panic otherwise. This is what <a href="https://github.com/rust-lang/rust/blob/0ec370670220b712b042ee09aab067ec7e5878d5/src/libstd/sys/wasm/mutex.rs">std does</a> for <code>Mutex</code> on WASM, and what is implemented for <code>once_cell</code> in this PR: <a href="https://github.com/matklad/once_cell/pull/82">#82</a>.</p>
 </div>
 <div class="paragraph">
-<p>Discussion on <a href="https://www.reddit.com/r/rust">/r/rust</a>.</p>
+<p>Discussion on <a href="https://www.reddit.com/r/rust/comments/eis1tr/blog_post_spinlocks_considered_harmful/">/r/rust</a>.</p>
 </div>
 </div>
 </div>
