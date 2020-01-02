@@ -480,7 +480,8 @@ For example, std may continue using a thread local (<a href="https://github.com/
 </div>
 </div>
 <div class="paragraph">
-<p>Take a second to appreciate the absence of <code>unsafe</code> blocks and cross-core communication in the above example! At worst, <code>init</code> will be called <code>number of cores</code> times.</p>
+<p>Take a second to appreciate the absence of <code>unsafe</code> blocks and cross-core communication in the above example!
+<span class="line-through">At worst, <code>init</code> will be called <code>number of cores</code> times</span> (EDIT: this is wrong, thanks to /u/pcpthm for <a href="https://www.reddit.com/r/rust/comments/eis1tr/blog_post_spinlocks_considered_harmful/fctg66s">pointing this out</a>!).</p>
 </div>
 <div class="paragraph">
 <p>There&#8217;s also a nuclear option: parametrize the library by blocking behavior, and allow the user to supply their own synchronization primitive.</p>
