@@ -188,7 +188,7 @@ The source code for the benchmark is here:</p>
 </div>
 <div class="paragraph">
 <p>Our hypothesis is that mutexes are faster, so we need to pick a workload which favors spinlocks.
-That is, we need to pick a very short critical section, and so we will just be incrementing a countner (<strong>1</strong>).</p>
+That is, we need to pick a very short critical section, and so we will just be incrementing a counter (<strong>1</strong>).</p>
 </div>
 <div class="paragraph">
 <p>This is better than doing a dummy lock/unlock.
@@ -384,7 +384,7 @@ With mutexes, there is a queue of sleeping threads for each lock, and the kernel
 <p>This is a funny example of mechanical (<a href="https://en.wikipedia.org/wiki/Race_to_the_bottom)">race to the bottom</a>. Due to the short length of critical section, each individual thread would spend less CPU cycles in total if it were spinning, but it increases the overall cost.</p>
 </div>
 <div class="paragraph">
-<p><em>Forth</em>, even under heavy contention spin locks can luck out and finish almost as fast as mutexes:</p>
+<p><em>Fourth</em>, even under heavy contention spin locks can luck out and finish almost as fast as mutexes:</p>
 </div>
 <div class="listingblock">
 <div class="content">
