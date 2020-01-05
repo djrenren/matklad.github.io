@@ -472,7 +472,7 @@ In particular I find the qualitative observation that, under contention mutexes 
 <li>
 <p><a href="https://linuxplumbersconf.org/event/4/contributions/286/attachments/225/398/LPC-2019-OptSpin-Locks.pdf">Effcient Userspace Optimistic Spinning Locks</a>&#8201;&#8212;&#8201;a presentation about making fast-path spinlocking in futex-based locks even more efficient.
 The main problem with optimistic spinning is how much of it do you want (that is, tweaking the number of iterations parameter).
-The proposal solves this in an ingenious self-tweeking way (with the help of the kernel): we spin until the holder of the locks goes to sleep.</p>
+The proposal solves this in an ingenious self-tweeking way (with the help of the kernel): we spin until the holder of the lock itself goes to sleep.</p>
 </li>
 </ul>
 </div>
