@@ -89,7 +89,7 @@ This is not free: you&#8217;ll pay with compile times and cognitive complexity, 
 The rest of the post would be a laundry list of those things, but first I&#8217;d love to mention why I think Rust is the way it is.</p>
 </div>
 <div class="paragraph">
-<p><em>First</em>, it is a relatively yong language, so it can have many &#8220;obviously good&#8221; things.
+<p><em>First</em>, it is a relatively young language, so it can have many &#8220;obviously good&#8221; things.
 For example, I feel like there&#8217;s a general consensus now that, by default, local variables should not be reassignable.
 This probably was much less obvious in the 90s, when today&#8217;s mainstream languages were designed.</p>
 </div>
@@ -341,7 +341,7 @@ Usually this means that you either can&#8217;t use the two libraries together, o
 </div>
 <div class="paragraph">
 <p>In Rust the name you use for a library is a property of the dependency edge between upstream and downstream crate.
-That is, the single crate can be known under different names in different dependant crates or, vice verse, two different crates might be known under equal names in different parts of the crate graph!
+That is, the single crate can be known under different names in different dependant crates or, vice versa, two different crates might be known under equal names in different parts of the crate graph!
 This (and semver discipline, which is a social thing) is the reason why Cargo doesn&#8217;t suffer from dependency hell as much as some other ecosystems.</p>
 </div>
 </div>
@@ -386,7 +386,7 @@ But the old system is less convenient in practice, because you can&#8217;t look 
 <h2 id="ord"><a class="anchor" href="#ord"></a>Ord</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The canonical comparison function returns an <code>enum Ord { Less, Equal, Greater }</code>, you don&#8217;t need to override all six comparison operators.
+<p>The canonical comparison function returns an <code>enum Ordering { Less, Equal, Greater }</code>, you don&#8217;t need to override all six comparison operators.
 Rust also manages this without introducing a separate <code>&lt;=&gt;</code> spaceship operator just for this purpose.
 And you still can implement fast path for <code>==</code> / <code>!=</code> checks.</p>
 </div>
