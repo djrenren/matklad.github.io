@@ -138,7 +138,7 @@ A popular request is to add a spin-lock based implementation for use in <code>#[
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>To grab a lock, we repeatedly executing compare_and_swap until it succeeds. The CPU "spins" in this very short loop.</td>
+<td>To grab a lock, we repeatedly execute compare_and_swap until it succeeds. The CPU "spins" in this very short loop.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -186,7 +186,7 @@ In the meantime, the thread waits off the CPU.</p>
 </div>
 <div class="paragraph">
 <p>If there are several different mutexes, the kernel needs to maintain several queues.
-An address of a lock can be used as a token to identify a specif queue (this is a <a href="http://man7.org/linux/man-pages/man2/futex.2.html">futex</a> API).</p>
+An address of a lock can be used as a token to identify a specific queue (this is a <a href="http://man7.org/linux/man-pages/man2/futex.2.html">futex</a> API).</p>
 </div>
 <div class="paragraph">
 <p>System calls are expensive, so production implementations of <code>Mutex</code> usually spin for several iterations before calling into OS, optimistically hoping that the <code>Mutex</code> will be released soon.
@@ -317,7 +317,7 @@ We also make creating the file descriptor slow, so that the first thread gets pr
 <p>This is actually a typical scenario for <code>getrandom</code>!
 Getting the first chunk of random bytes might block for a long time while the system gathers entropy after a reboot.
 I even had a fun bug last year, where my desktop environment won&#8217;t start until I press some key.
-It was waiting for entropy for some reason, an the keypress provided it.</p>
+It was waiting for entropy for some reason, and the keypress provided it.</p>
 </div>
 </div>
 </div>
@@ -383,7 +383,7 @@ Internally, on Linux the macro calls <code>__get_errno_location</code> function 
 </div>
 </div>
 <div class="paragraph">
-<p>It makes <code>getrandom</code> believe that there&#8217;s no <code>getradom</code> syscall, which causes it to fallback to <code>/dev/random</code> implementation.</p>
+<p>It makes <code>getrandom</code> believe that there&#8217;s no <code>getrandom</code> syscall, which causes it to fallback to <code>/dev/random</code> implementation.</p>
 </div>
 <div class="paragraph">
 <p>To set thread priorities, we use <a href="https://docs.rs/thread-priority/0.1.1/thread_priority/">thread_priority</a> create, which is a thin wrapper around around <code>pthread</code> APIs.
