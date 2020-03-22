@@ -8,7 +8,7 @@
 
   <title>Spinlocks Considered Harmful</title>
   <meta name="description"
-    content="">
+    content="Happy new year 🎉!">
 
   <link rel="stylesheet" href="/css/asciidoctor.css">
   <link rel="stylesheet" href="/css/rouge-github.css">
@@ -335,8 +335,8 @@ We can trick the static linker into using a function which we define ourselves:<
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="err">#</span><span class="p">[</span><span class="n">no_mangle</span><span class="p">]</span>
-<span class="k">pub</span> <span class="k">extern</span> <span class="s">"C"</span> <span class="k">fn</span> <span class="nf">poll</span><span class="p">(</span><span class="n">_fds</span><span class="p">:</span> <span class="o">*</span><span class="k">const</span> <span class="nb">u8</span><span class="p">,</span> <span class="n">_nfds</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span> <span class="n">_timeout</span><span class="p">:</span> <span class="nb">i32</span><span class="p">)</span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="nd">#[no_mangle]</span>
+<span class="k">pub</span> <span class="k">extern</span> <span class="s">"C"</span> <span class="k">fn</span> <span class="nf">poll</span><span class="p">(</span><span class="mi">_</span><span class="n">fds</span><span class="p">:</span> <span class="o">*</span><span class="k">const</span> <span class="nb">u8</span><span class="p">,</span> <span class="mi">_</span><span class="n">nfds</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span> <span class="mi">_</span><span class="n">timeout</span><span class="p">:</span> <span class="nb">i32</span><span class="p">)</span>
     <span class="k">-&gt;</span> <span class="nb">u32</span>
 <span class="p">{</span>
     <span class="nf">sleep_ms</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
@@ -370,15 +370,15 @@ Internally, on Linux the macro calls <code>__get_errno_location</code> function 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="err">#</span><span class="p">[</span><span class="n">no_mangle</span><span class="p">]</span>
-<span class="k">pub</span> <span class="k">extern</span> <span class="s">"C"</span> <span class="k">fn</span> <span class="nf">syscall</span><span class="p">(</span><span class="n">_syscall</span><span class="p">:</span> <span class="nb">u64</span><span class="p">,</span> <span class="n">_buf</span><span class="p">:</span> <span class="o">*</span><span class="k">const</span> <span class="nb">u8</span><span class="p">,</span> <span class="n">_len</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span> <span class="n">_flags</span><span class="p">:</span> <span class="nb">u32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">isize</span> <span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="nd">#[no_mangle]</span>
+<span class="k">pub</span> <span class="k">extern</span> <span class="s">"C"</span> <span class="k">fn</span> <span class="nf">syscall</span><span class="p">(</span><span class="mi">_</span><span class="n">syscall</span><span class="p">:</span> <span class="nb">u64</span><span class="p">,</span> <span class="mi">_</span><span class="n">buf</span><span class="p">:</span> <span class="o">*</span><span class="k">const</span> <span class="nb">u8</span><span class="p">,</span> <span class="mi">_</span><span class="n">len</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span> <span class="mi">_</span><span class="n">flags</span><span class="p">:</span> <span class="nb">u32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">isize</span> <span class="p">{</span>
     <span class="k">extern</span> <span class="s">"C"</span> <span class="p">{</span>
-        <span class="k">fn</span> <span class="nf">__errno_location</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="o">*</span><span class="k">mut</span> <span class="nb">i32</span><span class="p">;</span>
+        <span class="k">fn</span> <span class="mi">__</span><span class="nf">errno_location</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="o">*</span><span class="k">mut</span> <span class="nb">i32</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="k">unsafe</span> <span class="p">{</span>
-        <span class="o">*</span><span class="nf">__errno_location</span><span class="p">()</span> <span class="o">=</span> <span class="mi">38</span><span class="p">;</span> <span class="c">// ENOSYS</span>
+        <span class="o">*</span><span class="mi">__</span><span class="nf">errno_location</span><span class="p">()</span> <span class="o">=</span> <span class="mi">38</span><span class="p">;</span> <span class="c">// ENOSYS</span>
     <span class="p">}</span>
-    <span class="err">-</span><span class="mi">1</span>
+    <span class="o">-</span><span class="mi">1</span>
 <span class="p">}</span></code></pre>
 </div>
 </div>

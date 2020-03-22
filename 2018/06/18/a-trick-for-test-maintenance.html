@@ -8,7 +8,7 @@
 
   <title>A Trick For Test Maintenance</title>
   <meta name="description"
-    content="">
+    content="This is a post about an interesting testing technique which feels like it shouldbe well known. However, I haven&#8217;t seen it mentioned anywhere. I don&#82...">
 
   <link rel="stylesheet" href="/css/asciidoctor.css">
   <link rel="stylesheet" href="/css/rouge-github.css">
@@ -159,7 +159,7 @@ this</a>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="err">#</span><span class="p">[</span><span class="n">test</span><span class="p">]</span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="nd">#[test]</span>
 <span class="k">fn</span> <span class="nf">table_with_two_names</span><span class="p">()</span> <span class="p">{</span>
     <span class="nd">covers!</span><span class="p">(</span><span class="s">"table_with_two_names"</span><span class="p">);</span>
     <span class="k">let</span> <span class="n">f</span> <span class="o">=</span> <span class="nn">Factory</span><span class="p">::</span><span class="nf">new</span><span class="p">();</span>

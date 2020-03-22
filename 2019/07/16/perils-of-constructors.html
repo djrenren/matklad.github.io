@@ -8,7 +8,7 @@
 
   <title>Perils of Constructors</title>
   <meta name="description"
-    content="">
+    content="One of my favorite blog posts about Rust is Things Rust Shipped Without by Graydon Hoare.To me, footguns that don&#8217;t exist in a language are usually mor...">
 
   <link rel="stylesheet" href="/css/asciidoctor.css">
   <link rel="stylesheet" href="/css/rouge-github.css">
@@ -111,8 +111,8 @@ That is, with constructors it is possible to circumvent Kotlin null-checking.</p
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="kotlin"><span class="kd">class</span> <span class="nc">Person</span><span class="p">(</span>
-  <span class="kd">val</span> <span class="py">firstName</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span>
-  <span class="kd">val</span> <span class="py">lastName</span><span class="p">:</span> <span class="n">String</span>
+  <span class="kd">val</span> <span class="py">firstName</span><span class="p">:</span> <span class="nc">String</span><span class="p">,</span>
+  <span class="kd">val</span> <span class="py">lastName</span><span class="p">:</span> <span class="nc">String</span>
 <span class="p">)</span> <span class="p">{</span> <span class="o">..</span><span class="p">.</span> <span class="p">}</span></code></pre>
 </div>
 </div>
@@ -121,8 +121,8 @@ That is, with constructors it is possible to circumvent Kotlin null-checking.</p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="kotlin"><span class="kd">class</span> <span class="nc">Person</span><span class="p">(</span><span class="kd">val</span> <span class="py">firstName</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="kd">val</span> <span class="py">lastName</span><span class="p">:</span> <span class="n">String</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">val</span> <span class="py">fullName</span><span class="p">:</span> <span class="n">String</span> <span class="p">=</span> <span class="s">"$firstName $lastName"</span>
+<pre class="rouge highlight"><code data-lang="kotlin"><span class="kd">class</span> <span class="nc">Person</span><span class="p">(</span><span class="kd">val</span> <span class="py">firstName</span><span class="p">:</span> <span class="nc">String</span><span class="p">,</span> <span class="kd">val</span> <span class="py">lastName</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="py">fullName</span><span class="p">:</span> <span class="nc">String</span> <span class="p">=</span> <span class="s">"$firstName $lastName"</span>
 <span class="p">}</span></code></pre>
 </div>
 </div>
@@ -131,10 +131,10 @@ That is, with constructors it is possible to circumvent Kotlin null-checking.</p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="kotlin"><span class="kd">class</span> <span class="nc">Person</span><span class="p">(</span><span class="kd">val</span> <span class="py">firstName</span><span class="p">:</span> <span class="n">String</span><span class="p">,</span> <span class="kd">val</span> <span class="py">lastName</span><span class="p">:</span> <span class="n">String</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">val</span> <span class="py">fullName</span><span class="p">:</span> <span class="n">String</span>
-    <span class="n">init</span> <span class="p">{</span>
-        <span class="n">println</span><span class="p">(</span><span class="n">fullName</span><span class="p">)</span> <span class="c1">// error: variable must be initialized</span>
+<pre class="rouge highlight"><code data-lang="kotlin"><span class="kd">class</span> <span class="nc">Person</span><span class="p">(</span><span class="kd">val</span> <span class="py">firstName</span><span class="p">:</span> <span class="nc">String</span><span class="p">,</span> <span class="kd">val</span> <span class="py">lastName</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="py">fullName</span><span class="p">:</span> <span class="nc">String</span>
+    <span class="nf">init</span> <span class="p">{</span>
+        <span class="nf">println</span><span class="p">(</span><span class="n">fullName</span><span class="p">)</span> <span class="c1">// error: variable must be initialized</span>
         <span class="n">fullName</span> <span class="p">=</span> <span class="s">"$firstName $lastName"</span>
     <span class="p">}</span>
 <span class="p">}</span></code></pre>
@@ -147,16 +147,16 @@ For example, a method call would do:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="kotlin"><span class="kd">class</span> <span class="nc">A</span> <span class="p">{</span>
-    <span class="kd">val</span> <span class="py">x</span><span class="p">:</span> <span class="n">Any</span>
-    <span class="n">init</span> <span class="p">{</span>
-        <span class="n">observeNull</span><span class="p">()</span>
+    <span class="kd">val</span> <span class="py">x</span><span class="p">:</span> <span class="nc">Any</span>
+    <span class="nf">init</span> <span class="p">{</span>
+        <span class="nf">observeNull</span><span class="p">()</span>
         <span class="n">x</span> <span class="p">=</span> <span class="m">92</span>
     <span class="p">}</span>
-    <span class="k">fun</span> <span class="nf">observeNull</span><span class="p">()</span> <span class="p">=</span> <span class="n">println</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1">// prints null</span>
+    <span class="k">fun</span> <span class="nf">observeNull</span><span class="p">()</span> <span class="p">=</span> <span class="nf">println</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1">// prints null</span>
 <span class="p">}</span>
 
 <span class="k">fun</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">A</span><span class="p">()</span>
+    <span class="nc">A</span><span class="p">()</span>
 <span class="p">}</span></code></pre>
 </div>
 </div>
@@ -166,12 +166,12 @@ For example, a method call would do:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="kotlin"><span class="kd">class</span> <span class="nc">B</span> <span class="p">{</span>
-    <span class="kd">val</span> <span class="py">x</span><span class="p">:</span> <span class="n">Any</span> <span class="p">=</span> <span class="p">{</span> <span class="n">y</span> <span class="p">}()</span>
-    <span class="kd">val</span> <span class="py">y</span><span class="p">:</span> <span class="n">Any</span> <span class="p">=</span> <span class="n">x</span>
+    <span class="kd">val</span> <span class="py">x</span><span class="p">:</span> <span class="nc">Any</span> <span class="p">=</span> <span class="p">{</span> <span class="n">y</span> <span class="p">}()</span>
+    <span class="kd">val</span> <span class="py">y</span><span class="p">:</span> <span class="nc">Any</span> <span class="p">=</span> <span class="n">x</span>
 <span class="p">}</span>
 
 <span class="k">fun</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">println</span><span class="p">(</span><span class="n">B</span><span class="p">().</span><span class="n">x</span><span class="p">)</span> <span class="c1">// prints null</span>
+    <span class="nf">println</span><span class="p">(</span><span class="nc">B</span><span class="p">().</span><span class="n">x</span><span class="p">)</span> <span class="c1">// prints null</span>
 <span class="p">}</span></code></pre>
 </div>
 </div>
@@ -228,15 +228,15 @@ Constructor promises to establish invariants, but is actually the easiest place 
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="kotlin"><span class="k">abstract</span> <span class="kd">class</span> <span class="nc">Base</span> <span class="p">{</span>
-    <span class="n">init</span> <span class="p">{</span>
-        <span class="n">initialize</span><span class="p">()</span>
+    <span class="nf">init</span> <span class="p">{</span>
+        <span class="nf">initialize</span><span class="p">()</span>
     <span class="p">}</span>
     <span class="k">abstract</span> <span class="k">fun</span> <span class="nf">initialize</span><span class="p">()</span>
 <span class="p">}</span>
 
-<span class="kd">class</span> <span class="nc">Derived</span><span class="p">:</span> <span class="n">Base</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">val</span> <span class="py">x</span><span class="p">:</span> <span class="n">Any</span> <span class="p">=</span> <span class="m">92</span>
-    <span class="k">override</span> <span class="k">fun</span> <span class="nf">initialize</span><span class="p">()</span> <span class="p">=</span> <span class="n">println</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1">// prints null!</span>
+<span class="kd">class</span> <span class="nc">Derived</span><span class="p">:</span> <span class="nc">Base</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">val</span> <span class="py">x</span><span class="p">:</span> <span class="nc">Any</span> <span class="p">=</span> <span class="m">92</span>
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">initialize</span><span class="p">()</span> <span class="p">=</span> <span class="nf">println</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1">// prints null!</span>
 <span class="p">}</span></code></pre>
 </div>
 </div>

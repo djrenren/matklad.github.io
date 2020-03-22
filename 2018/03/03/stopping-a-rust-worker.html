@@ -8,7 +8,7 @@
 
   <title>Stopping a Rust Worker</title>
   <meta name="description"
-    content="">
+    content="This is a small post about a specific pattern for cancellation in the Rustprogramming language. The pattern is simple and elegant, but it&#8217;s ratherdiffi...">
 
   <link rel="stylesheet" href="/css/asciidoctor.css">
   <link rel="stylesheet" href="/css/rouge-github.css">
@@ -392,7 +392,7 @@ solution as well.</p>
 <span class="k">fn</span> <span class="nf">spawn_worker</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="n">Sender</span><span class="o">&lt;</span><span class="n">Msg</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="k">let</span> <span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="n">rx</span><span class="p">)</span> <span class="o">=</span> <span class="nf">channel</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
     <span class="nn">thread</span><span class="p">::</span><span class="nf">spawn</span><span class="p">(</span><span class="k">move</span> <span class="p">||</span> <span class="p">{</span>
-        <span class="k">let</span> <span class="n">_</span> <span class="o">=</span> <span class="n">rx</span><span class="nf">.for_each</span><span class="p">(|</span><span class="n">msg</span><span class="p">|</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="mi">_</span> <span class="o">=</span> <span class="n">rx</span><span class="nf">.for_each</span><span class="p">(|</span><span class="n">msg</span><span class="p">|</span> <span class="p">{</span>
             <span class="k">match</span> <span class="n">msg</span> <span class="p">{</span>
                 <span class="nn">Msg</span><span class="p">::</span><span class="nf">Echo</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="p">{</span>
                     <span class="nd">println!</span><span class="p">(</span><span class="s">"{} ❤️"</span><span class="p">,</span> <span class="n">msg</span><span class="p">);</span>

@@ -151,9 +151,9 @@ appropriate impl, we should be able to index into <code>Vec&lt;Foo&gt;</code> wi
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="err">#</span><span class="p">[</span><span class="n">test</span><span class="p">]</span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="nd">#[test]</span>
 <span class="k">fn</span> <span class="nf">direct_indexing</span><span class="p">(</span><span class="n">foos</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="n">FooIdx</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">let</span> <span class="n">_foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">Foo</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">foos</span><span class="p">[</span><span class="n">idx</span><span class="p">];</span>
+    <span class="k">let</span> <span class="mi">_</span><span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">Foo</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">foos</span><span class="p">[</span><span class="n">idx</span><span class="p">];</span>
 <span class="p">}</span></code></pre>
 </div>
 </div>
@@ -254,7 +254,7 @@ proc macro, the end result looks like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="err">#</span><span class="p">[</span><span class="n">macro_use</span><span class="p">]</span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="nd">#[macro_use]</span>
 <span class="k">extern</span> <span class="n">crate</span> <span class="n">typed_index_derive</span><span class="p">;</span>
 
 <span class="k">struct</span> <span class="nf">Spam</span><span class="p">(</span><span class="nb">String</span><span class="p">);</span>
@@ -283,10 +283,10 @@ proc macro, the end result looks like this:</p>
     <span class="c">// error: slice indices are of type `usize` or ranges of `usize`</span>
 
     <span class="c">// It is possible to  add/subtract `usize` from an index</span>
-    <span class="nd">assert_eq!</span><span class="p">(</span><span class="o">&amp;</span><span class="n">spams</span><span class="p">[</span><span class="n">idx</span> - <span class="mi">1</span><span class="p">]</span>.<span class="mi">0</span><span class="p">,</span> <span class="s">"foo"</span><span class="p">);</span>
+    <span class="nd">assert_eq!</span><span class="p">(</span><span class="o">&amp;</span><span class="n">spams</span><span class="p">[</span><span class="n">idx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>.<span class="mi">0</span><span class="p">,</span> <span class="s">"foo"</span><span class="p">);</span>
 
     <span class="c">// The difference between two indices is `usize`</span>
-    <span class="nd">assert_eq!</span><span class="p">(</span><span class="n">idx</span> - <span class="n">idx</span><span class="p">,</span> <span class="mi">0u</span><span class="n">size</span><span class="p">);</span>
+    <span class="nd">assert_eq!</span><span class="p">(</span><span class="n">idx</span> <span class="o">-</span> <span class="n">idx</span><span class="p">,</span> <span class="mi">0u</span><span class="n">size</span><span class="p">);</span>
 <span class="p">}</span></code></pre>
 </div>
 </div>

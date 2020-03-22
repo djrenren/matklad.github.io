@@ -8,7 +8,7 @@
 
   <title>Typed Key Pattern</title>
   <meta name="description"
-    content="">
+    content="In this post, I&#8217;ll talk about a pattern for extracting values from aweakly typed map. This pattern applies to all statically typedlanguages, and even t...">
 
   <link rel="stylesheet" href="/css/asciidoctor.css">
   <link rel="stylesheet" href="/css/rouge-github.css">
@@ -83,7 +83,7 @@ even just <a href="https://github.com/softprops/envy">environment variables</a>!
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="err">#</span><span class="p">[</span><span class="nf">derive</span><span class="p">(</span><span class="n">Deserialize</span><span class="p">)]</span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="nd">#[derive(Deserialize)]</span>
 <span class="k">struct</span> <span class="n">Config</span> <span class="p">{</span>
     <span class="n">foo</span><span class="p">:</span> <span class="n">Foo</span>
 <span class="p">}</span>

@@ -8,7 +8,7 @@
 
   <title>Why is Rust the Most Loved Programming Language?</title>
   <meta name="description"
-    content="">
+    content="... by me?">
 
   <link rel="stylesheet" href="/css/asciidoctor.css">
   <link rel="stylesheet" href="/css/rouge-github.css">
@@ -199,7 +199,7 @@ The nesting is undoubtedly there, but usually it is very boring, and calling it 
     <span class="k">let</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
     <span class="k">let</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
     <span class="k">let</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
-    <span class="n">b</span><span class="o">*</span><span class="n">b</span> <span class="err">-</span> <span class="mi">4</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">c</span>
+    <span class="n">b</span><span class="o">*</span><span class="n">b</span> <span class="o">-</span> <span class="mi">4</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">c</span>
 <span class="p">};</span></code></pre>
 </div>
 </div>
@@ -272,7 +272,7 @@ This makes matching less verbose and completely dodges the sad Rust ambiguity be
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="err">#</span><span class="p">[</span><span class="nf">derive</span><span class="p">(</span><span class="n">Clone</span><span class="p">,</span> <span class="nb">Copy</span><span class="p">)]</span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="nd">#[derive(Clone,</span> <span class="nd">Copy)]</span>
 <span class="k">struct</span> <span class="n">Point</span> <span class="p">{</span>
     <span class="n">x</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
     <span class="n">y</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
@@ -427,14 +427,14 @@ I hope some day we&#8217;ll be able to call custom user-provided <code>Debug</co
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="err">#</span><span class="p">[</span><span class="nf">derive</span><span class="p">(</span>
-    <span class="n">Debug</span><span class="p">,</span>
-    <span class="n">Clone</span><span class="p">,</span> <span class="nb">Copy</span><span class="p">,</span>
-    <span class="n">PartialEq</span><span class="p">,</span> <span class="nb">Eq</span><span class="p">,</span>
-    <span class="n">PartialOrd</span><span class="p">,</span> <span class="nb">Ord</span><span class="p">,</span>
-    <span class="n">Hash</span><span class="p">,</span>
-    <span class="n">Serialize</span><span class="p">,</span> <span class="n">Deserialize</span><span class="p">,</span>
-<span class="p">)]</span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="nd">#[derive(</span>
+    <span class="nd">Debug,</span>
+    <span class="nd">Clone,</span> <span class="nd">Copy,</span>
+    <span class="nd">PartialEq,</span> <span class="nd">Eq,</span>
+    <span class="nd">PartialOrd,</span> <span class="nd">Ord,</span>
+    <span class="nd">Hash,</span>
+    <span class="nd">Serialize,</span> <span class="nd">Deserialize,</span>
+<span class="nd">)]</span>
 <span class="k">struct</span> <span class="n">Point</span> <span class="p">{</span>
     <span class="n">x</span><span class="p">:</span> <span class="nb">i64</span><span class="p">,</span>
     <span class="n">y</span><span class="p">:</span> <span class="nb">i64</span><span class="p">,</span>
