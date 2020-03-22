@@ -11,7 +11,7 @@
     content="">
 
   <link rel="stylesheet" href="/css/asciidoctor.css">
-  <link rel="stylesheet" href="/css/asciidoctor-pygments.css">
+  <link rel="stylesheet" href="/css/rouge-github.css">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
   <link rel="canonical" href="https://matklad.github.io//2018/06/04/newtype-index-pattern.html">
@@ -126,20 +126,20 @@ around <code>usize</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">struct</span> <span class="tok-nc">Foo</span><span class="tok-p">;</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">struct</span> <span class="n">Foo</span><span class="p">;</span>
 
-<span class="tok-cp">#[derive(Debug, Copy, Clone, Ord, PartialOrd, Eq, PartialEq, Hash)]</span><span class="tok-w"></span>
-<span class="tok-k">struct</span> <span class="tok-nc">FooIdx</span><span class="tok-p">(</span><span class="tok-kt">usize</span><span class="tok-p">);</span><span class="tok-w"></span>
+<span class="nd">#[derive(Debug,</span> <span class="nd">Copy,</span> <span class="nd">Clone,</span> <span class="nd">Ord,</span> <span class="nd">PartialOrd,</span> <span class="nd">Eq,</span> <span class="nd">PartialEq,</span> <span class="nd">Hash)]</span>
+<span class="k">struct</span> <span class="nf">FooIdx</span><span class="p">(</span><span class="nb">usize</span><span class="p">);</span>
 
-<span class="tok-k">struct</span> <span class="tok-nc">Arena</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">foos</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Vec</span><span class="tok-o">&lt;</span><span class="tok-n">Foo</span><span class="tok-o">&gt;</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">struct</span> <span class="n">Arena</span> <span class="p">{</span>
+    <span class="n">foos</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="p">}</span>
 
-<span class="tok-k">impl</span><span class="tok-w"> </span><span class="tok-n">Arena</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">foo</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-bp">self</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">FooIdx</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-n">Foo</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-o">&amp;</span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">foos</span><span class="tok-p">[</span><span class="tok-n">foo</span><span class="tok-p">.</span><span class="tok-mi">0</span><span class="tok-p">]</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<span class="k">impl</span> <span class="n">Arena</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">foo</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">foo</span><span class="p">:</span> <span class="n">FooIdx</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="o">&amp;</span><span class="n">Foo</span> <span class="p">{</span>
+        <span class="o">&amp;</span><span class="k">self</span><span class="py">.foos</span><span class="p">[</span><span class="n">foo</span><span class="err">.</span><span class="mi">0</span><span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -151,10 +151,10 @@ appropriate impl, we should be able to index into <code>Vec&lt;Foo&gt;</code> wi
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-cp">#[test]</span><span class="tok-w"></span>
-<span class="tok-k">fn</span> <span class="tok-nf">direct_indexing</span><span class="tok-p">(</span><span class="tok-n">foos</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Vec</span><span class="tok-o">&lt;</span><span class="tok-n">Foo</span><span class="tok-o">&gt;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">idx</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">FooIdx</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">_foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-n">Foo</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-n">foos</span><span class="tok-p">[</span><span class="tok-n">idx</span><span class="tok-p">];</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><span class="err">#</span><span class="p">[</span><span class="n">test</span><span class="p">]</span>
+<span class="k">fn</span> <span class="nf">direct_indexing</span><span class="p">(</span><span class="n">foos</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">idx</span><span class="p">:</span> <span class="n">FooIdx</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="n">_foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">Foo</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">foos</span><span class="p">[</span><span class="n">idx</span><span class="p">];</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -162,15 +162,15 @@ appropriate impl, we should be able to index into <code>Vec&lt;Foo&gt;</code> wi
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">ops</span><span class="tok-p">;</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="n">ops</span><span class="p">;</span>
 
-<span class="tok-k">impl</span><span class="tok-w"> </span><span class="tok-n">ops</span><span class="tok-o">::</span><span class="tok-n">Index</span><span class="tok-o">&lt;</span><span class="tok-n">FooIdx</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-nb">Vec</span><span class="tok-o">&lt;</span><span class="tok-n">Foo</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">type</span> <span class="tok-nc">Output</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-p">;</span><span class="tok-w"></span>
+<span class="k">impl</span> <span class="nn">ops</span><span class="p">::</span><span class="nb">Index</span><span class="o">&lt;</span><span class="n">FooIdx</span><span class="o">&gt;</span> <span class="k">for</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">type</span> <span class="n">Output</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">;</span>
 
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">index</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-bp">self</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">index</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">FooIdx</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-n">Foo</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-o">&amp;</span><span class="tok-bp">self</span><span class="tok-p">[</span><span class="tok-n">index</span><span class="tok-p">.</span><span class="tok-mi">0</span><span class="tok-p">]</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+    <span class="k">fn</span> <span class="nf">index</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">FooIdx</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="o">&amp;</span><span class="n">Foo</span> <span class="p">{</span>
+        <span class="o">&amp;</span><span class="k">self</span><span class="p">[</span><span class="n">index</span><span class="err">.</span><span class="mi">0</span><span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 </div>
@@ -236,14 +236,14 @@ which hold distinct types:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">struct</span> <span class="tok-nc">Arena</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">foos</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Vec</span><span class="tok-o">&lt;</span><span class="tok-n">Foo</span><span class="tok-o">&gt;</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">bars</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Vec</span><span class="tok-o">&lt;</span><span class="tok-n">Bar</span><span class="tok-o">&gt;</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">struct</span> <span class="n">Arena</span> <span class="p">{</span>
+    <span class="n">foos</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="n">bars</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">Bar</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="p">}</span>
 
-<span class="tok-k">impl</span><span class="tok-w"> </span><span class="tok-n">ops</span><span class="tok-o">::</span><span class="tok-n">Index</span><span class="tok-o">&lt;</span><span class="tok-n">FooIdx</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-n">Arena</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-p">...</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">impl</span> <span class="nn">ops</span><span class="p">::</span><span class="nb">Index</span><span class="o">&lt;</span><span class="n">FooIdx</span><span class="o">&gt;</span> <span class="k">for</span> <span class="n">Arena</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
 
-<span class="tok-k">impl</span><span class="tok-w"> </span><span class="tok-n">ops</span><span class="tok-o">::</span><span class="tok-n">Index</span><span class="tok-o">&lt;</span><span class="tok-n">BarIdx</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-n">Arena</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-p">...</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<span class="k">impl</span> <span class="nn">ops</span><span class="p">::</span><span class="nb">Index</span><span class="o">&lt;</span><span class="n">BarIdx</span><span class="o">&gt;</span> <span class="k">for</span> <span class="n">Arena</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -254,40 +254,40 @@ proc macro, the end result looks like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-cp">#[macro_use]</span><span class="tok-w"></span>
-<span class="tok-k">extern</span><span class="tok-w"> </span><span class="tok-k">crate</span><span class="tok-w"> </span><span class="tok-n">typed_index_derive</span><span class="tok-p">;</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="err">#</span><span class="p">[</span><span class="n">macro_use</span><span class="p">]</span>
+<span class="k">extern</span> <span class="n">crate</span> <span class="n">typed_index_derive</span><span class="p">;</span>
 
-<span class="tok-k">struct</span> <span class="tok-nc">Spam</span><span class="tok-p">(</span><span class="tok-nb">String</span><span class="tok-p">);</span><span class="tok-w"></span>
+<span class="k">struct</span> <span class="nf">Spam</span><span class="p">(</span><span class="nb">String</span><span class="p">);</span>
 
-<span class="tok-cp">#[derive(</span>
-<span class="tok-cp">    // Usual derives for plain old data</span>
-<span class="tok-cp">    Debug, Copy, Clone, Ord, PartialOrd, Eq, PartialEq, Hash,</span>
+<span class="nd">#[derive(</span>
+    <span class="c">// Usual derives for plain old data</span>
+    <span class="nd">Debug,</span> <span class="nd">Copy,</span> <span class="nd">Clone,</span> <span class="nd">Ord,</span> <span class="nd">PartialOrd,</span> <span class="nd">Eq,</span> <span class="nd">PartialEq,</span> <span class="nd">Hash,</span>
 
-<span class="tok-cp">    TypedIndex</span>
-<span class="tok-cp">)]</span><span class="tok-w"></span>
-<span class="tok-cp">#[typed_index(Spam)]</span><span class="tok-w"> </span><span class="tok-c1">// index into `&amp;[Spam]`</span>
-<span class="tok-k">struct</span> <span class="tok-nc">SpamIdx</span><span class="tok-p">(</span><span class="tok-kt">usize</span><span class="tok-p">);</span><span class="tok-w"> </span><span class="tok-c1">// could be `u32` instead of `usize`</span>
+    <span class="nd">TypedIndex</span>
+<span class="nd">)]</span>
+<span class="nd">#[typed_index(Spam)]</span> <span class="c">// index into `&amp;[Spam]`</span>
+<span class="k">struct</span> <span class="nf">SpamIdx</span><span class="p">(</span><span class="nb">usize</span><span class="p">);</span> <span class="c">// could be `u32` instead of `usize`</span>
 
-<span class="tok-k">fn</span> <span class="tok-nf">main</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">spams</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">vec</span><span class="tok-o">!</span><span class="tok-p">[</span><span class="tok-n">Spam</span><span class="tok-p">(</span><span class="tok-s">&quot;foo&quot;</span><span class="tok-p">.</span><span class="tok-n">into</span><span class="tok-p">()),</span><span class="tok-w"> </span><span class="tok-n">Spam</span><span class="tok-p">(</span><span class="tok-s">&quot;bar&quot;</span><span class="tok-p">.</span><span class="tok-n">into</span><span class="tok-p">()),</span><span class="tok-w"> </span><span class="tok-n">Spam</span><span class="tok-p">(</span><span class="tok-s">&quot;baz&quot;</span><span class="tok-p">.</span><span class="tok-n">into</span><span class="tok-p">())];</span><span class="tok-w"></span>
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="n">spams</span> <span class="o">=</span> <span class="nd">vec!</span><span class="p">[</span><span class="nf">Spam</span><span class="p">(</span><span class="s">"foo"</span><span class="nf">.into</span><span class="p">()),</span> <span class="nf">Spam</span><span class="p">(</span><span class="s">"bar"</span><span class="nf">.into</span><span class="p">()),</span> <span class="nf">Spam</span><span class="p">(</span><span class="s">"baz"</span><span class="nf">.into</span><span class="p">())];</span>
 
-<span class="tok-w">    </span><span class="tok-c1">// Conversions between `usize` and `SpamIdx`</span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">idx</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">SpamIdx</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mf">1.</span><span class="tok-n">into</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">assert_eq</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-kt">usize</span><span class="tok-o">::</span><span class="tok-n">from</span><span class="tok-p">(</span><span class="tok-n">idx</span><span class="tok-p">),</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-p">);</span><span class="tok-w"></span>
+    <span class="c">// Conversions between `usize` and `SpamIdx`</span>
+    <span class="k">let</span> <span class="n">idx</span><span class="p">:</span> <span class="n">SpamIdx</span> <span class="o">=</span> <span class="mi">1</span><span class="nf">.into</span><span class="p">();</span>
+    <span class="nd">assert_eq!</span><span class="p">(</span><span class="nn">usize</span><span class="p">::</span><span class="nf">from</span><span class="p">(</span><span class="n">idx</span><span class="p">),</span> <span class="mi">1</span><span class="p">);</span>
 
-<span class="tok-w">    </span><span class="tok-c1">// Indexing `Vec&lt;Spam&gt;` with `SpamIdx`, `IndexMut` works as well</span>
-<span class="tok-w">    </span><span class="tok-n">assert_eq</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-n">spams</span><span class="tok-p">[</span><span class="tok-n">idx</span><span class="tok-p">].</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;bar&quot;</span><span class="tok-p">);</span><span class="tok-w"></span>
+    <span class="c">// Indexing `Vec&lt;Spam&gt;` with `SpamIdx`, `IndexMut` works as well</span>
+    <span class="nd">assert_eq!</span><span class="p">(</span><span class="o">&amp;</span><span class="n">spams</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>.<span class="mi">0</span><span class="p">,</span> <span class="s">"bar"</span><span class="p">);</span>
 
-<span class="tok-w">    </span><span class="tok-c1">// Indexing `Vec&lt;usize&gt;` is rightfully forbidden</span>
-<span class="tok-w">    </span><span class="tok-c1">// vec![1, 2, 3][idx]</span>
-<span class="tok-w">    </span><span class="tok-c1">// error: slice indices are of type `usize` or ranges of `usize`</span>
+    <span class="c">// Indexing `Vec&lt;usize&gt;` is rightfully forbidden</span>
+    <span class="c">// vec![1, 2, 3][idx]</span>
+    <span class="c">// error: slice indices are of type `usize` or ranges of `usize`</span>
 
-<span class="tok-w">    </span><span class="tok-c1">// It is possible to  add/subtract `usize` from an index</span>
-<span class="tok-w">    </span><span class="tok-n">assert_eq</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-n">spams</span><span class="tok-p">[</span><span class="tok-n">idx</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-p">].</span><span class="tok-mi">0</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-s">&quot;foo&quot;</span><span class="tok-p">);</span><span class="tok-w"></span>
+    <span class="c">// It is possible to  add/subtract `usize` from an index</span>
+    <span class="nd">assert_eq!</span><span class="p">(</span><span class="o">&amp;</span><span class="n">spams</span><span class="p">[</span><span class="n">idx</span> - <span class="mi">1</span><span class="p">]</span>.<span class="mi">0</span><span class="p">,</span> <span class="s">"foo"</span><span class="p">);</span>
 
-<span class="tok-w">    </span><span class="tok-c1">// The difference between two indices is `usize`</span>
-<span class="tok-w">    </span><span class="tok-n">assert_eq</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-n">idx</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-w"> </span><span class="tok-n">idx</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-k">usize</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+    <span class="c">// The difference between two indices is `usize`</span>
+    <span class="nd">assert_eq!</span><span class="p">(</span><span class="n">idx</span> - <span class="n">idx</span><span class="p">,</span> <span class="mi">0u</span><span class="n">size</span><span class="p">);</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">

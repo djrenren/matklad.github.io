@@ -11,7 +11,7 @@
     content="">
 
   <link rel="stylesheet" href="/css/asciidoctor.css">
-  <link rel="stylesheet" href="/css/asciidoctor-pygments.css">
+  <link rel="stylesheet" href="/css/rouge-github.css">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
   <link rel="canonical" href="https://matklad.github.io//2018/05/24/typed-key-pattern.html">
@@ -83,15 +83,15 @@ even just <a href="https://github.com/softprops/envy">environment variables</a>!
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-cp">#[derive(Deserialize)]</span><span class="tok-w"></span>
-<span class="tok-k">struct</span> <span class="tok-nc">Config</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="err">#</span><span class="p">[</span><span class="nf">derive</span><span class="p">(</span><span class="n">Deserialize</span><span class="p">)]</span>
+<span class="k">struct</span> <span class="n">Config</span> <span class="p">{</span>
+    <span class="n">foo</span><span class="p">:</span> <span class="n">Foo</span>
+<span class="p">}</span>
 
-<span class="tok-k">fn</span> <span class="tok-nf">parse_config</span><span class="tok-p">(</span><span class="tok-n">data</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-kt">str</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-nb">Result</span><span class="tok-o">&lt;</span><span class="tok-n">Config</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">config</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">serde_json</span><span class="tok-o">::</span><span class="tok-n">from_str</span><span class="tok-p">(</span><span class="tok-n">data</span><span class="tok-p">)</span><span class="tok-o">?</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-nb">Ok</span><span class="tok-p">(</span><span class="tok-n">config</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<span class="k">fn</span> <span class="nf">parse_config</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="o">&amp;</span><span class="nb">str</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Result</span><span class="o">&lt;</span><span class="n">Config</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="n">config</span> <span class="o">=</span> <span class="nn">serde_json</span><span class="p">::</span><span class="nf">from_str</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
+    <span class="nf">Ok</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -130,18 +130,18 @@ string literal and specify its type on the call site:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">impl</span><span class="tok-w"> </span><span class="tok-n">Config</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">get</span><span class="tok-o">&lt;</span><span class="tok-n">T</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">Deserialize</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-bp">self</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">key</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-kt">str</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-nb">Result</span><span class="tok-o">&lt;</span><span class="tok-n">T</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">json_value</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">map</span><span class="tok-p">.</span><span class="tok-n">get</span><span class="tok-p">(</span><span class="tok-s">&quot;key&quot;</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-n">ok_or_else</span><span class="tok-p">(</span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-n">bail</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;key is missing: `{}`&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">key</span><span class="tok-p">))</span><span class="tok-o">?</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-nb">Ok</span><span class="tok-p">(</span><span class="tok-n">T</span><span class="tok-o">::</span><span class="tok-n">deserialize</span><span class="tok-p">(</span><span class="tok-n">json_value</span><span class="tok-p">)</span><span class="tok-o">?</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">impl</span> <span class="n">Config</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="n">get</span><span class="o">&lt;</span><span class="n">T</span><span class="p">:</span> <span class="n">Deserialize</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="o">&amp;</span><span class="nb">str</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Result</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">json_value</span> <span class="o">=</span> <span class="k">self</span><span class="py">.map</span><span class="nf">.get</span><span class="p">(</span><span class="s">"key"</span><span class="p">)</span>
+            <span class="nf">.ok_or_else</span><span class="p">(||</span> <span class="nd">bail!</span><span class="p">(</span><span class="s">"key is missing: `{}`"</span><span class="p">,</span> <span class="n">key</span><span class="p">))</span><span class="o">?</span><span class="p">;</span>
+        <span class="nf">Ok</span><span class="p">(</span><span class="nn">T</span><span class="p">::</span><span class="nf">deserialize</span><span class="p">(</span><span class="n">json_value</span><span class="p">)</span><span class="o">?</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-<span class="tok-p">...</span><span class="tok-w"></span>
+<span class="o">...</span>
 
 
-<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">foo</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">config</span><span class="tok-p">.</span><span class="tok-n">get</span><span class="tok-o">::&lt;</span><span class="tok-n">Foo</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-s">&quot;foo&quot;</span><span class="tok-p">)</span><span class="tok-o">?</span><span class="tok-p">;</span><span class="tok-w"></span></code></pre>
+<span class="k">let</span> <span class="n">foo</span> <span class="o">=</span> <span class="n">config</span><span class="py">.get</span><span class="p">::</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"foo"</span><span class="p">)</span><span class="o">?</span><span class="p">;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -154,11 +154,11 @@ variable:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">const</span><span class="tok-w"> </span><span class="tok-n">FOO</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-kt">str</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-s">&quot;foo&quot;</span><span class="tok-p">;</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">const</span> <span class="n">FOO</span><span class="p">:</span> <span class="o">&amp;</span><span class="nb">str</span> <span class="o">=</span> <span class="s">"foo"</span><span class="p">;</span>
 
-<span class="tok-p">...</span><span class="tok-w"></span>
+<span class="o">...</span>
 
-<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">foo</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">config</span><span class="tok-p">.</span><span class="tok-n">get</span><span class="tok-o">::&lt;</span><span class="tok-n">Foo</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-n">FOO</span><span class="tok-p">)</span><span class="tok-o">?</span><span class="tok-p">;</span><span class="tok-w"></span></code></pre>
+<span class="k">let</span> <span class="n">foo</span> <span class="o">=</span> <span class="n">config</span><span class="py">.get</span><span class="p">::</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span><span class="p">(</span><span class="n">FOO</span><span class="p">)</span><span class="o">?</span><span class="p">;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -201,20 +201,20 @@ type <code>Foo</code>, and make it impossible to use it for, say,
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">pub</span><span class="tok-w"> </span><span class="tok-k">struct</span> <span class="tok-nc">Key</span><span class="tok-o">&lt;</span><span class="tok-n">T</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-nb">&#39;static</span><span class="tok-w"> </span><span class="tok-kt">str</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">marker</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">PhantomData</span><span class="tok-o">&lt;</span><span class="tok-n">T</span><span class="tok-o">&gt;</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">pub</span> <span class="k">struct</span> <span class="n">Key</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">name</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'static</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">marker</span><span class="p">:</span> <span class="n">PhantomData</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="p">}</span>
 
-<span class="tok-k">impl</span><span class="tok-o">&lt;</span><span class="tok-n">T</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">Key</span><span class="tok-o">&lt;</span><span class="tok-n">T</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">pub</span><span class="tok-w"> </span><span class="tok-k">const</span><span class="tok-w"> </span><span class="tok-k">fn</span> <span class="tok-nf">new</span><span class="tok-p">(</span><span class="tok-n">name</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-nb">&#39;static</span><span class="tok-w"> </span><span class="tok-kt">str</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">Key</span><span class="tok-o">&lt;</span><span class="tok-n">T</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">Key</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-n">name</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">marker</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">PhantomData</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">impl</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">Key</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">pub</span> <span class="k">const</span> <span class="k">fn</span> <span class="nf">new</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'static</span> <span class="nb">str</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Key</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="n">Key</span> <span class="p">{</span> <span class="n">name</span><span class="p">,</span> <span class="n">marker</span><span class="p">:</span> <span class="n">PhantomData</span> <span class="p">}</span>
+    <span class="p">}</span>
 
-<span class="tok-w">    </span><span class="tok-k">pub</span><span class="tok-w"> </span><span class="tok-k">fn</span> <span class="tok-nf">name</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-bp">self</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-nb">&#39;static</span><span class="tok-w"> </span><span class="tok-kt">str</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">name</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">name</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="o">&amp;</span><span class="nv">'static</span> <span class="nb">str</span> <span class="p">{</span>
+        <span class="k">self</span><span class="py">.name</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -222,7 +222,7 @@ type <code>Foo</code>, and make it impossible to use it for, say,
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">const</span><span class="tok-w"> </span><span class="tok-n">FOO</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">Key</span><span class="tok-o">&lt;</span><span class="tok-n">Foo</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Key</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-s">&quot;foo&quot;</span><span class="tok-p">);</span><span class="tok-w"></span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">const</span> <span class="n">FOO</span><span class="p">:</span> <span class="n">Key</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span> <span class="o">=</span> <span class="nn">Key</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="s">"foo"</span><span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -230,18 +230,18 @@ type <code>Foo</code>, and make it impossible to use it for, say,
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">impl</span><span class="tok-w"> </span><span class="tok-n">Config</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">get</span><span class="tok-o">&lt;</span><span class="tok-n">T</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">Deserialize</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-bp">self</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">key</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">Key</span><span class="tok-o">&lt;</span><span class="tok-n">T</span><span class="tok-o">&gt;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-nb">Result</span><span class="tok-o">&lt;</span><span class="tok-n">T</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">json_value</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">map</span><span class="tok-p">.</span><span class="tok-n">get</span><span class="tok-p">(</span><span class="tok-n">key</span><span class="tok-p">.</span><span class="tok-n">name</span><span class="tok-p">())</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-n">ok_or_else</span><span class="tok-p">(</span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-n">bail</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;key is missing: `{}`&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">key</span><span class="tok-p">))</span><span class="tok-o">?</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-nb">Ok</span><span class="tok-p">(</span><span class="tok-n">T</span><span class="tok-o">::</span><span class="tok-n">deserialize</span><span class="tok-p">(</span><span class="tok-n">json_value</span><span class="tok-p">)</span><span class="tok-o">?</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">impl</span> <span class="n">Config</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="n">get</span><span class="o">&lt;</span><span class="n">T</span><span class="p">:</span> <span class="n">Deserialize</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Key</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Result</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">json_value</span> <span class="o">=</span> <span class="k">self</span><span class="py">.map</span><span class="nf">.get</span><span class="p">(</span><span class="n">key</span><span class="nf">.name</span><span class="p">())</span>
+            <span class="nf">.ok_or_else</span><span class="p">(||</span> <span class="nd">bail!</span><span class="p">(</span><span class="s">"key is missing: `{}`"</span><span class="p">,</span> <span class="n">key</span><span class="p">))</span><span class="o">?</span><span class="p">;</span>
+        <span class="nf">Ok</span><span class="p">(</span><span class="nn">T</span><span class="p">::</span><span class="nf">deserialize</span><span class="p">(</span><span class="n">json_value</span><span class="p">)</span><span class="o">?</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-<span class="tok-p">...</span><span class="tok-w"></span>
+<span class="o">...</span>
 
 
-<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">foo</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">config</span><span class="tok-p">.</span><span class="tok-n">get</span><span class="tok-p">(</span><span class="tok-n">FOO</span><span class="tok-p">)</span><span class="tok-o">?</span><span class="tok-p">;</span><span class="tok-w"></span></code></pre>
+<span class="k">let</span> <span class="n">foo</span> <span class="o">=</span> <span class="n">config</span><span class="nf">.get</span><span class="p">(</span><span class="n">FOO</span><span class="p">)</span><span class="o">?</span><span class="p">;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">

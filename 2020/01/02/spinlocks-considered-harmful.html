@@ -11,7 +11,7 @@
     content="">
 
   <link rel="stylesheet" href="/css/asciidoctor.css">
-  <link rel="stylesheet" href="/css/asciidoctor-pygments.css">
+  <link rel="stylesheet" href="/css/rouge-github.css">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
   <link rel="canonical" href="https://matklad.github.io//2020/01/02/spinlocks-considered-harmful.html">
@@ -123,15 +123,15 @@ A popular request is to add a spin-lock based implementation for use in <code>#[
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">static</span><span class="tok-w"> </span><span class="tok-n">LOCKED</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">AtomicBool</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">AtomicBool</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-kc">false</span><span class="tok-p">);</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">static</span> <span class="n">LOCKED</span><span class="p">:</span> <span class="n">AtomicBool</span> <span class="o">=</span> <span class="nn">AtomicBool</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
 
-<span class="tok-k">while</span><span class="tok-w"> </span><span class="tok-n">LOCKED</span><span class="tok-p">.</span><span class="tok-n">compare_and_swap</span><span class="tok-p">(</span><span class="tok-kc">false</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Ordering</span><span class="tok-o">::</span><span class="tok-n">Acquire</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><i class="conum" data-value="1"></i><b>(1)</b>
-<span class="tok-w">    </span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">sync</span><span class="tok-o">::</span><span class="tok-n">atomic</span><span class="tok-o">::</span><span class="tok-n">spin_loop_hint</span><span class="tok-p">();</span><span class="tok-w"> </span><i class="conum" data-value="4"></i><b>(4)</b>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">while</span> <span class="n">LOCKED</span><span class="nf">.compare_and_swap</span><span class="p">(</span><span class="k">false</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="nn">Ordering</span><span class="p">::</span><span class="n">Acquire</span><span class="p">)</span> <span class="p">{</span> <i class="conum" data-value="1"></i><b>(1)</b>
+    <span class="nn">std</span><span class="p">::</span><span class="nn">sync</span><span class="p">::</span><span class="nn">atomic</span><span class="p">::</span><span class="nf">spin_loop_hint</span><span class="p">();</span> <i class="conum" data-value="4"></i><b>(4)</b>
+<span class="p">}</span>
 
-<span class="tok-cm">/* Critical section */</span><span class="tok-w">  </span><i class="conum" data-value="2"></i><b>(2)</b>
+<span class="cm">/* Critical section */</span>  <i class="conum" data-value="2"></i><b>(2)</b>
 
-<span class="tok-n">LOCKED</span><span class="tok-p">.</span><span class="tok-n">store</span><span class="tok-p">(</span><span class="tok-kc">false</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Ordering</span><span class="tok-o">::</span><span class="tok-n">Release</span><span class="tok-p">);</span><span class="tok-w"> </span><i class="conum" data-value="3"></i><b>(3)</b></code></pre>
+<span class="n">LOCKED</span><span class="nf">.store</span><span class="p">(</span><span class="k">false</span><span class="p">,</span> <span class="nn">Ordering</span><span class="p">::</span><span class="n">Release</span><span class="p">);</span> <i class="conum" data-value="3"></i><b>(3)</b></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -165,16 +165,16 @@ A popular request is to add a spin-lock based implementation for use in <code>#[
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">static</span><span class="tok-w"> </span><span class="tok-n">LOCKED</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">AtomicBool</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">AtomicBool</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-kc">false</span><span class="tok-p">);</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">static</span> <span class="n">LOCKED</span><span class="p">:</span> <span class="n">AtomicBool</span> <span class="o">=</span> <span class="nn">AtomicBool</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
 
-<span class="tok-k">while</span><span class="tok-w"> </span><span class="tok-n">LOCKED</span><span class="tok-p">.</span><span class="tok-n">compare_and_swap</span><span class="tok-p">(</span><span class="tok-kc">false</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kc">true</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Ordering</span><span class="tok-o">::</span><span class="tok-n">Acquire</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">park_this_thread</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-n">LOCKED</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">while</span> <span class="n">LOCKED</span><span class="nf">.compare_and_swap</span><span class="p">(</span><span class="k">false</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="nn">Ordering</span><span class="p">::</span><span class="n">Acquire</span><span class="p">)</span>
+    <span class="nf">park_this_thread</span><span class="p">(</span><span class="o">&amp;</span><span class="n">LOCKED</span><span class="p">);</span>
+<span class="p">}</span>
 
-<span class="tok-cm">/* Critical section */</span><span class="tok-w"></span>
+<span class="cm">/* Critical section */</span>
 
-<span class="tok-n">LOCKED</span><span class="tok-p">.</span><span class="tok-n">store</span><span class="tok-p">(</span><span class="tok-kc">false</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Ordering</span><span class="tok-o">::</span><span class="tok-n">Release</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-n">unpark_some_thread</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-n">LOCKED</span><span class="tok-p">);</span><span class="tok-w"></span></code></pre>
+<span class="n">LOCKED</span><span class="nf">.store</span><span class="p">(</span><span class="k">false</span><span class="p">,</span> <span class="nn">Ordering</span><span class="p">::</span><span class="n">Release</span><span class="p">);</span>
+<span class="nf">unpark_some_thread</span><span class="p">(</span><span class="o">&amp;</span><span class="n">LOCKED</span><span class="p">);</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -253,52 +253,52 @@ I don&#8217;t pick on <code>getrandom</code> specifically here: the pattern is p
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">pub</span><span class="tok-w"> </span><span class="tok-k">struct</span> <span class="tok-nc">LazyUsize</span><span class="tok-p">(</span><span class="tok-n">AtomicUsize</span><span class="tok-p">);</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">pub</span> <span class="k">struct</span> <span class="nf">LazyUsize</span><span class="p">(</span><span class="n">AtomicUsize</span><span class="p">);</span>
 
-<span class="tok-k">impl</span><span class="tok-w"> </span><span class="tok-n">LazyUsize</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-c1">// Synchronously runs the init() function. Only one caller</span>
-<span class="tok-w">    </span><span class="tok-c1">// will have their init() function running at a time, and</span>
-<span class="tok-w">    </span><span class="tok-c1">// exactly one successful call will be run. init() returning</span>
-<span class="tok-w">    </span><span class="tok-c1">// UNINIT or ACTIVE will be considered a failure, and future</span>
-<span class="tok-w">    </span><span class="tok-c1">// calls to sync_init will rerun their init() function.</span>
+<span class="k">impl</span> <span class="n">LazyUsize</span> <span class="p">{</span>
+    <span class="c">// Synchronously runs the init() function. Only one caller</span>
+    <span class="c">// will have their init() function running at a time, and</span>
+    <span class="c">// exactly one successful call will be run. init() returning</span>
+    <span class="c">// UNINIT or ACTIVE will be considered a failure, and future</span>
+    <span class="c">// calls to sync_init will rerun their init() function.</span>
 
-<span class="tok-w">    </span><span class="tok-k">pub</span><span class="tok-w"> </span><span class="tok-k">fn</span> <span class="tok-nf">sync_init</span><span class="tok-p">(</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-o">&amp;</span><span class="tok-bp">self</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">init</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-k">impl</span><span class="tok-w"> </span><span class="tok-nb">FnOnce</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-kt">usize</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">wait</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-k">impl</span><span class="tok-w"> </span><span class="tok-nb">FnMut</span><span class="tok-p">(),</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-kt">usize</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-c1">// Common and fast path with no contention.</span>
-<span class="tok-w">        </span><span class="tok-c1">// Don&#39;t wast time on CAS.</span>
-<span class="tok-w">        </span><span class="tok-k">match</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-mf">0.</span><span class="tok-n">load</span><span class="tok-p">(</span><span class="tok-n">Relaxed</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-n">Self</span><span class="tok-o">::</span><span class="tok-n">UNINIT</span><span class="tok-w"> </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-n">Self</span><span class="tok-o">::</span><span class="tok-n">ACTIVE</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{}</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-n">val</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">val</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-c1">// Relaxed ordering is fine,</span>
-<span class="tok-w">        </span><span class="tok-c1">// as we only have a single atomic variable.</span>
-<span class="tok-w">        </span><span class="tok-k">loop</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-k">match</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-mf">0.</span><span class="tok-n">compare_and_swap</span><span class="tok-p">(</span><span class="tok-w"></span>
-<span class="tok-w">                </span><span class="tok-n">Self</span><span class="tok-o">::</span><span class="tok-n">UNINIT</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-w">                </span><span class="tok-n">Self</span><span class="tok-o">::</span><span class="tok-n">ACTIVE</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-w">                </span><span class="tok-n">Relaxed</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">                </span><span class="tok-n">Self</span><span class="tok-o">::</span><span class="tok-n">UNINIT</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">                    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">val</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">init</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">                    </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-mf">0.</span><span class="tok-n">store</span><span class="tok-p">(</span><span class="tok-w"></span>
-<span class="tok-w">                        </span><span class="tok-k">match</span><span class="tok-w"> </span><span class="tok-n">val</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">                            </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-n">Self</span><span class="tok-o">::</span><span class="tok-n">UNINIT</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-w">                            </span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-n">Self</span><span class="tok-o">::</span><span class="tok-n">ACTIVE</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-n">Self</span><span class="tok-o">::</span><span class="tok-n">UNINIT</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-w">                            </span><span class="tok-n">val</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-n">val</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-w">                        </span><span class="tok-p">},</span><span class="tok-w"></span>
-<span class="tok-w">                        </span><span class="tok-n">Relaxed</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-w">                    </span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">                    </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">val</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-w">                </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">                </span><span class="tok-n">Self</span><span class="tok-o">::</span><span class="tok-n">ACTIVE</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-n">wait</span><span class="tok-p">(),</span><span class="tok-w"></span>
-<span class="tok-w">                </span><span class="tok-n">val</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-k">return</span><span class="tok-w"> </span><span class="tok-n">val</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">sync_init</span><span class="p">(</span>
+        <span class="o">&amp;</span><span class="k">self</span><span class="p">,</span>
+        <span class="n">init</span><span class="p">:</span> <span class="k">impl</span> <span class="nf">FnOnce</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="nb">usize</span><span class="p">,</span>
+        <span class="k">mut</span> <span class="n">wait</span><span class="p">:</span> <span class="k">impl</span> <span class="nf">FnMut</span><span class="p">(),</span>
+    <span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">usize</span> <span class="p">{</span>
+        <span class="c">// Common and fast path with no contention.</span>
+        <span class="c">// Don't wast time on CAS.</span>
+        <span class="k">match</span> <span class="k">self</span><span class="err">.</span><span class="mi">0</span><span class="nf">.load</span><span class="p">(</span><span class="n">Relaxed</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nn">Self</span><span class="p">::</span><span class="n">UNINIT</span> <span class="p">|</span> <span class="nn">Self</span><span class="p">::</span><span class="n">ACTIVE</span> <span class="k">=&gt;</span> <span class="p">{}</span>
+            <span class="n">val</span> <span class="k">=&gt;</span> <span class="k">return</span> <span class="n">val</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="c">// Relaxed ordering is fine,</span>
+        <span class="c">// as we only have a single atomic variable.</span>
+        <span class="k">loop</span> <span class="p">{</span>
+            <span class="k">match</span> <span class="k">self</span><span class="err">.</span><span class="mi">0</span><span class="nf">.compare_and_swap</span><span class="p">(</span>
+                <span class="nn">Self</span><span class="p">::</span><span class="n">UNINIT</span><span class="p">,</span>
+                <span class="nn">Self</span><span class="p">::</span><span class="n">ACTIVE</span><span class="p">,</span>
+                <span class="n">Relaxed</span><span class="p">,</span>
+            <span class="p">)</span> <span class="p">{</span>
+                <span class="nn">Self</span><span class="p">::</span><span class="n">UNINIT</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                    <span class="k">let</span> <span class="n">val</span> <span class="o">=</span> <span class="nf">init</span><span class="p">();</span>
+                    <span class="k">self</span><span class="err">.</span><span class="mi">0</span><span class="nf">.store</span><span class="p">(</span>
+                        <span class="k">match</span> <span class="n">val</span> <span class="p">{</span>
+                            <span class="p">|</span> <span class="nn">Self</span><span class="p">::</span><span class="n">UNINIT</span><span class="p">,</span>
+                            <span class="p">|</span> <span class="nn">Self</span><span class="p">::</span><span class="n">ACTIVE</span> <span class="k">=&gt;</span> <span class="nn">Self</span><span class="p">::</span><span class="n">UNINIT</span><span class="p">,</span>
+                            <span class="n">val</span> <span class="k">=&gt;</span> <span class="n">val</span><span class="p">,</span>
+                        <span class="p">},</span>
+                        <span class="n">Relaxed</span><span class="p">,</span>
+                    <span class="p">);</span>
+                    <span class="k">return</span> <span class="n">val</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="nn">Self</span><span class="p">::</span><span class="n">ACTIVE</span> <span class="k">=&gt;</span> <span class="nf">wait</span><span class="p">(),</span>
+                <span class="n">val</span> <span class="k">=&gt;</span> <span class="k">return</span> <span class="n">val</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -335,13 +335,13 @@ We can trick the static linker into using a function which we define ourselves:<
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-cp">#[no_mangle]</span><span class="tok-w"></span>
-<span class="tok-k">pub</span><span class="tok-w"> </span><span class="tok-k">extern</span><span class="tok-w"> </span><span class="tok-s">&quot;C&quot;</span><span class="tok-w"> </span><span class="tok-k">fn</span> <span class="tok-nf">poll</span><span class="tok-p">(</span><span class="tok-n">_fds</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-k">const</span><span class="tok-w"> </span><span class="tok-kt">u8</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">_nfds</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">usize</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">_timeout</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">i32</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-kt">u32</span><span class="tok-w"></span>
-<span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">sleep_ms</span><span class="tok-p">(</span><span class="tok-mi">500</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-mi">1</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><span class="err">#</span><span class="p">[</span><span class="n">no_mangle</span><span class="p">]</span>
+<span class="k">pub</span> <span class="k">extern</span> <span class="s">"C"</span> <span class="k">fn</span> <span class="nf">poll</span><span class="p">(</span><span class="n">_fds</span><span class="p">:</span> <span class="o">*</span><span class="k">const</span> <span class="nb">u8</span><span class="p">,</span> <span class="n">_nfds</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span> <span class="n">_timeout</span><span class="p">:</span> <span class="nb">i32</span><span class="p">)</span>
+    <span class="k">-&gt;</span> <span class="nb">u32</span>
+<span class="p">{</span>
+    <span class="nf">sleep_ms</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+    <span class="mi">1</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -370,16 +370,16 @@ Internally, on Linux the macro calls <code>__get_errno_location</code> function 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-cp">#[no_mangle]</span><span class="tok-w"></span>
-<span class="tok-k">pub</span><span class="tok-w"> </span><span class="tok-k">extern</span><span class="tok-w"> </span><span class="tok-s">&quot;C&quot;</span><span class="tok-w"> </span><span class="tok-k">fn</span> <span class="tok-nf">syscall</span><span class="tok-p">(</span><span class="tok-n">_syscall</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">u64</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">_buf</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-k">const</span><span class="tok-w"> </span><span class="tok-kt">u8</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">_len</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">usize</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">_flags</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">u32</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-kt">isize</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">extern</span><span class="tok-w"> </span><span class="tok-s">&quot;C&quot;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-k">fn</span> <span class="tok-nf">__errno_location</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-kt">i32</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">unsafe</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-o">*</span><span class="tok-n">__errno_location</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mi">38</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// ENOSYS</span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-o">-</span><span class="tok-mi">1</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><span class="err">#</span><span class="p">[</span><span class="n">no_mangle</span><span class="p">]</span>
+<span class="k">pub</span> <span class="k">extern</span> <span class="s">"C"</span> <span class="k">fn</span> <span class="nf">syscall</span><span class="p">(</span><span class="n">_syscall</span><span class="p">:</span> <span class="nb">u64</span><span class="p">,</span> <span class="n">_buf</span><span class="p">:</span> <span class="o">*</span><span class="k">const</span> <span class="nb">u8</span><span class="p">,</span> <span class="n">_len</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span> <span class="n">_flags</span><span class="p">:</span> <span class="nb">u32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">isize</span> <span class="p">{</span>
+    <span class="k">extern</span> <span class="s">"C"</span> <span class="p">{</span>
+        <span class="k">fn</span> <span class="nf">__errno_location</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="o">*</span><span class="k">mut</span> <span class="nb">i32</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">unsafe</span> <span class="p">{</span>
+        <span class="o">*</span><span class="nf">__errno_location</span><span class="p">()</span> <span class="o">=</span> <span class="mi">38</span><span class="p">;</span> <span class="c">// ENOSYS</span>
+    <span class="p">}</span>
+    <span class="err">-</span><span class="mi">1</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -394,7 +394,7 @@ We well be using real time priorities, which require <code>sudo</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code><span></span>22:37:24|~/projects/spin-of-death|HEAD⚡?
+<pre class="rouge highlight"><code>22:37:24|~/projects/spin-of-death|HEAD⚡?
 λ cargo build --release &amp;&amp; time sudo ./target/release/spin-of-death
     Finished release [optimized] target(s) in 0.01s
 ^CCommand terminated by signal 2
@@ -418,7 +418,7 @@ Also note the impressive system time, as well as load average</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code><span></span>22:32:30|~/projects/spin-of-death|HEAD⚡?
+<pre class="rouge highlight"><code>22:32:30|~/projects/spin-of-death|HEAD⚡?
 λ cargo build --release --features os-blocking-getrandom &amp;&amp; time sudo ./target/release/spin-of-death
     Finished release [optimized] target(s) in 0.01s
 real 0.51s <i class="conum" data-value="1"></i><b>(1)</b>
@@ -453,8 +453,8 @@ They already do a small amount of spinning iterations before calling into the ke
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">fn</span> <span class="tok-nf">init</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-nb">Result</span><span class="tok-o">&lt;</span><span class="tok-n">RandomState</span><span class="tok-o">&gt;</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-k">fn</span> <span class="tok-nf">getrandom</span><span class="tok-p">(</span><span class="tok-n">state</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-n">RandomState</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">buf</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-k">mut</span><span class="tok-p">[</span><span class="tok-kt">u8</span><span class="tok-p">])</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-nb">Result</span><span class="tok-o">&lt;</span><span class="tok-kt">usize</span><span class="tok-o">&gt;</span><span class="tok-p">;</span><span class="tok-w"></span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">fn</span> <span class="nf">init</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="n">Result</span><span class="o">&lt;</span><span class="n">RandomState</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">fn</span> <span class="nf">getrandom</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">RandomState</span><span class="p">,</span> <span class="n">buf</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span><span class="p">[</span><span class="nb">u8</span><span class="p">])</span> <span class="k">-&gt;</span> <span class="n">Result</span><span class="o">&lt;</span><span class="nb">usize</span><span class="o">&gt;</span><span class="p">;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -466,17 +466,17 @@ For example, std may continue using a thread local (<a href="https://github.com/
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">pub</span><span class="tok-w"> </span><span class="tok-k">fn</span> <span class="tok-nf">get_state</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-kt">usize</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">static</span><span class="tok-w"> </span><span class="tok-n">CACHE</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">AtomicUsize</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">AtomicUsize</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">res</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">CACHE</span><span class="tok-p">.</span><span class="tok-n">load</span><span class="tok-p">(</span><span class="tok-n">Ordering</span><span class="tok-o">::</span><span class="tok-n">Relaxed</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-n">res</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">res</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">init</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">CACHE</span><span class="tok-p">.</span><span class="tok-n">store</span><span class="tok-p">(</span><span class="tok-n">res</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Ordering</span><span class="tok-o">::</span><span class="tok-n">Relaxed</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">res</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">pub</span> <span class="k">fn</span> <span class="nf">get_state</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="nb">usize</span> <span class="p">{</span>
+    <span class="k">static</span> <span class="n">CACHE</span><span class="p">:</span> <span class="n">AtomicUsize</span> <span class="o">=</span> <span class="nn">AtomicUsize</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">res</span> <span class="o">=</span> <span class="n">CACHE</span><span class="nf">.load</span><span class="p">(</span><span class="nn">Ordering</span><span class="p">::</span><span class="n">Relaxed</span><span class="p">);</span>
+    <span class="k">if</span> <span class="n">res</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="nf">init</span><span class="p">();</span>
+        <span class="n">CACHE</span><span class="nf">.store</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="nn">Ordering</span><span class="p">::</span><span class="n">Relaxed</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">res</span>
+<span class="p">}</span>
 
-<span class="tok-k">fn</span> <span class="tok-nf">init</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-kt">usize</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-p">...</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<span class="k">fn</span> <span class="nf">init</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="nb">usize</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">

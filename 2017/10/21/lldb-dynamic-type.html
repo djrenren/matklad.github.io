@@ -11,7 +11,7 @@
     content="">
 
   <link rel="stylesheet" href="/css/asciidoctor.css">
-  <link rel="stylesheet" href="/css/asciidoctor-pygments.css">
+  <link rel="stylesheet" href="/css/rouge-github.css">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
   <link rel="canonical" href="https://matklad.github.io//2017/10/21/lldb-dynamic-type.html">
@@ -68,14 +68,14 @@ actual type? Turns out, it can handle cases like the one below just fine!</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="cpp"><span></span><span class="tok-k">struct</span> <span class="tok-n">Base</span> <span class="tok-p">{</span> <span class="tok-p">...</span> <span class="tok-p">};</span>
+<pre class="rouge highlight"><code data-lang="cpp"><span class="k">struct</span> <span class="n">Base</span> <span class="p">{</span> <span class="p">...</span> <span class="p">};</span>
 
-<span class="tok-k">struct</span> <span class="tok-nl">Derived</span><span class="tok-p">:</span> <span class="tok-n">Baes</span> <span class="tok-p">{</span> <span class="tok-p">...</span> <span class="tok-p">};</span>
+<span class="k">struct</span> <span class="n">Derived</span><span class="o">:</span> <span class="n">Baes</span> <span class="p">{</span> <span class="p">...</span> <span class="p">};</span>
 
-<span class="tok-kt">void</span> <span class="tok-nf">foo</span><span class="tok-p">(</span><span class="tok-n">Base</span><span class="tok-o">&amp;</span> <span class="tok-n">x</span><span class="tok-p">)</span> <span class="tok-p">{</span>
-    <span class="tok-c1">// `x` can be `Derived` or `Base` here.</span>
-    <span class="tok-c1">// How can debugger show fields of `Derived` then?</span>
-<span class="tok-p">}</span></code></pre>
+<span class="kt">void</span> <span class="nf">foo</span><span class="p">(</span><span class="n">Base</span><span class="o">&amp;</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// `x` can be `Derived` or `Base` here.</span>
+    <span class="c1">// How can debugger show fields of `Derived` then?</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 </div>

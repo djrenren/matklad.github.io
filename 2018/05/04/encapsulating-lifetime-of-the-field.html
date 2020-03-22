@@ -11,7 +11,7 @@
     content="">
 
   <link rel="stylesheet" href="/css/asciidoctor.css">
-  <link rel="stylesheet" href="/css/asciidoctor-pygments.css">
+  <link rel="stylesheet" href="/css/rouge-github.css">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
   <link rel="canonical" href="https://matklad.github.io//2018/05/04/encapsulating-lifetime-of-the-field.html">
@@ -66,13 +66,13 @@ struct. It could look like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">struct</span> <span class="tok-nc">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">buff</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;a</span><span class="tok-w"> </span><span class="tok-nb">String</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">struct</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">buff</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'a</span> <span class="nb">String</span>
+<span class="p">}</span>
 
-<span class="tok-k">struct</span> <span class="tok-nc">Context</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<span class="k">struct</span> <span class="n">Context</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="n">Foo</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -92,13 +92,13 @@ struct. It could look like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">struct</span> <span class="tok-nc">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">buff</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;a</span><span class="tok-w"> </span><span class="tok-nb">String</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">struct</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">buff</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'a</span> <span class="nb">String</span>
+<span class="p">}</span>
 
-<span class="tok-k">struct</span> <span class="tok-nc">Context</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-na">&#39;a</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<span class="k">struct</span> <span class="n">Context</span><span class="o">&lt;</span><span class="nv">'f</span><span class="p">,</span> <span class="nv">'a</span><span class="p">:</span> <span class="nv">'f</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -130,37 +130,37 @@ actually works out in practice.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">struct</span> <span class="tok-nc">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">buff</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;a</span><span class="tok-w"> </span><span class="tok-nb">String</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">struct</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">buff</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'a</span> <span class="nb">String</span>
+<span class="p">}</span>
 
-<span class="tok-k">impl</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">len</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-bp">self</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-kt">usize</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">buff</span><span class="tok-p">.</span><span class="tok-n">len</span><span class="tok-p">()</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">impl</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">len</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">usize</span> <span class="p">{</span>
+        <span class="k">self</span><span class="py">.buff</span><span class="nf">.len</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-<span class="tok-k">struct</span> <span class="tok-nc">Context</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-na">&#39;a</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">struct</span> <span class="n">Context</span><span class="o">&lt;</span><span class="nv">'f</span><span class="p">,</span> <span class="nv">'a</span><span class="p">:</span> <span class="nv">'f</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span>
+<span class="p">}</span>
 
-<span class="tok-c1">// Note how we have to repeat ugly `&#39;a: &#39;f` bound here!</span>
-<span class="tok-k">impl</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-na">&#39;a</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">Context</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">new</span><span class="tok-p">(</span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">Self</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">Context</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-n">foo</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="c">// Note how we have to repeat ugly `'a: 'f` bound here!</span>
+<span class="k">impl</span><span class="o">&lt;</span><span class="nv">'f</span><span class="p">,</span> <span class="nv">'a</span><span class="p">:</span> <span class="nv">'f</span><span class="o">&gt;</span> <span class="n">Context</span><span class="o">&lt;</span><span class="nv">'f</span><span class="p">,</span> <span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">new</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Self</span> <span class="p">{</span>
+        <span class="n">Context</span> <span class="p">{</span> <span class="n">foo</span> <span class="p">}</span>
+    <span class="p">}</span>
 
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">len</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-bp">self</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-kt">usize</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">foo</span><span class="tok-p">.</span><span class="tok-n">len</span><span class="tok-p">()</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+    <span class="k">fn</span> <span class="nf">len</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">usize</span> <span class="p">{</span>
+        <span class="k">self</span><span class="py">.foo</span><span class="nf">.len</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-<span class="tok-c1">// Check, that we actually can create a `Context`</span>
-<span class="tok-c1">// from `Foo` and call a method.</span>
-<span class="tok-k">fn</span> <span class="tok-nf">test</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">ctx</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Context</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-n">foo</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">ctx</span><span class="tok-p">.</span><span class="tok-n">len</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<span class="c">// Check, that we actually can create a `Context`</span>
+<span class="c">// from `Foo` and call a method.</span>
+<span class="k">fn</span> <span class="n">test</span><span class="o">&lt;</span><span class="nv">'f</span><span class="p">,</span> <span class="nv">'a</span><span class="o">&gt;</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="n">ctx</span> <span class="o">=</span> <span class="nn">Context</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">foo</span><span class="p">);</span>
+    <span class="n">ctx</span><span class="nf">.len</span><span class="p">();</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -177,34 +177,34 @@ both <code>&amp;</code> and <code>Foo</code>: it fits syntactically, so why not 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">struct</span> <span class="tok-nc">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">buff</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;a</span><span class="tok-w"> </span><span class="tok-nb">String</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">struct</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">buff</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'a</span> <span class="nb">String</span>
+<span class="p">}</span>
 
-<span class="tok-k">impl</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">len</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-bp">self</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-kt">usize</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">buff</span><span class="tok-p">.</span><span class="tok-n">len</span><span class="tok-p">()</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">impl</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">len</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">usize</span> <span class="p">{</span>
+        <span class="k">self</span><span class="py">.buff</span><span class="nf">.len</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-<span class="tok-k">struct</span> <span class="tok-nc">Context</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">struct</span> <span class="n">Context</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span>
+<span class="p">}</span>
 
-<span class="tok-k">impl</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">Context</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">new</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">Self</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">Context</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-n">foo</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">impl</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span> <span class="n">Context</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="n">new</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Self</span> <span class="p">{</span>
+        <span class="n">Context</span> <span class="p">{</span> <span class="n">foo</span> <span class="p">}</span>
+    <span class="p">}</span>
 
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">len</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-bp">self</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-kt">usize</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">foo</span><span class="tok-p">.</span><span class="tok-n">len</span><span class="tok-p">()</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+    <span class="k">fn</span> <span class="nf">len</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">usize</span> <span class="p">{</span>
+        <span class="k">self</span><span class="py">.foo</span><span class="nf">.len</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-<span class="tok-k">fn</span> <span class="tok-nf">test</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">ctx</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Context</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-n">foo</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">ctx</span><span class="tok-p">.</span><span class="tok-n">len</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<span class="k">fn</span> <span class="n">test</span><span class="o">&lt;</span><span class="nv">'f</span><span class="p">,</span> <span class="nv">'a</span><span class="o">&gt;</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="n">ctx</span> <span class="o">=</span> <span class="nn">Context</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">foo</span><span class="p">);</span>
+    <span class="n">ctx</span><span class="nf">.len</span><span class="p">();</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -217,10 +217,10 @@ happens in the <code>new</code> method, which could be written more explicitly a
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">fn</span> <span class="tok-nf">new</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">Self</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">foo1</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">foo</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">Context</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">foo1</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">fn</span> <span class="n">new</span><span class="o">&lt;</span><span class="nv">'a</span><span class="p">:</span> <span class="nv">'f</span><span class="o">&gt;</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Self</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="n">foo1</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">foo</span><span class="p">;</span>
+    <span class="n">Context</span> <span class="p">{</span> <span class="n">foo</span><span class="p">:</span> <span class="n">foo1</span> <span class="p">}</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -252,34 +252,34 @@ variance discussion :-)</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">struct</span> <span class="tok-nc">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">buff</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;a</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-nb">String</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">struct</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">buff</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'a</span> <span class="k">mut</span> <span class="nb">String</span>
+<span class="p">}</span>
 
-<span class="tok-k">impl</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">push</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">c</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">char</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">buff</span><span class="tok-p">.</span><span class="tok-n">push</span><span class="tok-p">(</span><span class="tok-n">c</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">impl</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">push</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="nb">char</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">self</span><span class="py">.buff</span><span class="nf">.push</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-<span class="tok-k">struct</span> <span class="tok-nc">Context</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-na">&#39;a</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w">  </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">struct</span> <span class="n">Context</span><span class="o">&lt;</span><span class="nv">'f</span><span class="p">,</span> <span class="nv">'a</span><span class="p">:</span> <span class="nv">'f</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span>  <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span>
+<span class="p">}</span>
 
-<span class="tok-k">impl</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-na">&#39;a</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">Context</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">new</span><span class="tok-p">(</span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">Self</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">Context</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-n">foo</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">impl</span><span class="o">&lt;</span><span class="nv">'f</span><span class="p">,</span> <span class="nv">'a</span><span class="p">:</span> <span class="nv">'f</span><span class="o">&gt;</span> <span class="n">Context</span><span class="o">&lt;</span><span class="nv">'f</span><span class="p">,</span> <span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">new</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Self</span> <span class="p">{</span>
+        <span class="n">Context</span> <span class="p">{</span> <span class="n">foo</span> <span class="p">}</span>
+    <span class="p">}</span>
 
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">push</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">c</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">char</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">foo</span><span class="tok-p">.</span><span class="tok-n">push</span><span class="tok-p">(</span><span class="tok-n">c</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+    <span class="k">fn</span> <span class="nf">push</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="nb">char</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">self</span><span class="py">.foo</span><span class="nf">.push</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-<span class="tok-k">fn</span> <span class="tok-nf">test</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">ctx</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Context</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-n">foo</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">ctx</span><span class="tok-p">.</span><span class="tok-n">push</span><span class="tok-p">(</span><span class="tok-sc">&#39;9&#39;</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<span class="k">fn</span> <span class="n">test</span><span class="o">&lt;</span><span class="nv">'f</span><span class="p">,</span> <span class="nv">'a</span><span class="o">&gt;</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">ctx</span> <span class="o">=</span> <span class="nn">Context</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">foo</span><span class="p">);</span>
+    <span class="n">ctx</span><span class="nf">.push</span><span class="p">(</span><span class="sc">'9'</span><span class="p">);</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -290,20 +290,20 @@ variance discussion :-)</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">struct</span> <span class="tok-nc">Context</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w">  </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">struct</span> <span class="n">Context</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span>  <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span>
+<span class="p">}</span>
 
-<span class="tok-k">impl</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">Context</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">new</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">Self</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">foo1</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">foo</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">Context</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">foo1</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">impl</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span> <span class="n">Context</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="n">new</span><span class="o">&lt;</span><span class="nv">'a</span><span class="p">:</span> <span class="nv">'f</span><span class="o">&gt;</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Self</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">foo1</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">foo</span><span class="p">;</span>
+        <span class="n">Context</span> <span class="p">{</span> <span class="n">foo</span><span class="p">:</span> <span class="n">foo1</span> <span class="p">}</span>
+    <span class="p">}</span>
 
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">push</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">c</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">char</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">foo</span><span class="tok-p">.</span><span class="tok-n">push</span><span class="tok-p">(</span><span class="tok-n">c</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+    <span class="k">fn</span> <span class="nf">push</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="nb">char</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">self</span><span class="py">.foo</span><span class="nf">.push</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -331,9 +331,9 @@ variance discussion :-)</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">struct</span> <span class="tok-nc">Context</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-na">&#39;a</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w">  </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">struct</span> <span class="n">Context</span><span class="o">&lt;</span><span class="nv">'f</span><span class="p">,</span> <span class="nv">'a</span><span class="p">:</span> <span class="nv">'f</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span>  <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -344,9 +344,9 @@ would be something like</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">struct</span> <span class="tok-nc">Context</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-k">for</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">f</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">struct</span> <span class="n">Context</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span> <span class="k">for</span><span class="o">&lt;</span><span class="nv">'a</span><span class="p">:</span> <span class="n">f</span><span class="o">&gt;</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -374,45 +374,45 @@ we <strong>can</strong> use a trait here!</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">struct</span> <span class="tok-nc">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">buff</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;a</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-nb">String</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">struct</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">buff</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'a</span> <span class="k">mut</span> <span class="nb">String</span>
+<span class="p">}</span>
 
-<span class="tok-k">impl</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">push</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">c</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">char</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">buff</span><span class="tok-p">.</span><span class="tok-n">push</span><span class="tok-p">(</span><span class="tok-n">c</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">impl</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">push</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="nb">char</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">self</span><span class="py">.buff</span><span class="nf">.push</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-<span class="tok-k">trait</span><span class="tok-w"> </span><span class="tok-n">Push</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">push</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">c</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">char</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">trait</span> <span class="n">Push</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">push</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="nb">char</span><span class="p">);</span>
+<span class="p">}</span>
 
-<span class="tok-k">impl</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">Push</span><span class="tok-w"> </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">push</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">c</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">char</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">push</span><span class="tok-p">(</span><span class="tok-n">c</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">impl</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="n">Push</span> <span class="k">for</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">push</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="nb">char</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">self</span><span class="nf">.push</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-<span class="tok-k">struct</span> <span class="tok-nc">Context</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">Push</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-na">&#39;f</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">struct</span> <span class="n">Context</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span> <span class="p">(</span><span class="n">Push</span> <span class="o">+</span> <span class="nv">'f</span><span class="p">)</span>
+<span class="p">}</span>
 
-<span class="tok-k">impl</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">Context</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">new</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">Self</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">Push</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">foo</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">Context</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-n">foo</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">impl</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span> <span class="n">Context</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="n">new</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Self</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span> <span class="n">Push</span> <span class="o">=</span> <span class="n">foo</span><span class="p">;</span>
+        <span class="n">Context</span> <span class="p">{</span> <span class="n">foo</span> <span class="p">}</span>
+    <span class="p">}</span>
 
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">push</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">c</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">char</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">foo</span><span class="tok-p">.</span><span class="tok-n">push</span><span class="tok-p">(</span><span class="tok-n">c</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+    <span class="k">fn</span> <span class="nf">push</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="nb">char</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">self</span><span class="py">.foo</span><span class="nf">.push</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-<span class="tok-k">fn</span> <span class="tok-nf">test</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">ctx</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Context</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-n">foo</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">ctx</span><span class="tok-p">.</span><span class="tok-n">push</span><span class="tok-p">(</span><span class="tok-sc">&#39;9&#39;</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<span class="k">fn</span> <span class="n">test</span><span class="o">&lt;</span><span class="nv">'f</span><span class="p">,</span> <span class="nv">'a</span><span class="o">&gt;</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">ctx</span> <span class="o">=</span> <span class="nn">Context</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">foo</span><span class="p">);</span>
+    <span class="n">ctx</span><span class="nf">.push</span><span class="p">(</span><span class="sc">'9'</span><span class="p">);</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -445,45 +445,45 @@ least to some extent:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">struct</span> <span class="tok-nc">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">buff</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;a</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-nb">String</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">struct</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">buff</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'a</span> <span class="k">mut</span> <span class="nb">String</span>
+<span class="p">}</span>
 
-<span class="tok-k">impl</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">push</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">c</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">char</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">buff</span><span class="tok-p">.</span><span class="tok-n">push</span><span class="tok-p">(</span><span class="tok-n">c</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">impl</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">push</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="nb">char</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">self</span><span class="py">.buff</span><span class="nf">.push</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-<span class="tok-k">trait</span><span class="tok-w"> </span><span class="tok-n">WithFoo</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">with_foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">f</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-nb">FnMut</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-p">));</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">trait</span> <span class="n">WithFoo</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="n">with_foo</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="nf">FnMut</span><span class="p">(</span><span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span> <span class="n">Foo</span><span class="p">));</span>
+<span class="p">}</span>
 
-<span class="tok-k">impl</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">WithFoo</span><span class="tok-w"> </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">with_foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">f</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-nb">FnMut</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-p">))</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">f</span><span class="tok-p">(</span><span class="tok-bp">self</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">impl</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="n">WithFoo</span> <span class="k">for</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="n">with_foo</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="nf">FnMut</span><span class="p">(</span><span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span> <span class="n">Foo</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nf">f</span><span class="p">(</span><span class="k">self</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-<span class="tok-k">struct</span> <span class="tok-nc">Context</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">WithFoo</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-na">&#39;f</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">struct</span> <span class="n">Context</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span> <span class="p">(</span><span class="n">WithFoo</span> <span class="o">+</span> <span class="nv">'f</span><span class="p">)</span>
+<span class="p">}</span>
 
-<span class="tok-k">impl</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-n">Context</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">new</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">Self</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">WithFoo</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">foo</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">Context</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-n">foo</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">impl</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span> <span class="n">Context</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="n">new</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Self</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span> <span class="n">WithFoo</span> <span class="o">=</span> <span class="n">foo</span><span class="p">;</span>
+        <span class="n">Context</span> <span class="p">{</span> <span class="n">foo</span> <span class="p">}</span>
+    <span class="p">}</span>
 
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">push</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">c</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">char</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">foo</span><span class="tok-p">.</span><span class="tok-n">with_foo</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-o">|</span><span class="tok-n">foo</span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-n">foo</span><span class="tok-p">.</span><span class="tok-n">push</span><span class="tok-p">(</span><span class="tok-n">c</span><span class="tok-p">))</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+    <span class="k">fn</span> <span class="nf">push</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="nb">char</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">self</span><span class="py">.foo</span><span class="nf">.with_foo</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="p">|</span><span class="n">foo</span><span class="p">|</span> <span class="n">foo</span><span class="nf">.push</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-<span class="tok-k">fn</span> <span class="tok-nf">test</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;f</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-n">foo</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-na">&#39;f</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">Foo</span><span class="tok-o">&lt;</span><span class="tok-na">&#39;a</span><span class="tok-o">&gt;</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">ctx</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Context</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-n">foo</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">ctx</span><span class="tok-p">.</span><span class="tok-n">push</span><span class="tok-p">(</span><span class="tok-sc">&#39;9&#39;</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<span class="k">fn</span> <span class="n">test</span><span class="o">&lt;</span><span class="nv">'f</span><span class="p">,</span> <span class="nv">'a</span><span class="o">&gt;</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">ctx</span> <span class="o">=</span> <span class="nn">Context</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">foo</span><span class="p">);</span>
+    <span class="n">ctx</span><span class="nf">.push</span><span class="p">(</span><span class="sc">'9'</span><span class="p">);</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">

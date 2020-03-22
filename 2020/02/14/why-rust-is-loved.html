@@ -11,7 +11,7 @@
     content="">
 
   <link rel="stylesheet" href="/css/asciidoctor.css">
-  <link rel="stylesheet" href="/css/asciidoctor-pygments.css">
+  <link rel="stylesheet" href="/css/rouge-github.css">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
   <link rel="canonical" href="https://matklad.github.io//2020/02/14/why-rust-is-loved.html">
@@ -195,12 +195,12 @@ The nesting is undoubtedly there, but usually it is very boring, and calling it 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">d</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">a</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">b</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mi">6</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">c</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mi">9</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">b</span><span class="tok-o">*</span><span class="tok-n">b</span><span class="tok-w"> </span><span class="tok-o">-</span><span class="tok-w"> </span><span class="tok-mi">4</span><span class="tok-o">*</span><span class="tok-n">a</span><span class="tok-o">*</span><span class="tok-n">c</span><span class="tok-w"></span>
-<span class="tok-p">};</span><span class="tok-w"></span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">let</span> <span class="n">d</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">let</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+    <span class="k">let</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
+    <span class="n">b</span><span class="o">*</span><span class="n">b</span> <span class="err">-</span> <span class="mi">4</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">c</span>
+<span class="p">};</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -228,11 +228,11 @@ Note how the rarer option is more verbose, and how it is expressed as a modifier
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">enum</span> <span class="tok-nc">Expr</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">Int</span><span class="tok-p">(</span><span class="tok-kt">i32</span><span class="tok-p">),</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">Bool</span><span class="tok-p">(</span><span class="tok-kt">bool</span><span class="tok-p">),</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">Sum</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-n">lhs</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Box</span><span class="tok-o">&lt;</span><span class="tok-n">Expr</span><span class="tok-o">&gt;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">rhs</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Box</span><span class="tok-o">&lt;</span><span class="tok-n">Expr</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">},</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">enum</span> <span class="n">Expr</span> <span class="p">{</span>
+    <span class="nf">Int</span><span class="p">(</span><span class="nb">i32</span><span class="p">),</span>
+    <span class="nf">Bool</span><span class="p">(</span><span class="nb">bool</span><span class="p">),</span>
+    <span class="n">Sum</span> <span class="p">{</span> <span class="n">lhs</span><span class="p">:</span> <span class="nb">Box</span><span class="o">&lt;</span><span class="n">Expr</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">rhs</span><span class="p">:</span> <span class="nb">Box</span><span class="o">&lt;</span><span class="n">Expr</span><span class="o">&gt;</span> <span class="p">},</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -240,10 +240,10 @@ Note how the rarer option is more verbose, and how it is expressed as a modifier
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">enum</span> <span class="tok-nc">Type</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">Int</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">Bool</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">enum</span> <span class="n">Type</span> <span class="p">{</span>
+    <span class="n">Int</span><span class="p">,</span>
+    <span class="n">Bool</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -255,11 +255,11 @@ This makes matching less verbose and completely dodges the sad Rust ambiguity be
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">x</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Option</span><span class="tok-o">&lt;</span><span class="tok-kt">i32</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">Some</span><span class="tok-p">(</span><span class="tok-mi">92</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-k">match</span><span class="tok-w"> </span><span class="tok-n">x</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-nb">None</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">none</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-mi">2</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">let</span> <span class="n">x</span><span class="p">:</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="nb">i32</span><span class="o">&gt;</span> <span class="o">=</span> <span class="nf">Some</span><span class="p">(</span><span class="mi">92</span><span class="p">);</span>
+<span class="k">match</span> <span class="n">x</span> <span class="p">{</span>
+    <span class="nb">None</span> <span class="k">=&gt;</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">none</span> <span class="k">=&gt;</span> <span class="mi">2</span><span class="p">,</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 </div>
@@ -272,19 +272,19 @@ This makes matching less verbose and completely dodges the sad Rust ambiguity be
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-cp">#[derive(Clone, Copy)]</span><span class="tok-w"></span>
-<span class="tok-k">struct</span> <span class="tok-nc">Point</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">x</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">f64</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">y</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">f64</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="err">#</span><span class="p">[</span><span class="nf">derive</span><span class="p">(</span><span class="n">Clone</span><span class="p">,</span> <span class="nb">Copy</span><span class="p">)]</span>
+<span class="k">struct</span> <span class="n">Point</span> <span class="p">{</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
+<span class="p">}</span>
 
-<span class="tok-k">impl</span><span class="tok-w"> </span><span class="tok-n">Point</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">distance_to_origin</span><span class="tok-p">(</span><span class="tok-bp">self</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-kt">f64</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">Point</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-n">x</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">y</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-bp">self</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">(</span><span class="tok-n">x</span><span class="tok-o">*</span><span class="tok-n">x</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-n">y</span><span class="tok-o">*</span><span class="tok-n">y</span><span class="tok-p">).</span><span class="tok-n">sqrt</span><span class="tok-p">()</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">...</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<span class="k">impl</span> <span class="n">Point</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">distance_to_origin</span><span class="p">(</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">f64</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">Point</span> <span class="p">{</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="p">}</span> <span class="o">=</span> <span class="k">self</span><span class="p">;</span>
+        <span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">*</span><span class="n">y</span><span class="p">)</span><span class="nf">.sqrt</span><span class="p">()</span>
+    <span class="p">}</span>
+    <span class="o">...</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -427,18 +427,18 @@ I hope some day we&#8217;ll be able to call custom user-provided <code>Debug</co
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-cp">#[derive(</span>
-<span class="tok-cp">    Debug,</span>
-<span class="tok-cp">    Clone, Copy,</span>
-<span class="tok-cp">    PartialEq, Eq,</span>
-<span class="tok-cp">    PartialOrd, Ord,</span>
-<span class="tok-cp">    Hash,</span>
-<span class="tok-cp">    Serialize, Deserialize,</span>
-<span class="tok-cp">)]</span><span class="tok-w"></span>
-<span class="tok-k">struct</span> <span class="tok-nc">Point</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">x</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">i64</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">y</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">i64</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><span class="err">#</span><span class="p">[</span><span class="nf">derive</span><span class="p">(</span>
+    <span class="n">Debug</span><span class="p">,</span>
+    <span class="n">Clone</span><span class="p">,</span> <span class="nb">Copy</span><span class="p">,</span>
+    <span class="n">PartialEq</span><span class="p">,</span> <span class="nb">Eq</span><span class="p">,</span>
+    <span class="n">PartialOrd</span><span class="p">,</span> <span class="nb">Ord</span><span class="p">,</span>
+    <span class="n">Hash</span><span class="p">,</span>
+    <span class="n">Serialize</span><span class="p">,</span> <span class="n">Deserialize</span><span class="p">,</span>
+<span class="p">)]</span>
+<span class="k">struct</span> <span class="n">Point</span> <span class="p">{</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">i64</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">:</span> <span class="nb">i64</span><span class="p">,</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 </div>

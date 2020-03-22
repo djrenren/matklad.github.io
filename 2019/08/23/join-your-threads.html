@@ -11,7 +11,7 @@
     content="">
 
   <link rel="stylesheet" href="/css/asciidoctor.css">
-  <link rel="stylesheet" href="/css/asciidoctor-pygments.css">
+  <link rel="stylesheet" href="/css/rouge-github.css">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
   <link rel="canonical" href="https://matklad.github.io//2019/08/23/join-your-threads.html">
@@ -100,13 +100,13 @@ However, <em>just</em> calling <code>JoinHandle::join</code> is not enough:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">thread</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">thread</span><span class="tok-o">::</span><span class="tok-n">spawn</span><span class="tok-p">(</span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-cm">/* useful work */</span><span class="tok-w"></span>
-<span class="tok-p">});</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">let</span> <span class="n">thread</span> <span class="o">=</span> <span class="nn">std</span><span class="p">::</span><span class="nn">thread</span><span class="p">::</span><span class="nf">spawn</span><span class="p">(||</span> <span class="p">{</span>
+    <span class="cm">/* useful work */</span>
+<span class="p">});</span>
 
-<span class="tok-c1">// ...</span>
+<span class="c">// ...</span>
 
-<span class="tok-n">thread</span><span class="tok-p">.</span><span class="tok-n">join</span><span class="tok-p">().</span><span class="tok-n">unwrap</span><span class="tok-p">();</span><span class="tok-w"> </span><span class="tok-c1">// propagate the panic</span></code></pre>
+<span class="n">thread</span><span class="nf">.join</span><span class="p">()</span><span class="nf">.unwrap</span><span class="p">();</span> <span class="c">// propagate the panic</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -204,16 +204,16 @@ It was about the usual setup with a worker thread that consumes items from a cha
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">fn</span> <span class="tok-nf">frobnicate</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">sender</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">receiver</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">channel</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">worker</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">jod_thread</span><span class="tok-o">::</span><span class="tok-n">spawn</span><span class="tok-p">(</span><span class="tok-k">move</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-w"> </span><span class="tok-n">receiver</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-n">do_work</span><span class="tok-p">(</span><span class="tok-n">item</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">});</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">fn</span> <span class="nf">frobnicate</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">receiver</span><span class="p">)</span> <span class="o">=</span> <span class="nf">channel</span><span class="p">();</span>
+    <span class="k">let</span> <span class="n">worker</span> <span class="o">=</span> <span class="nn">jod_thread</span><span class="p">::</span><span class="nf">spawn</span><span class="p">(</span><span class="k">move</span> <span class="p">||</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="n">receiver</span> <span class="p">{</span>
+            <span class="nf">do_work</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
 
-<span class="tok-w">    </span><span class="tok-c1">// prepare some work and send it via sender</span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+    <span class="c">// prepare some work and send it via sender</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -226,19 +226,19 @@ This is a deadlock: <code>frobnicate</code> waits for <code>worker</code> to exi
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">fn</span> <span class="tok-nf">frobnicate</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">sender</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">receiver</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">channel</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">worker</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">jod_thread</span><span class="tok-o">::</span><span class="tok-n">spawn</span><span class="tok-p">(</span><span class="tok-k">move</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-n">item</span><span class="tok-w"> </span><span class="tok-n">receiver</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-n">do_work</span><span class="tok-p">(</span><span class="tok-n">item</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">});</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">fn</span> <span class="nf">frobnicate</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">receiver</span><span class="p">)</span> <span class="o">=</span> <span class="nf">channel</span><span class="p">();</span>
+    <span class="k">let</span> <span class="n">worker</span> <span class="o">=</span> <span class="nn">jod_thread</span><span class="p">::</span><span class="nf">spawn</span><span class="p">(</span><span class="k">move</span> <span class="p">||</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="n">receiver</span> <span class="p">{</span>
+            <span class="nf">do_work</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
 
-<span class="tok-w">    </span><span class="tok-c1">// prepare some work and send it via sender</span>
+    <span class="c">// prepare some work and send it via sender</span>
 
-<span class="tok-w">    </span><span class="tok-nb">drop</span><span class="tok-p">(</span><span class="tok-n">sender</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-nb">drop</span><span class="tok-p">(</span><span class="tok-n">worker</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+    <span class="k">drop</span><span class="p">(</span><span class="n">sender</span><span class="p">);</span>
+    <span class="k">drop</span><span class="p">(</span><span class="n">worker</span><span class="p">);</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -291,8 +291,8 @@ Specifically, we&#8217;ll arrange the code in such way that compiler automatical
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">worker</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">jod_thread</span><span class="tok-o">::</span><span class="tok-n">spawn</span><span class="tok-p">(</span><span class="tok-k">move</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-p">...</span><span class="tok-w"> </span><span class="tok-p">});</span><span class="tok-w"></span>
-<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">sender</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">receiver</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">channel</span><span class="tok-p">();</span><span class="tok-w"></span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">let</span> <span class="n">worker</span> <span class="o">=</span> <span class="nn">jod_thread</span><span class="p">::</span><span class="nf">spawn</span><span class="p">(</span><span class="k">move</span> <span class="p">||</span> <span class="p">{</span> <span class="o">...</span> <span class="p">});</span>
+<span class="k">let</span> <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">receiver</span><span class="p">)</span> <span class="o">=</span> <span class="nf">channel</span><span class="p">();</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -301,9 +301,9 @@ Instead, we do this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">worker</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">sender</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">receiver</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">channel</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-n">worker</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">jod_thread</span><span class="tok-o">::</span><span class="tok-n">spawn</span><span class="tok-p">(</span><span class="tok-k">move</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-p">...</span><span class="tok-w"> </span><span class="tok-p">});</span><span class="tok-w"></span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">let</span> <span class="n">worker</span><span class="p">;</span>
+<span class="k">let</span> <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">receiver</span><span class="p">)</span> <span class="o">=</span> <span class="nf">channel</span><span class="p">();</span>
+<span class="n">worker</span> <span class="o">=</span> <span class="nn">jod_thread</span><span class="p">::</span><span class="nf">spawn</span><span class="p">(</span><span class="k">move</span> <span class="p">||</span> <span class="p">{</span> <span class="o">...</span> <span class="p">});</span></code></pre>
 </div>
 </div>
 <div class="paragraph">

@@ -11,7 +11,7 @@
     content="">
 
   <link rel="stylesheet" href="/css/asciidoctor.css">
-  <link rel="stylesheet" href="/css/asciidoctor-pygments.css">
+  <link rel="stylesheet" href="/css/rouge-github.css">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
   <link rel="canonical" href="https://matklad.github.io//2018/07/24/exceptions-in-structured-concurrency.html">
@@ -167,14 +167,14 @@ concurrency:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">thread</span><span class="tok-p">;</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="n">thread</span><span class="p">;</span>
 
-<span class="tok-k">fn</span> <span class="tok-nf">unstructured</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">thread</span><span class="tok-o">::</span><span class="tok-n">spawn</span><span class="tok-p">(</span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">do_stuff</span><span class="tok-p">()</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">});</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-c1">// The thread is &quot;leaked&quot; out of `unstructured` function</span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<span class="k">fn</span> <span class="nf">unstructured</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nn">thread</span><span class="p">::</span><span class="nf">spawn</span><span class="p">(||</span> <span class="p">{</span>
+        <span class="nf">do_stuff</span><span class="p">()</span>
+    <span class="p">});</span>
+    <span class="c">// The thread is "leaked" out of `unstructured` function</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -183,16 +183,16 @@ never escape it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">extern</span><span class="tok-w"> </span><span class="tok-k">crate</span><span class="tok-w"> </span><span class="tok-n">crossbeam</span><span class="tok-p">;</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">extern</span> <span class="n">crate</span> <span class="n">crossbeam</span><span class="p">;</span>
 
-<span class="tok-k">fn</span> <span class="tok-nf">structured</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">crossbeam</span><span class="tok-o">::</span><span class="tok-n">scope</span><span class="tok-p">(</span><span class="tok-o">|</span><span class="tok-n">scope</span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">scope</span><span class="tok-p">.</span><span class="tok-n">spawn</span><span class="tok-p">(</span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-n">do_stuff</span><span class="tok-p">()</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">})</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">});</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-c1">// The thread is finished and joined at this point.</span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<span class="k">fn</span> <span class="nf">structured</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nn">crossbeam</span><span class="p">::</span><span class="nf">scope</span><span class="p">(|</span><span class="n">scope</span><span class="p">|</span> <span class="p">{</span>
+        <span class="n">scope</span><span class="nf">.spawn</span><span class="p">(||</span> <span class="p">{</span>
+            <span class="nf">do_stuff</span><span class="p">()</span>
+        <span class="p">})</span>
+    <span class="p">});</span>
+    <span class="c">// The thread is finished and joined at this point.</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -213,12 +213,12 @@ behavior of the following program?</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">fn</span> <span class="tok-nf">everything_is_terrible</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">crossbeam</span><span class="tok-o">::</span><span class="tok-n">scope</span><span class="tok-p">(</span><span class="tok-o">|</span><span class="tok-n">scope</span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">scope</span><span class="tok-p">.</span><span class="tok-n">spawn</span><span class="tok-p">(</span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-n">do_work</span><span class="tok-p">());</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">scope</span><span class="tok-p">.</span><span class="tok-n">spawn</span><span class="tok-p">(</span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-n">panic</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;this hurts&quot;</span><span class="tok-p">));</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">});</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">fn</span> <span class="nf">everything_is_terrible</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nn">crossbeam</span><span class="p">::</span><span class="nf">scope</span><span class="p">(|</span><span class="n">scope</span><span class="p">|</span> <span class="p">{</span>
+        <span class="n">scope</span><span class="nf">.spawn</span><span class="p">(||</span> <span class="nf">do_work</span><span class="p">());</span>
+        <span class="n">scope</span><span class="nf">.spawn</span><span class="p">(||</span> <span class="nd">panic!</span><span class="p">(</span><span class="s">"this hurts"</span><span class="p">));</span>
+    <span class="p">});</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -246,16 +246,16 @@ partition (actual processing was in native code, so GIL was avoided):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-k">with</span> <span class="tok-n">ThreadPoolExecutor</span><span class="tok-p">()</span> <span class="tok-k">as</span> <span class="tok-n">executor</span><span class="tok-p">:</span>
-    <span class="tok-n">futures</span> <span class="tok-o">=</span> <span class="tok-p">[]</span>
-    <span class="tok-k">for</span> <span class="tok-n">task_type</span><span class="tok-p">,</span> <span class="tok-n">hosts</span> <span class="tok-ow">in</span> <span class="tok-nb">reversed</span><span class="tok-p">(</span><span class="tok-n">tasks</span><span class="tok-p">):</span>
-        <span class="tok-k">for</span> <span class="tok-n">task_id</span><span class="tok-p">,</span> <span class="tok-n">_host</span> <span class="tok-ow">in</span> <span class="tok-nb">enumerate</span><span class="tok-p">(</span><span class="tok-n">hosts</span><span class="tok-p">):</span>
-            <span class="tok-n">futures</span><span class="tok-o">.</span><span class="tok-n">append</span><span class="tok-p">(</span>
-                <span class="tok-n">executor</span><span class="tok-o">.</span><span class="tok-n">submit</span><span class="tok-p">(</span><span class="tok-n">func</span><span class="tok-p">,</span> <span class="tok-n">task_type</span><span class="tok-p">,</span> <span class="tok-n">task_id</span><span class="tok-p">))</span>
+<pre class="rouge highlight"><code data-lang="python"><span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">()</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+    <span class="n">futures</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">task_type</span><span class="p">,</span> <span class="n">hosts</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">tasks</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">task_id</span><span class="p">,</span> <span class="n">_host</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hosts</span><span class="p">):</span>
+            <span class="n">futures</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">task_type</span><span class="p">,</span> <span class="n">task_id</span><span class="p">))</span>
 
-    <span class="tok-c1"># Re-raise the exception.</span>
-    <span class="tok-k">for</span> <span class="tok-n">future</span> <span class="tok-ow">in</span> <span class="tok-n">as_completed</span><span class="tok-p">(</span><span class="tok-n">futures</span><span class="tok-p">):</span>
-        <span class="tok-n">future</span><span class="tok-o">.</span><span class="tok-n">result</span><span class="tok-p">()</span></code></pre>
+    <span class="c1"># Re-raise the exception.
+</span>    <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">):</span>
+        <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span></code></pre>
 </div>
 </div>
 <div class="paragraph">

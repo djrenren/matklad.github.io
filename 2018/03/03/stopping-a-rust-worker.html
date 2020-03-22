@@ -11,7 +11,7 @@
     content="">
 
   <link rel="stylesheet" href="/css/asciidoctor.css">
-  <link rel="stylesheet" href="/css/asciidoctor-pygments.css">
+  <link rel="stylesheet" href="/css/rouge-github.css">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
   <link rel="canonical" href="https://matklad.github.io//2018/03/03/stopping-a-rust-worker.html">
@@ -71,39 +71,39 @@ My solution looks like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">io</span><span class="tok-o">::</span><span class="tok-n">BufRead</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">sync</span><span class="tok-o">::</span><span class="tok-n">mpsc</span><span class="tok-o">::</span><span class="tok-p">{</span><span class="tok-n">Sender</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">channel</span><span class="tok-p">};</span><span class="tok-w"></span>
-<span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">thread</span><span class="tok-p">;</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="nn">io</span><span class="p">::</span><span class="n">BufRead</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="nn">sync</span><span class="p">::</span><span class="nn">mpsc</span><span class="p">::{</span><span class="n">Sender</span><span class="p">,</span> <span class="n">channel</span><span class="p">};</span>
+<span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="n">thread</span><span class="p">;</span>
 
-<span class="tok-k">fn</span> <span class="tok-nf">main</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">worker</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">spawn_worker</span><span class="tok-p">();</span><span class="tok-w"></span>
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="n">worker</span> <span class="o">=</span> <span class="nf">spawn_worker</span><span class="p">();</span>
 
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">stdin</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-o">::</span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">io</span><span class="tok-o">::</span><span class="tok-n">stdin</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-n">line</span><span class="tok-w"> </span><span class="tok-k">in</span><span class="tok-w"> </span><span class="tok-n">stdin</span><span class="tok-p">.</span><span class="tok-n">lock</span><span class="tok-p">().</span><span class="tok-n">lines</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">line</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">line</span><span class="tok-p">.</span><span class="tok-n">unwrap</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">worker</span><span class="tok-p">.</span><span class="tok-n">send</span><span class="tok-p">(</span><span class="tok-n">Msg</span><span class="tok-o">::</span><span class="tok-n">Echo</span><span class="tok-p">(</span><span class="tok-n">line</span><span class="tok-p">))</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-n">unwrap</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+    <span class="k">let</span> <span class="n">stdin</span> <span class="o">=</span> <span class="p">::</span><span class="nn">std</span><span class="p">::</span><span class="nn">io</span><span class="p">::</span><span class="nf">stdin</span><span class="p">();</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="n">in</span> <span class="n">stdin</span><span class="nf">.lock</span><span class="p">()</span><span class="nf">.lines</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="nf">.unwrap</span><span class="p">();</span>
+        <span class="n">worker</span><span class="nf">.send</span><span class="p">(</span><span class="nn">Msg</span><span class="p">::</span><span class="nf">Echo</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
+            <span class="nf">.unwrap</span><span class="p">();</span>
+    <span class="p">}</span>
 
-<span class="tok-w">    </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;Bye!&quot;</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"Bye!"</span><span class="p">);</span>
+<span class="p">}</span>
 
-<span class="tok-k">enum</span> <span class="tok-nc">Msg</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">Echo</span><span class="tok-p">(</span><span class="tok-nb">String</span><span class="tok-p">),</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">enum</span> <span class="n">Msg</span> <span class="p">{</span>
+    <span class="nf">Echo</span><span class="p">(</span><span class="nb">String</span><span class="p">),</span>
+<span class="p">}</span>
 
-<span class="tok-k">fn</span> <span class="tok-nf">spawn_worker</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">Sender</span><span class="tok-o">&lt;</span><span class="tok-n">Msg</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">tx</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">rx</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">channel</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">thread</span><span class="tok-o">::</span><span class="tok-n">spawn</span><span class="tok-p">(</span><span class="tok-k">move</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-k">loop</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">msg</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">rx</span><span class="tok-p">.</span><span class="tok-n">recv</span><span class="tok-p">().</span><span class="tok-n">unwrap</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-k">match</span><span class="tok-w"> </span><span class="tok-n">msg</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">                </span><span class="tok-n">Msg</span><span class="tok-o">::</span><span class="tok-n">Echo</span><span class="tok-p">(</span><span class="tok-n">msg</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;{} ❤️&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">msg</span><span class="tok-p">),</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">});</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">tx</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<span class="k">fn</span> <span class="nf">spawn_worker</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="n">Sender</span><span class="o">&lt;</span><span class="n">Msg</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="n">rx</span><span class="p">)</span> <span class="o">=</span> <span class="nf">channel</span><span class="p">();</span>
+    <span class="nn">thread</span><span class="p">::</span><span class="nf">spawn</span><span class="p">(</span><span class="k">move</span> <span class="p">||</span> <span class="p">{</span>
+        <span class="k">loop</span> <span class="p">{</span>
+            <span class="k">let</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">rx</span><span class="nf">.recv</span><span class="p">()</span><span class="nf">.unwrap</span><span class="p">();</span>
+            <span class="k">match</span> <span class="n">msg</span> <span class="p">{</span>
+                <span class="nn">Msg</span><span class="p">::</span><span class="nf">Echo</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="nd">println!</span><span class="p">(</span><span class="s">"{} ❤️"</span><span class="p">,</span> <span class="n">msg</span><span class="p">),</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+    <span class="n">tx</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -138,48 +138,48 @@ enum, and break out of the worker&#8217;s loop:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">io</span><span class="tok-o">::</span><span class="tok-n">BufRead</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">sync</span><span class="tok-o">::</span><span class="tok-n">mpsc</span><span class="tok-o">::</span><span class="tok-p">{</span><span class="tok-n">Sender</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">channel</span><span class="tok-p">};</span><span class="tok-w"></span>
-<span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">thread</span><span class="tok-p">;</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="nn">io</span><span class="p">::</span><span class="n">BufRead</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="nn">sync</span><span class="p">::</span><span class="nn">mpsc</span><span class="p">::{</span><span class="n">Sender</span><span class="p">,</span> <span class="n">channel</span><span class="p">};</span>
+<span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="n">thread</span><span class="p">;</span>
 
-<span class="tok-k">fn</span> <span class="tok-nf">main</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">worker</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">spawn_worker</span><span class="tok-p">();</span><span class="tok-w"></span>
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="n">worker</span> <span class="o">=</span> <span class="nf">spawn_worker</span><span class="p">();</span>
 
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">stdin</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-o">::</span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">io</span><span class="tok-o">::</span><span class="tok-n">stdin</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-n">line</span><span class="tok-w"> </span><span class="tok-k">in</span><span class="tok-w"> </span><span class="tok-n">stdin</span><span class="tok-p">.</span><span class="tok-n">lock</span><span class="tok-p">().</span><span class="tok-n">lines</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">line</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">line</span><span class="tok-p">.</span><span class="tok-n">unwrap</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">msg</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-n">line</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-s">&quot;stop&quot;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-n">Msg</span><span class="tok-o">::</span><span class="tok-n">Stop</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-n">Msg</span><span class="tok-o">::</span><span class="tok-n">Echo</span><span class="tok-p">(</span><span class="tok-n">line</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">};</span><span class="tok-w"></span>
+    <span class="k">let</span> <span class="n">stdin</span> <span class="o">=</span> <span class="p">::</span><span class="nn">std</span><span class="p">::</span><span class="nn">io</span><span class="p">::</span><span class="nf">stdin</span><span class="p">();</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="n">in</span> <span class="n">stdin</span><span class="nf">.lock</span><span class="p">()</span><span class="nf">.lines</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="nf">.unwrap</span><span class="p">();</span>
+        <span class="k">let</span> <span class="n">msg</span> <span class="o">=</span> <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s">"stop"</span> <span class="p">{</span>
+            <span class="nn">Msg</span><span class="p">::</span><span class="n">Stop</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nn">Msg</span><span class="p">::</span><span class="nf">Echo</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="p">};</span>
 
-<span class="tok-w">        </span><span class="tok-n">worker</span><span class="tok-p">.</span><span class="tok-n">send</span><span class="tok-p">(</span><span class="tok-n">msg</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-n">unwrap</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+        <span class="n">worker</span><span class="nf">.send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="nf">.unwrap</span><span class="p">();</span>
+    <span class="p">}</span>
 
-<span class="tok-w">    </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;Bye!&quot;</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"Bye!"</span><span class="p">);</span>
+<span class="p">}</span>
 
-<span class="tok-k">enum</span> <span class="tok-nc">Msg</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">Echo</span><span class="tok-p">(</span><span class="tok-nb">String</span><span class="tok-p">),</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">Stop</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">enum</span> <span class="n">Msg</span> <span class="p">{</span>
+    <span class="nf">Echo</span><span class="p">(</span><span class="nb">String</span><span class="p">),</span>
+    <span class="n">Stop</span><span class="p">,</span>
+<span class="p">}</span>
 
-<span class="tok-k">fn</span> <span class="tok-nf">spawn_worker</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">Sender</span><span class="tok-o">&lt;</span><span class="tok-n">Msg</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">tx</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">rx</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">channel</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">thread</span><span class="tok-o">::</span><span class="tok-n">spawn</span><span class="tok-p">(</span><span class="tok-k">move</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-k">loop</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">msg</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">rx</span><span class="tok-p">.</span><span class="tok-n">recv</span><span class="tok-p">().</span><span class="tok-n">unwrap</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-k">match</span><span class="tok-w"> </span><span class="tok-n">msg</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">                </span><span class="tok-n">Msg</span><span class="tok-o">::</span><span class="tok-n">Echo</span><span class="tok-p">(</span><span class="tok-n">msg</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;{} ❤️&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">msg</span><span class="tok-p">),</span><span class="tok-w"></span>
-<span class="tok-w">                </span><span class="tok-n">Msg</span><span class="tok-o">::</span><span class="tok-n">Stop</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-k">break</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;The worker has stopped!&quot;</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">});</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">tx</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<span class="k">fn</span> <span class="nf">spawn_worker</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="n">Sender</span><span class="o">&lt;</span><span class="n">Msg</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="n">rx</span><span class="p">)</span> <span class="o">=</span> <span class="nf">channel</span><span class="p">();</span>
+    <span class="nn">thread</span><span class="p">::</span><span class="nf">spawn</span><span class="p">(</span><span class="k">move</span> <span class="p">||</span> <span class="p">{</span>
+        <span class="k">loop</span> <span class="p">{</span>
+            <span class="k">let</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">rx</span><span class="nf">.recv</span><span class="p">()</span><span class="nf">.unwrap</span><span class="p">();</span>
+            <span class="k">match</span> <span class="n">msg</span> <span class="p">{</span>
+                <span class="nn">Msg</span><span class="p">::</span><span class="nf">Echo</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="nd">println!</span><span class="p">(</span><span class="s">"{} ❤️"</span><span class="p">,</span> <span class="n">msg</span><span class="p">),</span>
+                <span class="nn">Msg</span><span class="p">::</span><span class="n">Stop</span> <span class="k">=&gt;</span> <span class="k">break</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="nd">println!</span><span class="p">(</span><span class="s">"The worker has stopped!"</span><span class="p">);</span>
+    <span class="p">});</span>
+    <span class="n">tx</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -220,47 +220,47 @@ For our task, we can stop the worker by dropping the <code>Sender</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">io</span><span class="tok-o">::</span><span class="tok-n">BufRead</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">sync</span><span class="tok-o">::</span><span class="tok-n">mpsc</span><span class="tok-o">::</span><span class="tok-p">{</span><span class="tok-n">Sender</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">channel</span><span class="tok-p">};</span><span class="tok-w"></span>
-<span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">thread</span><span class="tok-p">;</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="nn">io</span><span class="p">::</span><span class="n">BufRead</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="nn">sync</span><span class="p">::</span><span class="nn">mpsc</span><span class="p">::{</span><span class="n">Sender</span><span class="p">,</span> <span class="n">channel</span><span class="p">};</span>
+<span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="n">thread</span><span class="p">;</span>
 
-<span class="tok-k">fn</span> <span class="tok-nf">main</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">worker</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">Some</span><span class="tok-p">(</span><span class="tok-n">spawn_worker</span><span class="tok-p">());</span><span class="tok-w"></span>
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">worker</span> <span class="o">=</span> <span class="nf">Some</span><span class="p">(</span><span class="nf">spawn_worker</span><span class="p">());</span>
 
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">stdin</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-o">::</span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">io</span><span class="tok-o">::</span><span class="tok-n">stdin</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-n">line</span><span class="tok-w"> </span><span class="tok-k">in</span><span class="tok-w"> </span><span class="tok-n">stdin</span><span class="tok-p">.</span><span class="tok-n">lock</span><span class="tok-p">().</span><span class="tok-n">lines</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">line</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">line</span><span class="tok-p">.</span><span class="tok-n">unwrap</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-n">line</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-s">&quot;stop&quot;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-nb">drop</span><span class="tok-p">(</span><span class="tok-n">worker</span><span class="tok-p">.</span><span class="tok-n">take</span><span class="tok-p">());</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-k">continue</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">};</span><span class="tok-w"></span>
+    <span class="k">let</span> <span class="n">stdin</span> <span class="o">=</span> <span class="p">::</span><span class="nn">std</span><span class="p">::</span><span class="nn">io</span><span class="p">::</span><span class="nf">stdin</span><span class="p">();</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="n">in</span> <span class="n">stdin</span><span class="nf">.lock</span><span class="p">()</span><span class="nf">.lines</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="nf">.unwrap</span><span class="p">();</span>
+        <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s">"stop"</span> <span class="p">{</span>
+            <span class="k">drop</span><span class="p">(</span><span class="n">worker</span><span class="nf">.take</span><span class="p">());</span>
+            <span class="n">continue</span>
+        <span class="p">};</span>
 
-<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nb">Some</span><span class="tok-p">(</span><span class="tok-k">ref</span><span class="tok-w"> </span><span class="tok-n">worker</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">worker</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-n">worker</span><span class="tok-p">.</span><span class="tok-n">send</span><span class="tok-p">(</span><span class="tok-n">Msg</span><span class="tok-o">::</span><span class="tok-n">Echo</span><span class="tok-p">(</span><span class="tok-n">line</span><span class="tok-p">)).</span><span class="tok-n">unwrap</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;The worker has been stopped!&quot;</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">};</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nf">Some</span><span class="p">(</span><span class="k">ref</span> <span class="n">worker</span><span class="p">)</span> <span class="o">=</span> <span class="n">worker</span> <span class="p">{</span>
+            <span class="n">worker</span><span class="nf">.send</span><span class="p">(</span><span class="nn">Msg</span><span class="p">::</span><span class="nf">Echo</span><span class="p">(</span><span class="n">line</span><span class="p">))</span><span class="nf">.unwrap</span><span class="p">();</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nd">println!</span><span class="p">(</span><span class="s">"The worker has been stopped!"</span><span class="p">);</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
 
-<span class="tok-w">    </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;Bye!&quot;</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"Bye!"</span><span class="p">);</span>
+<span class="p">}</span>
 
-<span class="tok-k">enum</span> <span class="tok-nc">Msg</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">Echo</span><span class="tok-p">(</span><span class="tok-nb">String</span><span class="tok-p">),</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">enum</span> <span class="n">Msg</span> <span class="p">{</span>
+    <span class="nf">Echo</span><span class="p">(</span><span class="nb">String</span><span class="p">),</span>
+<span class="p">}</span>
 
-<span class="tok-k">fn</span> <span class="tok-nf">spawn_worker</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">Sender</span><span class="tok-o">&lt;</span><span class="tok-n">Msg</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">tx</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">rx</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">channel</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">thread</span><span class="tok-o">::</span><span class="tok-n">spawn</span><span class="tok-p">(</span><span class="tok-k">move</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-k">while</span><span class="tok-w"> </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nb">Ok</span><span class="tok-p">(</span><span class="tok-n">msg</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">rx</span><span class="tok-p">.</span><span class="tok-n">recv</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-k">match</span><span class="tok-w"> </span><span class="tok-n">msg</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">                </span><span class="tok-n">Msg</span><span class="tok-o">::</span><span class="tok-n">Echo</span><span class="tok-p">(</span><span class="tok-n">msg</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;{} ❤️&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">msg</span><span class="tok-p">),</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;The worker has stopped!&quot;</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">});</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">tx</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<span class="k">fn</span> <span class="nf">spawn_worker</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="n">Sender</span><span class="o">&lt;</span><span class="n">Msg</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="n">rx</span><span class="p">)</span> <span class="o">=</span> <span class="nf">channel</span><span class="p">();</span>
+    <span class="nn">thread</span><span class="p">::</span><span class="nf">spawn</span><span class="p">(</span><span class="k">move</span> <span class="p">||</span> <span class="p">{</span>
+        <span class="k">while</span> <span class="k">let</span> <span class="nf">Ok</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="o">=</span> <span class="n">rx</span><span class="nf">.recv</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">match</span> <span class="n">msg</span> <span class="p">{</span>
+                <span class="nn">Msg</span><span class="p">::</span><span class="nf">Echo</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="nd">println!</span><span class="p">(</span><span class="s">"{} ❤️"</span><span class="p">,</span> <span class="n">msg</span><span class="p">),</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="nd">println!</span><span class="p">(</span><span class="s">"The worker has stopped!"</span><span class="p">);</span>
+    <span class="p">});</span>
+    <span class="n">tx</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -295,11 +295,11 @@ with a <code>for</code> loop:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-n">msg</span><span class="tok-w"> </span><span class="tok-k">in</span><span class="tok-w"> </span><span class="tok-n">rx</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">match</span><span class="tok-w"> </span><span class="tok-n">msg</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">Msg</span><span class="tok-o">::</span><span class="tok-n">Echo</span><span class="tok-p">(</span><span class="tok-n">msg</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;{} ❤️&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">msg</span><span class="tok-p">),</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">for</span> <span class="n">msg</span> <span class="n">in</span> <span class="n">rx</span> <span class="p">{</span>
+    <span class="k">match</span> <span class="n">msg</span> <span class="p">{</span>
+        <span class="nn">Msg</span><span class="p">::</span><span class="nf">Echo</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="nd">println!</span><span class="p">(</span><span class="s">"{} ❤️"</span><span class="p">,</span> <span class="n">msg</span><span class="p">),</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 </div>
@@ -316,42 +316,42 @@ solution as well.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">extern</span><span class="tok-w"> </span><span class="tok-k">crate</span><span class="tok-w"> </span><span class="tok-n">futures</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// [dependencies] futures = &quot;0.1&quot;</span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">extern</span> <span class="n">crate</span> <span class="n">futures</span><span class="p">;</span> <span class="c">// [dependencies] futures = "0.1"</span>
 
-<span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">io</span><span class="tok-o">::</span><span class="tok-n">BufRead</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">thread</span><span class="tok-p">;</span><span class="tok-w"></span>
+<span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="nn">io</span><span class="p">::</span><span class="n">BufRead</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="n">thread</span><span class="p">;</span>
 
-<span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">futures</span><span class="tok-o">::</span><span class="tok-n">sync</span><span class="tok-o">::</span><span class="tok-n">mpsc</span><span class="tok-o">::</span><span class="tok-p">{</span><span class="tok-n">Sender</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">channel</span><span class="tok-p">};</span><span class="tok-w"></span>
-<span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">futures</span><span class="tok-o">::</span><span class="tok-p">{</span><span class="tok-n">Future</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Stream</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Sink</span><span class="tok-p">};</span><span class="tok-w"></span>
+<span class="k">use</span> <span class="nn">futures</span><span class="p">::</span><span class="nn">sync</span><span class="p">::</span><span class="nn">mpsc</span><span class="p">::{</span><span class="n">Sender</span><span class="p">,</span> <span class="n">channel</span><span class="p">};</span>
+<span class="k">use</span> <span class="nn">futures</span><span class="p">::{</span><span class="n">Future</span><span class="p">,</span> <span class="n">Stream</span><span class="p">,</span> <span class="n">Sink</span><span class="p">};</span>
 
-<span class="tok-k">fn</span> <span class="tok-nf">main</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">worker</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">spawn_worker</span><span class="tok-p">();</span><span class="tok-w"></span>
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">worker</span> <span class="o">=</span> <span class="nf">spawn_worker</span><span class="p">();</span>
 
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">stdin</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-o">::</span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">io</span><span class="tok-o">::</span><span class="tok-n">stdin</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-n">line</span><span class="tok-w"> </span><span class="tok-k">in</span><span class="tok-w"> </span><span class="tok-n">stdin</span><span class="tok-p">.</span><span class="tok-n">lock</span><span class="tok-p">().</span><span class="tok-n">lines</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">line</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">line</span><span class="tok-p">.</span><span class="tok-n">unwrap</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">worker</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">worker</span><span class="tok-p">.</span><span class="tok-n">send</span><span class="tok-p">(</span><span class="tok-n">Msg</span><span class="tok-o">::</span><span class="tok-n">Echo</span><span class="tok-p">(</span><span class="tok-n">line</span><span class="tok-p">)).</span><span class="tok-n">wait</span><span class="tok-p">().</span><span class="tok-n">unwrap</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+    <span class="k">let</span> <span class="n">stdin</span> <span class="o">=</span> <span class="p">::</span><span class="nn">std</span><span class="p">::</span><span class="nn">io</span><span class="p">::</span><span class="nf">stdin</span><span class="p">();</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="n">in</span> <span class="n">stdin</span><span class="nf">.lock</span><span class="p">()</span><span class="nf">.lines</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="nf">.unwrap</span><span class="p">();</span>
+        <span class="n">worker</span> <span class="o">=</span> <span class="n">worker</span><span class="nf">.send</span><span class="p">(</span><span class="nn">Msg</span><span class="p">::</span><span class="nf">Echo</span><span class="p">(</span><span class="n">line</span><span class="p">))</span><span class="nf">.wait</span><span class="p">()</span><span class="nf">.unwrap</span><span class="p">();</span>
+    <span class="p">}</span>
 
-<span class="tok-w">    </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;Bye!&quot;</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"Bye!"</span><span class="p">);</span>
+<span class="p">}</span>
 
-<span class="tok-k">enum</span> <span class="tok-nc">Msg</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">Echo</span><span class="tok-p">(</span><span class="tok-nb">String</span><span class="tok-p">),</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">enum</span> <span class="n">Msg</span> <span class="p">{</span>
+    <span class="nf">Echo</span><span class="p">(</span><span class="nb">String</span><span class="p">),</span>
+<span class="p">}</span>
 
-<span class="tok-k">fn</span> <span class="tok-nf">spawn_worker</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">Sender</span><span class="tok-o">&lt;</span><span class="tok-n">Msg</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">tx</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">rx</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">channel</span><span class="tok-p">(</span><span class="tok-mi">1</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">thread</span><span class="tok-o">::</span><span class="tok-n">spawn</span><span class="tok-p">(</span><span class="tok-k">move</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">rx</span><span class="tok-p">.</span><span class="tok-n">for_each</span><span class="tok-p">(</span><span class="tok-o">|</span><span class="tok-n">msg</span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-k">match</span><span class="tok-w"> </span><span class="tok-n">msg</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">                </span><span class="tok-n">Msg</span><span class="tok-o">::</span><span class="tok-n">Echo</span><span class="tok-p">(</span><span class="tok-n">msg</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;{} ❤️&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">msg</span><span class="tok-p">),</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-nb">Ok</span><span class="tok-p">(())</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">}).</span><span class="tok-n">wait</span><span class="tok-p">().</span><span class="tok-n">unwrap</span><span class="tok-p">()</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">});</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">tx</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<span class="k">fn</span> <span class="nf">spawn_worker</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="n">Sender</span><span class="o">&lt;</span><span class="n">Msg</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="n">rx</span><span class="p">)</span> <span class="o">=</span> <span class="nf">channel</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="nn">thread</span><span class="p">::</span><span class="nf">spawn</span><span class="p">(</span><span class="k">move</span> <span class="p">||</span> <span class="p">{</span>
+        <span class="n">rx</span><span class="nf">.for_each</span><span class="p">(|</span><span class="n">msg</span><span class="p">|</span> <span class="p">{</span>
+            <span class="k">match</span> <span class="n">msg</span> <span class="p">{</span>
+                <span class="nn">Msg</span><span class="p">::</span><span class="nf">Echo</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="nd">println!</span><span class="p">(</span><span class="s">"{} ❤️"</span><span class="p">,</span> <span class="n">msg</span><span class="p">),</span>
+            <span class="p">}</span>
+            <span class="nf">Ok</span><span class="p">(())</span>
+        <span class="p">})</span><span class="nf">.wait</span><span class="p">()</span><span class="nf">.unwrap</span><span class="p">()</span>
+    <span class="p">});</span>
+    <span class="n">tx</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -359,54 +359,54 @@ solution as well.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">extern</span><span class="tok-w"> </span><span class="tok-k">crate</span><span class="tok-w"> </span><span class="tok-n">futures</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// [dependencies] futures = &quot;0.1&quot;</span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">extern</span> <span class="n">crate</span> <span class="n">futures</span><span class="p">;</span> <span class="c">// [dependencies] futures = "0.1"</span>
 
-<span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">io</span><span class="tok-o">::</span><span class="tok-n">BufRead</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">thread</span><span class="tok-p">;</span><span class="tok-w"></span>
+<span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="nn">io</span><span class="p">::</span><span class="n">BufRead</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="n">thread</span><span class="p">;</span>
 
-<span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">futures</span><span class="tok-o">::</span><span class="tok-n">sync</span><span class="tok-o">::</span><span class="tok-n">mpsc</span><span class="tok-o">::</span><span class="tok-p">{</span><span class="tok-n">Sender</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">channel</span><span class="tok-p">};</span><span class="tok-w"></span>
-<span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">futures</span><span class="tok-o">::</span><span class="tok-p">{</span><span class="tok-n">Future</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Stream</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Sink</span><span class="tok-p">};</span><span class="tok-w"></span>
+<span class="k">use</span> <span class="nn">futures</span><span class="p">::</span><span class="nn">sync</span><span class="p">::</span><span class="nn">mpsc</span><span class="p">::{</span><span class="n">Sender</span><span class="p">,</span> <span class="n">channel</span><span class="p">};</span>
+<span class="k">use</span> <span class="nn">futures</span><span class="p">::{</span><span class="n">Future</span><span class="p">,</span> <span class="n">Stream</span><span class="p">,</span> <span class="n">Sink</span><span class="p">};</span>
 
-<span class="tok-k">fn</span> <span class="tok-nf">main</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">worker</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">spawn_worker</span><span class="tok-p">();</span><span class="tok-w"></span>
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">worker</span> <span class="o">=</span> <span class="nf">spawn_worker</span><span class="p">();</span>
 
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">stdin</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-o">::</span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">io</span><span class="tok-o">::</span><span class="tok-n">stdin</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-n">line</span><span class="tok-w"> </span><span class="tok-k">in</span><span class="tok-w"> </span><span class="tok-n">stdin</span><span class="tok-p">.</span><span class="tok-n">lock</span><span class="tok-p">().</span><span class="tok-n">lines</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">line</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">line</span><span class="tok-p">.</span><span class="tok-n">unwrap</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">msg</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-n">line</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-s">&quot;stop&quot;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-n">Msg</span><span class="tok-o">::</span><span class="tok-n">Stop</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-n">Msg</span><span class="tok-o">::</span><span class="tok-n">Echo</span><span class="tok-p">(</span><span class="tok-n">line</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">};</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">worker</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">worker</span><span class="tok-p">.</span><span class="tok-n">send</span><span class="tok-p">(</span><span class="tok-n">msg</span><span class="tok-p">).</span><span class="tok-n">wait</span><span class="tok-p">().</span><span class="tok-n">unwrap</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+    <span class="k">let</span> <span class="n">stdin</span> <span class="o">=</span> <span class="p">::</span><span class="nn">std</span><span class="p">::</span><span class="nn">io</span><span class="p">::</span><span class="nf">stdin</span><span class="p">();</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="n">in</span> <span class="n">stdin</span><span class="nf">.lock</span><span class="p">()</span><span class="nf">.lines</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="nf">.unwrap</span><span class="p">();</span>
+        <span class="k">let</span> <span class="n">msg</span> <span class="o">=</span> <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s">"stop"</span> <span class="p">{</span>
+            <span class="nn">Msg</span><span class="p">::</span><span class="n">Stop</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nn">Msg</span><span class="p">::</span><span class="nf">Echo</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="p">};</span>
+        <span class="n">worker</span> <span class="o">=</span> <span class="n">worker</span><span class="nf">.send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span><span class="nf">.wait</span><span class="p">()</span><span class="nf">.unwrap</span><span class="p">();</span>
+    <span class="p">}</span>
 
-<span class="tok-w">    </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;Bye!&quot;</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"Bye!"</span><span class="p">);</span>
+<span class="p">}</span>
 
-<span class="tok-k">enum</span> <span class="tok-nc">Msg</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">Echo</span><span class="tok-p">(</span><span class="tok-nb">String</span><span class="tok-p">),</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">Stop</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">enum</span> <span class="n">Msg</span> <span class="p">{</span>
+    <span class="nf">Echo</span><span class="p">(</span><span class="nb">String</span><span class="p">),</span>
+    <span class="n">Stop</span><span class="p">,</span>
+<span class="p">}</span>
 
-<span class="tok-k">fn</span> <span class="tok-nf">spawn_worker</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">Sender</span><span class="tok-o">&lt;</span><span class="tok-n">Msg</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">tx</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">rx</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">channel</span><span class="tok-p">(</span><span class="tok-mi">1</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">thread</span><span class="tok-o">::</span><span class="tok-n">spawn</span><span class="tok-p">(</span><span class="tok-k">move</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">_</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">rx</span><span class="tok-p">.</span><span class="tok-n">for_each</span><span class="tok-p">(</span><span class="tok-o">|</span><span class="tok-n">msg</span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-k">match</span><span class="tok-w"> </span><span class="tok-n">msg</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">                </span><span class="tok-n">Msg</span><span class="tok-o">::</span><span class="tok-n">Echo</span><span class="tok-p">(</span><span class="tok-n">msg</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">                    </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;{} ❤️&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">msg</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">                    </span><span class="tok-nb">Ok</span><span class="tok-p">(())</span><span class="tok-w"></span>
-<span class="tok-w">                </span><span class="tok-p">},</span><span class="tok-w"></span>
-<span class="tok-w">                </span><span class="tok-n">Msg</span><span class="tok-o">::</span><span class="tok-n">Stop</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-nb">Err</span><span class="tok-p">(()),</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">}).</span><span class="tok-n">then</span><span class="tok-p">(</span><span class="tok-o">|</span><span class="tok-n">result</span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;The worker has stopped!&quot;</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-n">result</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">}).</span><span class="tok-n">wait</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">});</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">tx</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<span class="k">fn</span> <span class="nf">spawn_worker</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="n">Sender</span><span class="o">&lt;</span><span class="n">Msg</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="n">rx</span><span class="p">)</span> <span class="o">=</span> <span class="nf">channel</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="nn">thread</span><span class="p">::</span><span class="nf">spawn</span><span class="p">(</span><span class="k">move</span> <span class="p">||</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">_</span> <span class="o">=</span> <span class="n">rx</span><span class="nf">.for_each</span><span class="p">(|</span><span class="n">msg</span><span class="p">|</span> <span class="p">{</span>
+            <span class="k">match</span> <span class="n">msg</span> <span class="p">{</span>
+                <span class="nn">Msg</span><span class="p">::</span><span class="nf">Echo</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="p">{</span>
+                    <span class="nd">println!</span><span class="p">(</span><span class="s">"{} ❤️"</span><span class="p">,</span> <span class="n">msg</span><span class="p">);</span>
+                    <span class="nf">Ok</span><span class="p">(())</span>
+                <span class="p">},</span>
+                <span class="nn">Msg</span><span class="p">::</span><span class="n">Stop</span> <span class="k">=&gt;</span> <span class="nf">Err</span><span class="p">(()),</span>
+            <span class="p">}</span>
+        <span class="p">})</span><span class="nf">.then</span><span class="p">(|</span><span class="n">result</span><span class="p">|</span> <span class="p">{</span>
+            <span class="nd">println!</span><span class="p">(</span><span class="s">"The worker has stopped!"</span><span class="p">);</span>
+            <span class="n">result</span>
+        <span class="p">})</span><span class="nf">.wait</span><span class="p">();</span>
+    <span class="p">});</span>
+    <span class="n">tx</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -428,53 +428,53 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.</pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">extern</span><span class="tok-w"> </span><span class="tok-k">crate</span><span class="tok-w"> </span><span class="tok-n">futures</span><span class="tok-p">;</span><span class="tok-w"> </span><span class="tok-c1">// [dependencies] futures = &quot;0.1&quot;</span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">extern</span> <span class="n">crate</span> <span class="n">futures</span><span class="p">;</span> <span class="c">// [dependencies] futures = "0.1"</span>
 
-<span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">io</span><span class="tok-o">::</span><span class="tok-n">BufRead</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">thread</span><span class="tok-p">;</span><span class="tok-w"></span>
+<span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="nn">io</span><span class="p">::</span><span class="n">BufRead</span><span class="p">;</span>
+<span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="n">thread</span><span class="p">;</span>
 
-<span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">futures</span><span class="tok-o">::</span><span class="tok-n">sync</span><span class="tok-o">::</span><span class="tok-n">mpsc</span><span class="tok-o">::</span><span class="tok-p">{</span><span class="tok-n">Sender</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">channel</span><span class="tok-p">};</span><span class="tok-w"></span>
-<span class="tok-k">use</span><span class="tok-w"> </span><span class="tok-n">futures</span><span class="tok-o">::</span><span class="tok-p">{</span><span class="tok-n">Future</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Stream</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">Sink</span><span class="tok-p">};</span><span class="tok-w"></span>
+<span class="k">use</span> <span class="nn">futures</span><span class="p">::</span><span class="nn">sync</span><span class="p">::</span><span class="nn">mpsc</span><span class="p">::{</span><span class="n">Sender</span><span class="p">,</span> <span class="n">channel</span><span class="p">};</span>
+<span class="k">use</span> <span class="nn">futures</span><span class="p">::{</span><span class="n">Future</span><span class="p">,</span> <span class="n">Stream</span><span class="p">,</span> <span class="n">Sink</span><span class="p">};</span>
 
-<span class="tok-k">fn</span> <span class="tok-nf">main</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">worker</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">Some</span><span class="tok-p">(</span><span class="tok-n">spawn_worker</span><span class="tok-p">());</span><span class="tok-w"></span>
+<span class="k">fn</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">worker</span> <span class="o">=</span> <span class="nf">Some</span><span class="p">(</span><span class="nf">spawn_worker</span><span class="p">());</span>
 
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">stdin</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-o">::</span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">io</span><span class="tok-o">::</span><span class="tok-n">stdin</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-n">line</span><span class="tok-w"> </span><span class="tok-k">in</span><span class="tok-w"> </span><span class="tok-n">stdin</span><span class="tok-p">.</span><span class="tok-n">lock</span><span class="tok-p">().</span><span class="tok-n">lines</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">line</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">line</span><span class="tok-p">.</span><span class="tok-n">unwrap</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-n">line</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-s">&quot;stop&quot;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-nb">drop</span><span class="tok-p">(</span><span class="tok-n">worker</span><span class="tok-p">.</span><span class="tok-n">take</span><span class="tok-p">());</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-k">continue</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">};</span><span class="tok-w"></span>
+    <span class="k">let</span> <span class="n">stdin</span> <span class="o">=</span> <span class="p">::</span><span class="nn">std</span><span class="p">::</span><span class="nn">io</span><span class="p">::</span><span class="nf">stdin</span><span class="p">();</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="n">in</span> <span class="n">stdin</span><span class="nf">.lock</span><span class="p">()</span><span class="nf">.lines</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="nf">.unwrap</span><span class="p">();</span>
+        <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s">"stop"</span> <span class="p">{</span>
+            <span class="k">drop</span><span class="p">(</span><span class="n">worker</span><span class="nf">.take</span><span class="p">());</span>
+            <span class="n">continue</span><span class="p">;</span>
+        <span class="p">};</span>
 
-<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-nb">Some</span><span class="tok-p">(</span><span class="tok-n">w</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">worker</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-n">worker</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-nb">Some</span><span class="tok-p">(</span><span class="tok-n">w</span><span class="tok-p">.</span><span class="tok-n">send</span><span class="tok-p">(</span><span class="tok-n">Msg</span><span class="tok-o">::</span><span class="tok-n">Echo</span><span class="tok-p">(</span><span class="tok-n">line</span><span class="tok-p">)).</span><span class="tok-n">wait</span><span class="tok-p">().</span><span class="tok-n">unwrap</span><span class="tok-p">())</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"> </span><span class="tok-k">else</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;The worker has been stopped!&quot;</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nf">Some</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">=</span> <span class="n">worker</span> <span class="p">{</span>
+            <span class="n">worker</span> <span class="o">=</span> <span class="nf">Some</span><span class="p">(</span><span class="n">w</span><span class="nf">.send</span><span class="p">(</span><span class="nn">Msg</span><span class="p">::</span><span class="nf">Echo</span><span class="p">(</span><span class="n">line</span><span class="p">))</span><span class="nf">.wait</span><span class="p">()</span><span class="nf">.unwrap</span><span class="p">())</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nd">println!</span><span class="p">(</span><span class="s">"The worker has been stopped!"</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-<span class="tok-w">    </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;Bye!&quot;</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+    <span class="nd">println!</span><span class="p">(</span><span class="s">"Bye!"</span><span class="p">);</span>
+<span class="p">}</span>
 
-<span class="tok-k">enum</span> <span class="tok-nc">Msg</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">Echo</span><span class="tok-p">(</span><span class="tok-nb">String</span><span class="tok-p">),</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+<span class="k">enum</span> <span class="n">Msg</span> <span class="p">{</span>
+    <span class="nf">Echo</span><span class="p">(</span><span class="nb">String</span><span class="p">),</span>
+<span class="p">}</span>
 
-<span class="tok-k">fn</span> <span class="tok-nf">spawn_worker</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">Sender</span><span class="tok-o">&lt;</span><span class="tok-n">Msg</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-n">tx</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">rx</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">channel</span><span class="tok-p">(</span><span class="tok-mi">1</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">thread</span><span class="tok-o">::</span><span class="tok-n">spawn</span><span class="tok-p">(</span><span class="tok-k">move</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">rx</span><span class="tok-p">.</span><span class="tok-n">for_each</span><span class="tok-p">(</span><span class="tok-o">|</span><span class="tok-n">msg</span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-k">match</span><span class="tok-w"> </span><span class="tok-n">msg</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">                </span><span class="tok-n">Msg</span><span class="tok-o">::</span><span class="tok-n">Echo</span><span class="tok-p">(</span><span class="tok-n">msg</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">=&gt;</span><span class="tok-w"> </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;{} ❤️&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">msg</span><span class="tok-p">),</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-nb">Ok</span><span class="tok-p">(())</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">}).</span><span class="tok-n">map</span><span class="tok-p">(</span><span class="tok-o">|</span><span class="tok-p">()</span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-n">println</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;The worker has stopped!&quot;</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">}).</span><span class="tok-n">wait</span><span class="tok-p">().</span><span class="tok-n">unwrap</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">});</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">tx</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<span class="k">fn</span> <span class="nf">spawn_worker</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="n">Sender</span><span class="o">&lt;</span><span class="n">Msg</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="n">rx</span><span class="p">)</span> <span class="o">=</span> <span class="nf">channel</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="nn">thread</span><span class="p">::</span><span class="nf">spawn</span><span class="p">(</span><span class="k">move</span> <span class="p">||</span> <span class="p">{</span>
+        <span class="n">rx</span><span class="nf">.for_each</span><span class="p">(|</span><span class="n">msg</span><span class="p">|</span> <span class="p">{</span>
+            <span class="k">match</span> <span class="n">msg</span> <span class="p">{</span>
+                <span class="nn">Msg</span><span class="p">::</span><span class="nf">Echo</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="k">=&gt;</span> <span class="nd">println!</span><span class="p">(</span><span class="s">"{} ❤️"</span><span class="p">,</span> <span class="n">msg</span><span class="p">),</span>
+            <span class="p">}</span>
+            <span class="nf">Ok</span><span class="p">(())</span>
+        <span class="p">})</span><span class="nf">.map</span><span class="p">(|()|</span> <span class="p">{</span>
+            <span class="nd">println!</span><span class="p">(</span><span class="s">"The worker has stopped!"</span><span class="p">);</span>
+        <span class="p">})</span><span class="nf">.wait</span><span class="p">()</span><span class="nf">.unwrap</span><span class="p">();</span>
+    <span class="p">});</span>
+    <span class="n">tx</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="listingblock">

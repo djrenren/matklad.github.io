@@ -11,7 +11,7 @@
     content="">
 
   <link rel="stylesheet" href="/css/asciidoctor.css">
-  <link rel="stylesheet" href="/css/asciidoctor-pygments.css">
+  <link rel="stylesheet" href="/css/rouge-github.css">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
   <link rel="canonical" href="https://matklad.github.io//2019/06/20/linux-desktop-tips.html">
@@ -87,13 +87,13 @@ shortcuts, with the following config:</p>
 <div class="listingblock">
 <div class="title">~/.xbindkeysrc</div>
 <div class="content">
-<pre class="pygments highlight"><code><span></span>&quot;jumpapp -m kitty&quot;
+<pre class="rouge highlight"><code>"jumpapp -m kitty"
   F1
 
-&quot;jumpapp -m firefox&quot;
+"jumpapp -m firefox"
   F2
 
-&quot;jumpapp -m code&quot;
+"jumpapp -m code"
   F3</code></pre>
 </div>
 </div>
@@ -259,7 +259,7 @@ The killer feature for me is autosuggestions: completion of the commands based o
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code><span></span>02:43:39|~/.config
+<pre class="rouge highlight"><code>02:43:39|~/.config
 λ</code></pre>
 </div>
 </div>
@@ -303,7 +303,7 @@ post</a> was instrumental for me to figure this stuff out. Thanks Chris!</p>
 <div class="listingblock">
 <div class="title">~/.local/share/kwin/scripts/SmartCloseWindow/metadata.desktop</div>
 <div class="content">
-<pre class="pygments highlight"><code><span></span>[Desktop Entry]
+<pre class="rouge highlight"><code>[Desktop Entry]
 Name=Smart Close Window
 Comment=
 Icon=preferences-system-windows-script-test
@@ -324,12 +324,12 @@ X-KDE-PluginInfo-Version=3</code></pre>
 <div class="listingblock">
 <div class="title">~/.local/share/kwin/scripts/SmartCloseWindow/contents/code/main.js</div>
 <div class="content">
-<pre class="pygments highlight"><code><span></span>registerShortcut(&quot;Smart Close Window.&quot;,
-    &quot;Smart Close Window.&quot;,
-    &quot;alt+f4&quot;,
+<pre class="rouge highlight"><code>registerShortcut("Smart Close Window.",
+    "Smart Close Window.",
+    "alt+f4",
     function () {
         var c = workspace.activeClient;
-        if (c.caption.indexOf(&quot;Firefox&quot;) == -1) {
+        if (c.caption.indexOf("Firefox") == -1) {
             c.closeWindow();
         } else {
             c.minimized = true;

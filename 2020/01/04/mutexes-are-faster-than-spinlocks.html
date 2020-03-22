@@ -11,7 +11,7 @@
     content="">
 
   <link rel="stylesheet" href="/css/asciidoctor.css">
-  <link rel="stylesheet" href="/css/asciidoctor-pygments.css">
+  <link rel="stylesheet" href="/css/rouge-github.css">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
   <link rel="canonical" href="https://matklad.github.io//2020/01/04/mutexes-are-faster-than-spinlocks.html">
@@ -139,67 +139,67 @@ The source code for the benchmark is here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">fn</span> <span class="tok-nf">run_bench</span><span class="tok-o">&lt;</span><span class="tok-n">M</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">Mutex</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-n">options</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-n">Options</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">time</span><span class="tok-o">::</span><span class="tok-n">Duration</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">locks</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-p">(</span><span class="tok-mi">0</span><span class="tok-p">..</span><span class="tok-n">options</span><span class="tok-p">.</span><span class="tok-n">n_locks</span><span class="tok-p">)</span><span class="tok-w"> </span><i class="conum" data-value="3"></i><b>(3)</b>
-<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-n">map</span><span class="tok-p">(</span><span class="tok-o">|</span><span class="tok-n">_</span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-n">CachePadded</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-n">M</span><span class="tok-o">::</span><span class="tok-n">default</span><span class="tok-p">()))</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">.</span><span class="tok-n">collect</span><span class="tok-o">::&lt;</span><span class="tok-nb">Vec</span><span class="tok-o">&lt;</span><span class="tok-n">_</span><span class="tok-o">&gt;&gt;</span><span class="tok-p">();</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">fn</span> <span class="n">run_bench</span><span class="o">&lt;</span><span class="n">M</span><span class="p">:</span> <span class="n">Mutex</span><span class="o">&gt;</span><span class="p">(</span><span class="n">options</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">Options</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nn">time</span><span class="p">::</span><span class="n">Duration</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="n">locks</span> <span class="o">=</span> <span class="o">&amp;</span><span class="p">(</span><span class="mi">0</span><span class="o">..</span><span class="n">options</span><span class="py">.n_locks</span><span class="p">)</span> <i class="conum" data-value="3"></i><b>(3)</b>
+        <span class="nf">.map</span><span class="p">(|</span><span class="n">_</span><span class="p">|</span> <span class="nn">CachePadded</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">M</span><span class="p">::</span><span class="nf">default</span><span class="p">()))</span>
+        <span class="py">.collect</span><span class="p">::</span><span class="o">&lt;</span><span class="nb">Vec</span><span class="o">&lt;</span><span class="n">_</span><span class="o">&gt;&gt;</span><span class="p">();</span>
 
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">start_barrier</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-n">Barrier</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">options</span><span class="tok-p">.</span><span class="tok-n">n_threads</span><span class="tok-w"> </span><span class="tok-k">as</span><span class="tok-w"> </span><span class="tok-kt">usize</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">end_barrier</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-n">Barrier</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">(</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">options</span><span class="tok-p">.</span><span class="tok-n">n_threads</span><span class="tok-w"> </span><span class="tok-k">as</span><span class="tok-w"> </span><span class="tok-kt">usize</span><span class="tok-w"> </span><span class="tok-o">+</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">);</span><span class="tok-w"></span>
+    <span class="k">let</span> <span class="n">start_barrier</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nn">Barrier</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span>
+        <span class="n">options</span><span class="py">.n_threads</span> <span class="k">as</span> <span class="nb">usize</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">);</span>
+    <span class="k">let</span> <span class="n">end_barrier</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nn">Barrier</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span>
+        <span class="n">options</span><span class="py">.n_threads</span> <span class="k">as</span> <span class="nb">usize</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">);</span>
 
-<span class="tok-w">    </span><span class="tok-n">scope</span><span class="tok-p">(</span><span class="tok-o">|</span><span class="tok-n">scope</span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">thread_seeds</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">random_numbers</span><span class="tok-p">(</span><span class="tok-mh">0x6F4A955E</span><span class="tok-p">).</span><span class="tok-n">scan</span><span class="tok-p">(</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-mh">0x9BA2BF27</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-o">|</span><span class="tok-n">state</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">n</span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">                </span><span class="tok-o">*</span><span class="tok-n">state</span><span class="tok-w"> </span><span class="tok-o">^=</span><span class="tok-w"> </span><span class="tok-n">n</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-w">                </span><span class="tok-nb">Some</span><span class="tok-p">(</span><span class="tok-o">*</span><span class="tok-n">state</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-p">},</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">).</span><span class="tok-n">take</span><span class="tok-p">(</span><span class="tok-n">options</span><span class="tok-p">.</span><span class="tok-n">n_threads</span><span class="tok-w"> </span><span class="tok-k">as</span><span class="tok-w"> </span><span class="tok-kt">usize</span><span class="tok-p">);</span><span class="tok-w"></span>
+    <span class="nf">scope</span><span class="p">(|</span><span class="n">scope</span><span class="p">|</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="n">thread_seeds</span> <span class="o">=</span> <span class="nf">random_numbers</span><span class="p">(</span><span class="mi">0x6F4A955E</span><span class="p">)</span><span class="nf">.scan</span><span class="p">(</span>
+            <span class="mi">0x9BA2BF27</span><span class="p">,</span>
+            <span class="p">|</span><span class="n">state</span><span class="p">,</span> <span class="n">n</span><span class="p">|</span> <span class="p">{</span>
+                <span class="o">*</span><span class="n">state</span> <span class="o">^=</span> <span class="n">n</span><span class="p">;</span>
+                <span class="nf">Some</span><span class="p">(</span><span class="o">*</span><span class="n">state</span><span class="p">)</span>
+            <span class="p">},</span>
+        <span class="p">)</span><span class="nf">.take</span><span class="p">(</span><span class="n">options</span><span class="py">.n_threads</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">);</span>
 
-<span class="tok-w">        </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-n">thread_seed</span><span class="tok-w"> </span><span class="tok-k">in</span><span class="tok-w"> </span><span class="tok-n">thread_seeds</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-n">scope</span><span class="tok-p">.</span><span class="tok-n">spawn</span><span class="tok-p">(</span><span class="tok-k">move</span><span class="tok-w"> </span><span class="tok-o">|</span><span class="tok-n">_</span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">                </span><span class="tok-n">start_barrier</span><span class="tok-p">.</span><span class="tok-n">wait</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">                </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">indexes</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">random_numbers</span><span class="tok-p">(</span><span class="tok-n">thread_seed</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">                    </span><span class="tok-p">.</span><span class="tok-n">map</span><span class="tok-p">(</span><span class="tok-o">|</span><span class="tok-n">it</span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-n">it</span><span class="tok-w"> </span><span class="tok-o">%</span><span class="tok-w"> </span><span class="tok-n">options</span><span class="tok-p">.</span><span class="tok-n">n_locks</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">                    </span><span class="tok-p">.</span><span class="tok-n">map</span><span class="tok-p">(</span><span class="tok-o">|</span><span class="tok-n">it</span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-n">it</span><span class="tok-w"> </span><span class="tok-k">as</span><span class="tok-w"> </span><span class="tok-kt">usize</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">                    </span><span class="tok-p">.</span><span class="tok-n">take</span><span class="tok-p">(</span><span class="tok-n">options</span><span class="tok-p">.</span><span class="tok-n">n_ops</span><span class="tok-w"> </span><span class="tok-k">as</span><span class="tok-w"> </span><span class="tok-kt">usize</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">                </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-n">idx</span><span class="tok-w"> </span><span class="tok-k">in</span><span class="tok-w"> </span><span class="tok-n">indexes</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">                    </span><span class="tok-n">locks</span><span class="tok-p">[</span><span class="tok-n">idx</span><span class="tok-p">].</span><span class="tok-n">with_lock</span><span class="tok-p">(</span><span class="tok-o">|</span><span class="tok-n">cnt</span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-n">cnt</span><span class="tok-w"> </span><span class="tok-o">+=</span><span class="tok-w"> </span><span class="tok-mi">1</span><span class="tok-p">);</span><span class="tok-w"> </span><i class="conum" data-value="1"></i><b>(1)</b>
-<span class="tok-w">                </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">                </span><span class="tok-n">end_barrier</span><span class="tok-p">.</span><span class="tok-n">wait</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-p">});</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"></span>
+        <span class="k">for</span> <span class="n">thread_seed</span> <span class="n">in</span> <span class="n">thread_seeds</span> <span class="p">{</span>
+            <span class="n">scope</span><span class="nf">.spawn</span><span class="p">(</span><span class="k">move</span> <span class="p">|</span><span class="n">_</span><span class="p">|</span> <span class="p">{</span>
+                <span class="n">start_barrier</span><span class="nf">.wait</span><span class="p">();</span>
+                <span class="k">let</span> <span class="n">indexes</span> <span class="o">=</span> <span class="nf">random_numbers</span><span class="p">(</span><span class="n">thread_seed</span><span class="p">)</span>
+                    <span class="nf">.map</span><span class="p">(|</span><span class="n">it</span><span class="p">|</span> <span class="n">it</span> <span class="o">%</span> <span class="n">options</span><span class="py">.n_locks</span><span class="p">)</span>
+                    <span class="nf">.map</span><span class="p">(|</span><span class="n">it</span><span class="p">|</span> <span class="n">it</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">)</span>
+                    <span class="nf">.take</span><span class="p">(</span><span class="n">options</span><span class="py">.n_ops</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">);</span>
+                <span class="k">for</span> <span class="n">idx</span> <span class="n">in</span> <span class="n">indexes</span> <span class="p">{</span>
+                    <span class="n">locks</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="nf">.with_lock</span><span class="p">(|</span><span class="n">cnt</span><span class="p">|</span> <span class="o">*</span><span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">);</span> <i class="conum" data-value="1"></i><b>(1)</b>
+                <span class="p">}</span>
+                <span class="n">end_barrier</span><span class="nf">.wait</span><span class="p">();</span>
+            <span class="p">});</span>
+        <span class="p">}</span>
 
-<span class="tok-w">        </span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">thread</span><span class="tok-o">::</span><span class="tok-n">sleep</span><span class="tok-p">(</span><span class="tok-n">time</span><span class="tok-o">::</span><span class="tok-n">Duration</span><span class="tok-o">::</span><span class="tok-n">from_millis</span><span class="tok-p">(</span><span class="tok-mi">100</span><span class="tok-p">));</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">start_barrier</span><span class="tok-p">.</span><span class="tok-n">wait</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">start</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">time</span><span class="tok-o">::</span><span class="tok-n">Instant</span><span class="tok-o">::</span><span class="tok-n">now</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">end_barrier</span><span class="tok-p">.</span><span class="tok-n">wait</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">elapsed</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">start</span><span class="tok-p">.</span><span class="tok-n">elapsed</span><span class="tok-p">();</span><span class="tok-w"></span>
+        <span class="nn">std</span><span class="p">::</span><span class="nn">thread</span><span class="p">::</span><span class="nf">sleep</span><span class="p">(</span><span class="nn">time</span><span class="p">::</span><span class="nn">Duration</span><span class="p">::</span><span class="nf">from_millis</span><span class="p">(</span><span class="mi">100</span><span class="p">));</span>
+        <span class="n">start_barrier</span><span class="nf">.wait</span><span class="p">();</span>
+        <span class="k">let</span> <span class="n">start</span> <span class="o">=</span> <span class="nn">time</span><span class="p">::</span><span class="nn">Instant</span><span class="p">::</span><span class="nf">now</span><span class="p">();</span>
+        <span class="n">end_barrier</span><span class="nf">.wait</span><span class="p">();</span>
+        <span class="k">let</span> <span class="n">elapsed</span> <span class="o">=</span> <span class="n">start</span><span class="nf">.elapsed</span><span class="p">();</span>
 
-<span class="tok-w">        </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">total</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-mi">0</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-k">for</span><span class="tok-w"> </span><span class="tok-n">lock</span><span class="tok-w"> </span><span class="tok-k">in</span><span class="tok-w"> </span><span class="tok-n">locks</span><span class="tok-p">.</span><span class="tok-n">iter</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-n">lock</span><span class="tok-p">.</span><span class="tok-n">with_lock</span><span class="tok-p">(</span><span class="tok-o">|</span><span class="tok-n">cnt</span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-n">total</span><span class="tok-w"> </span><span class="tok-o">+=</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-n">cnt</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">assert_eq</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-n">total</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">options</span><span class="tok-p">.</span><span class="tok-n">n_threads</span><span class="tok-w"> </span><span class="tok-o">*</span><span class="tok-w"> </span><span class="tok-n">options</span><span class="tok-p">.</span><span class="tok-n">n_ops</span><span class="tok-p">);</span><span class="tok-w"> </span><i class="conum" data-value="2"></i><b>(2)</b>
+        <span class="k">let</span> <span class="k">mut</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">for</span> <span class="n">lock</span> <span class="n">in</span> <span class="n">locks</span><span class="nf">.iter</span><span class="p">()</span> <span class="p">{</span>
+            <span class="n">lock</span><span class="nf">.with_lock</span><span class="p">(|</span><span class="n">cnt</span><span class="p">|</span> <span class="n">total</span> <span class="o">+=</span> <span class="o">*</span><span class="n">cnt</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nd">assert_eq!</span><span class="p">(</span><span class="n">total</span><span class="p">,</span> <span class="n">options</span><span class="py">.n_threads</span> <span class="o">*</span> <span class="n">options</span><span class="py">.n_ops</span><span class="p">);</span> <i class="conum" data-value="2"></i><b>(2)</b>
 
-<span class="tok-w">        </span><span class="tok-n">elapsed</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">})</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">.</span><span class="tok-n">unwrap</span><span class="tok-p">()</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span>
+        <span class="n">elapsed</span>
+    <span class="p">})</span>
+    <span class="nf">.unwrap</span><span class="p">()</span>
+<span class="p">}</span>
 
-<span class="tok-k">fn</span> <span class="tok-nf">random_numbers</span><span class="tok-p">(</span><span class="tok-n">seed</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">u32</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-k">impl</span><span class="tok-w"> </span><span class="tok-nb">Iterator</span><span class="tok-o">&lt;</span><span class="tok-n">Item</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-kt">u32</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><i class="conum" data-value="4"></i><b>(4)</b>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">random</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">seed</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">iter</span><span class="tok-o">::</span><span class="tok-n">repeat_with</span><span class="tok-p">(</span><span class="tok-k">move</span><span class="tok-w"> </span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">random</span><span class="tok-w"> </span><span class="tok-o">^=</span><span class="tok-w"> </span><span class="tok-n">random</span><span class="tok-w"> </span><span class="tok-o">&lt;&lt;</span><span class="tok-w"> </span><span class="tok-mi">13</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">random</span><span class="tok-w"> </span><span class="tok-o">^=</span><span class="tok-w"> </span><span class="tok-n">random</span><span class="tok-w"> </span><span class="tok-o">&gt;&gt;</span><span class="tok-w"> </span><span class="tok-mi">17</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">random</span><span class="tok-w"> </span><span class="tok-o">^=</span><span class="tok-w"> </span><span class="tok-n">random</span><span class="tok-w"> </span><span class="tok-o">&lt;&lt;</span><span class="tok-w"> </span><span class="tok-mi">5</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">random</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">})</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<span class="k">fn</span> <span class="nf">random_numbers</span><span class="p">(</span><span class="n">seed</span><span class="p">:</span> <span class="nb">u32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="k">impl</span> <span class="n">Iterator</span><span class="o">&lt;</span><span class="n">Item</span> <span class="o">=</span> <span class="nb">u32</span><span class="o">&gt;</span> <span class="p">{</span> <i class="conum" data-value="4"></i><b>(4)</b>
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">random</span> <span class="o">=</span> <span class="n">seed</span><span class="p">;</span>
+    <span class="nn">iter</span><span class="p">::</span><span class="nf">repeat_with</span><span class="p">(</span><span class="k">move</span> <span class="p">||</span> <span class="p">{</span>
+        <span class="n">random</span> <span class="o">^=</span> <span class="n">random</span> <span class="o">&lt;&lt;</span> <span class="mi">13</span><span class="p">;</span>
+        <span class="n">random</span> <span class="o">^=</span> <span class="n">random</span> <span class="o">&gt;&gt;</span> <span class="mi">17</span><span class="p">;</span>
+        <span class="n">random</span> <span class="o">^=</span> <span class="n">random</span> <span class="o">&lt;&lt;</span> <span class="mi">5</span><span class="p">;</span>
+        <span class="n">random</span>
+    <span class="p">})</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -249,7 +249,7 @@ Finally, we run the whole suite twice, to sanity check that the results are repr
 <div class="listingblock">
 <div class="title">Extreme Contention:</div>
 <div class="content">
-<pre class="pygments highlight"><code><span></span>12:31:05|~/projects/lock-bench|master⚡*
+<pre class="rouge highlight"><code>12:31:05|~/projects/lock-bench|master⚡*
 λ cargo run --release 32 2 10000 100
     Finished release [optimized] target(s) in 0.01s
      Running `target/release/lock-bench 32 2 10000 100`
@@ -274,7 +274,7 @@ AmdSpinlock          avg 127ms  min 50ms  max 210ms</code></pre>
 <div class="listingblock">
 <div class="title">Heavy contention:</div>
 <div class="content">
-<pre class="pygments highlight"><code><span></span>12:34:39|~/projects/lock-bench|master⚡*
+<pre class="rouge highlight"><code>12:34:39|~/projects/lock-bench|master⚡*
 λ cargo run --release 32 64 10000 100
     Finished release [optimized] target(s) in 0.01s
      Running `target/release/lock-bench 32 64 10000 100`
@@ -299,7 +299,7 @@ AmdSpinlock          avg 40ms  min  8ms  max 110ms</code></pre>
 <div class="listingblock">
 <div class="title">Light contention:</div>
 <div class="content">
-<pre class="pygments highlight"><code><span></span>12:29:01|~/projects/lock-bench|master⚡*
+<pre class="rouge highlight"><code>12:29:01|~/projects/lock-bench|master⚡*
 λ cargo run --release 32 1000 10000 100
     Finished release [optimized] target(s) in 0.01s
      Running `target/release/lock-bench 32 1000 10000 100`
@@ -324,7 +324,7 @@ AmdSpinlock          avg 37ms  min  5ms  max 103ms</code></pre>
 <div class="listingblock">
 <div class="title">No contention</div>
 <div class="content">
-<pre class="pygments highlight"><code><span></span>12:26:25|~/projects/lock-bench|master⚡*
+<pre class="rouge highlight"><code>12:26:25|~/projects/lock-bench|master⚡*
 λ cargo run --release 32 1000000 10000 100
     Finished release [optimized] target(s) in 0.01s
      Running `target/release/lock-bench 32 1000000 10000 100`
@@ -359,7 +359,7 @@ AmdSpinlock          avg  6ms  min 5ms   max  7ms</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code><span></span>parking_lot::Mutex  min 6ms  max  11ms
+<pre class="rouge highlight"><code>parking_lot::Mutex  min 6ms  max  11ms
 AmdSpinlock         min 6ms  max 123ms</code></pre>
 </div>
 </div>
@@ -372,7 +372,7 @@ That is, individual lock/unlock operations probably have an even higher spread.<
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code><span></span>Parking_lot::Mutex   avg 6ms  min 4ms  max 9ms
+<pre class="rouge highlight"><code>Parking_lot::Mutex   avg 6ms  min 4ms  max 9ms
 spin::Mutex          avg 5ms  min 4ms  max 7ms</code></pre>
 </div>
 </div>
@@ -381,7 +381,7 @@ spin::Mutex          avg 5ms  min 4ms  max 7ms</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code><span></span>parking_lot::Mutex   avg 10ms  max  11ms
+<pre class="rouge highlight"><code>parking_lot::Mutex   avg 10ms  max  11ms
 spin::Mutex          avg 55ms  max 161ms</code></pre>
 </div>
 </div>
@@ -407,7 +407,7 @@ With mutexes, there is a queue of sleeping threads for each lock, and the kernel
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code><span></span>parking_lot::Mutex   avg 10ms  min 6ms
+<pre class="rouge highlight"><code>parking_lot::Mutex   avg 10ms  min 6ms
 spin::Mutex          avg 55ms  min 7ms</code></pre>
 </div>
 </div>
@@ -419,7 +419,7 @@ spin::Mutex          avg 55ms  min 7ms</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code><span></span>parking_lot::Mutex   avg  6ms  min 3ms   max   8ms
+<pre class="rouge highlight"><code>parking_lot::Mutex   avg  6ms  min 3ms   max   8ms
 spin::Mutex          avg 37ms  min 4ms   max 115ms</code></pre>
 </div>
 </div>

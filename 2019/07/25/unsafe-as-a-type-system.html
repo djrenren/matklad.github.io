@@ -11,7 +11,7 @@
     content="">
 
   <link rel="stylesheet" href="/css/asciidoctor.css">
-  <link rel="stylesheet" href="/css/asciidoctor-pygments.css">
+  <link rel="stylesheet" href="/css/rouge-github.css">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
   <link rel="canonical" href="https://matklad.github.io//2019/07/25/unsafe-as-a-type-system.html">
@@ -60,12 +60,12 @@ It looked roughly like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">fn</span> <span class="tok-nf">map_in_place</span><span class="tok-o">&lt;</span><span class="tok-n">T</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">F</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-n">t</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">T</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">f</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">F</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-k">where</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">F</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">FnOnce</span><span class="tok-p">(</span><span class="tok-n">T</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">T</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">unsafe</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"> </span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">ptr</span><span class="tok-o">::</span><span class="tok-n">write</span><span class="tok-p">(</span><span class="tok-n">t</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">f</span><span class="tok-p">(</span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">ptr</span><span class="tok-o">::</span><span class="tok-n">read</span><span class="tok-p">(</span><span class="tok-n">t</span><span class="tok-p">)));</span><span class="tok-w"> </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">fn</span> <span class="n">map_in_place</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">F</span><span class="o">&gt;</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">T</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span>
+<span class="k">where</span>
+    <span class="n">F</span><span class="p">:</span> <span class="nf">FnOnce</span><span class="p">(</span><span class="n">T</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">T</span><span class="p">,</span>
+<span class="p">{</span>
+    <span class="k">unsafe</span> <span class="p">{</span> <span class="nn">std</span><span class="p">::</span><span class="nn">ptr</span><span class="p">::</span><span class="nf">write</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nf">f</span><span class="p">(</span><span class="nn">std</span><span class="p">::</span><span class="nn">ptr</span><span class="p">::</span><span class="nf">read</span><span class="p">(</span><span class="n">t</span><span class="p">)));</span> <span class="p">}</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -76,14 +76,14 @@ It looked roughly like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">fn</span> <span class="tok-nf">map_in_place_safe</span><span class="tok-o">&lt;</span><span class="tok-n">T</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">F</span><span class="tok-o">&gt;</span><span class="tok-p">(</span><span class="tok-n">t</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-o">&amp;</span><span class="tok-k">mut</span><span class="tok-w"> </span><span class="tok-n">T</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">f</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">F</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-k">where</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">F</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">FnOnce</span><span class="tok-p">(</span><span class="tok-n">T</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-n">T</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">T</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Default</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">stolen_t</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">std</span><span class="tok-o">::</span><span class="tok-n">mem</span><span class="tok-o">::</span><span class="tok-n">replace</span><span class="tok-p">(</span><span class="tok-n">t</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">T</span><span class="tok-o">::</span><span class="tok-n">default</span><span class="tok-p">());</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">t</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">f</span><span class="tok-p">(</span><span class="tok-n">stolen_t</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">fn</span> <span class="n">map_in_place_safe</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">F</span><span class="o">&gt;</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="o">&amp;</span><span class="k">mut</span> <span class="n">T</span><span class="p">,</span> <span class="n">f</span><span class="p">:</span> <span class="n">F</span><span class="p">)</span>
+<span class="k">where</span>
+    <span class="n">F</span><span class="p">:</span> <span class="nf">FnOnce</span><span class="p">(</span><span class="n">T</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">T</span><span class="p">,</span>
+    <span class="n">T</span><span class="p">:</span> <span class="n">Default</span><span class="p">,</span>
+<span class="p">{</span>
+    <span class="k">let</span> <span class="n">stolen_t</span> <span class="o">=</span> <span class="nn">std</span><span class="p">::</span><span class="nn">mem</span><span class="p">::</span><span class="nf">replace</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="nn">T</span><span class="p">::</span><span class="nf">default</span><span class="p">());</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="nf">f</span><span class="p">(</span><span class="n">stolen_t</span><span class="p">)</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">

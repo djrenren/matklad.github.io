@@ -11,7 +11,7 @@
     content="">
 
   <link rel="stylesheet" href="/css/asciidoctor.css">
-  <link rel="stylesheet" href="/css/asciidoctor-pygments.css">
+  <link rel="stylesheet" href="/css/rouge-github.css">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
   <link rel="canonical" href="https://matklad.github.io//2019/05/19/consider-using-asciidoctor-for-your-next-presentation.html">
@@ -143,7 +143,7 @@ When I was translating this blog from <code>.md</code> to <code>.adoc</code> the
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code><span></span>[some link](http://example.com)</code></pre>
+<pre class="rouge highlight"><code>[some link](http://example.com)</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -151,7 +151,7 @@ When I was translating this blog from <code>.md</code> to <code>.adoc</code> the
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code><span></span>http://example.com[some link]</code></pre>
+<pre class="rouge highlight"><code>http://example.com[some link]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -163,7 +163,7 @@ We&#8217;ve seen the syntax for links before, and this is how one includes an im
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code><span></span>image::assets/logo.svg[alt text]</code></pre>
+<pre class="rouge highlight"><code>image::assets/logo.svg[alt text]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -171,7 +171,7 @@ We&#8217;ve seen the syntax for links before, and this is how one includes an im
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code><span></span>include::code_samples/worker.rs[]</code></pre>
+<pre class="rouge highlight"><code>include::code_samples/worker.rs[]</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -180,7 +180,7 @@ We&#8217;ve seen the syntax for links before, and this is how one includes an im
 <div class="listingblock">
 <div class="title">Paragraphs</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="adoc"><span></span>This is a paragraph
+<pre class="rouge highlight"><code data-lang="adoc">This is a paragraph
 
 [.lead]
 This is a paragraph with an attribute (which translates to CSS class)</code></pre>
@@ -199,7 +199,7 @@ This is a paragraph with an attribute (which translates to CSS class)</code></pr
 <div class="listingblock">
 <div class="title">List with nested elements</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="adoc"><span></span>* This is a bullet list
+<pre class="rouge highlight"><code data-lang="adoc">* This is a bullet list
 * Bullet with table (+ joins blocks)
 +
 |===
@@ -236,7 +236,7 @@ This is a paragraph with an attribute (which translates to CSS class)</code></pr
 <div class="listingblock">
 <div class="title">Code with <strong>inline markup</strong></div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="adoc"><span></span>[source,rust,subs=&quot;+quotes&quot;]
+<pre class="rouge highlight"><code data-lang="adoc">[source,rust,subs="+quotes"]
 ----
 let x = 1;
 let r: &amp;i32;
@@ -244,7 +244,7 @@ let r: &amp;i32;
     let y = 2;
     r = [.hl-error]##&amp;y##;  // borrowed value does not live long enough
 }
-println!(&quot;{}&quot;, *r);
+println!("{}", *r);
 ----</code></pre>
 </div>
 </div>
@@ -262,7 +262,7 @@ This can be used to call out specific bits of code, or, like in this case, to sh
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="adoc"><span></span>[.two-col]  <i class="conum" data-value="1"></i><b>(1)</b> <i class="conum" data-value="4"></i><b>(4)</b>
+<pre class="rouge highlight"><code data-lang="adoc">[.two-col]  <i class="conum" data-value="1"></i><b>(1)</b> <i class="conum" data-value="4"></i><b>(4)</b>
 == Ссылки в C++ и Rust
 
 .C++

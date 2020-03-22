@@ -11,7 +11,7 @@
     content="">
 
   <link rel="stylesheet" href="/css/asciidoctor.css">
-  <link rel="stylesheet" href="/css/asciidoctor-pygments.css">
+  <link rel="stylesheet" href="/css/rouge-github.css">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
   <link rel="canonical" href="https://matklad.github.io//2018/06/06/modern-parser-generator.html">
@@ -322,13 +322,13 @@ version looks like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">struct</span> <span class="tok-nc">Kind</span><span class="tok-p">(</span><span class="tok-kt">u32</span><span class="tok-p">);</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">struct</span> <span class="nf">Kind</span><span class="p">(</span><span class="nb">u32</span><span class="p">);</span>
 
-<span class="tok-k">struct</span> <span class="tok-nc">Node</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">kind</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-n">Kind</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">span</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-p">(</span><span class="tok-kt">usize</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-kt">usize</span><span class="tok-p">),</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">children</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-nb">Vec</span><span class="tok-o">&lt;</span><span class="tok-n">Node</span><span class="tok-o">&gt;</span><span class="tok-p">,</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<span class="k">struct</span> <span class="n">Node</span> <span class="p">{</span>
+    <span class="n">kind</span><span class="p">:</span> <span class="n">Kind</span><span class="p">,</span>
+    <span class="n">span</span><span class="p">:</span> <span class="p">(</span><span class="nb">usize</span><span class="p">,</span> <span class="nb">usize</span><span class="p">),</span>
+    <span class="n">children</span><span class="p">:</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -358,19 +358,19 @@ homogeneous tree, using newtype wrappers like</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-c1">// invariant: Node.kind == STRUCT_DEF</span>
-<span class="tok-k">struct</span> <span class="tok-nc">StructDef</span><span class="tok-p">(</span><span class="tok-n">Node</span><span class="tok-p">);</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="c">// invariant: Node.kind == STRUCT_DEF</span>
+<span class="k">struct</span> <span class="nf">StructDef</span><span class="p">(</span><span class="n">Node</span><span class="p">);</span>
 
-<span class="tok-c1">// invariant: Node.kind == STRUCT_FIELD</span>
-<span class="tok-k">struct</span> <span class="tok-nc">StructField</span><span class="tok-p">(</span><span class="tok-n">Node</span><span class="tok-p">);</span><span class="tok-w"></span>
+<span class="c">// invariant: Node.kind == STRUCT_FIELD</span>
+<span class="k">struct</span> <span class="nf">StructField</span><span class="p">(</span><span class="n">Node</span><span class="p">);</span>
 
-<span class="tok-k">impl</span><span class="tok-w"> </span><span class="tok-n">StructDef</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">fn</span> <span class="tok-nf">fields</span><span class="tok-p">(</span><span class="tok-o">&amp;</span><span class="tok-bp">self</span><span class="tok-p">)</span><span class="tok-w"> </span><span class="tok-o">-&gt;</span><span class="tok-w"> </span><span class="tok-nb">Vec</span><span class="tok-o">&lt;</span><span class="tok-n">StructField</span><span class="tok-o">&gt;</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-mf">0.</span><span class="tok-n">children</span><span class="tok-p">.</span><span class="tok-n">iter</span><span class="tok-p">().</span><span class="tok-n">filer</span><span class="tok-p">(</span><span class="tok-o">|</span><span class="tok-n">c</span><span class="tok-o">|</span><span class="tok-w"> </span><span class="tok-n">c</span><span class="tok-p">.</span><span class="tok-n">kind</span><span class="tok-w"> </span><span class="tok-o">==</span><span class="tok-w"> </span><span class="tok-n">STRUCT_FIELD</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-n">map</span><span class="tok-p">(</span><span class="tok-n">StructField</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-n">collect</span><span class="tok-p">()</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<span class="k">impl</span> <span class="n">StructDef</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="nf">fields</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">StructField</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="k">self</span><span class="err">.</span><span class="mi">0</span><span class="py">.children</span><span class="nf">.iter</span><span class="p">()</span><span class="nf">.filer</span><span class="p">(|</span><span class="n">c</span><span class="p">|</span> <span class="n">c</span><span class="py">.kind</span> <span class="o">==</span> <span class="n">STRUCT_FIELD</span><span class="p">)</span>
+            <span class="nf">.map</span><span class="p">(</span><span class="n">StructField</span><span class="p">)</span>
+            <span class="nf">.collect</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -648,10 +648,10 @@ grammar rules like <code>T &#8594; A B</code> into a set of recursive functions:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">fn</span> <span class="tok-nf">parse_t</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">parse_a</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">parse_b</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">fn</span> <span class="nf">parse_t</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nf">parse_a</span><span class="p">();</span>
+    <span class="nf">parse_b</span><span class="p">();</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -665,14 +665,14 @@ non-existent problem, because we have loops:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">fn</span> <span class="tok-nf">parse_statements</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-k">loop</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">parse_one_statement</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-o">!</span><span class="tok-n">parse_semicolon</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-k">break</span><span class="tok-p">;</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">}</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">fn</span> <span class="nf">parse_statements</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">loop</span> <span class="p">{</span>
+        <span class="nf">parse_one_statement</span><span class="p">();</span>
+        <span class="k">if</span> <span class="o">!</span><span class="nf">parse_semicolon</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -723,11 +723,11 @@ token.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">fn</span> <span class="tok-nf">foo</span><span class="tok-p">(</span><span class="tok-w"></span>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">fn</span> <span class="nf">foo</span><span class="p">(</span>
 
-<span class="tok-k">struct</span> <span class="tok-nc">S</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">   </span><span class="tok-n">f</span><span class="tok-o">:</span><span class="tok-w"> </span><span class="tok-kt">u32</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<span class="k">struct</span> <span class="n">S</span> <span class="p">{</span>
+   <span class="n">f</span><span class="p">:</span> <span class="nb">u32</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">

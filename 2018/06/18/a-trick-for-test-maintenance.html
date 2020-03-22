@@ -11,7 +11,7 @@
     content="">
 
   <link rel="stylesheet" href="/css/asciidoctor.css">
-  <link rel="stylesheet" href="/css/asciidoctor-pygments.css">
+  <link rel="stylesheet" href="/css/rouge-github.css">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
   <link rel="canonical" href="https://matklad.github.io//2018/06/18/a-trick-for-test-maintenance.html">
@@ -148,10 +148,10 @@ this</a>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-k">if</span><span class="tok-w"> </span><span class="tok-o">!</span><span class="tok-bp">self</span><span class="tok-p">.</span><span class="tok-n">keys</span><span class="tok-p">.</span><span class="tok-n">is_empty</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">covered_by</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;table_with_two_names&quot;</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">panic</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;table header is already specified, can&#39;t reset to {:?}&quot;</span><span class="tok-p">,</span><span class="tok-w"> </span><span class="tok-n">key</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><span class="k">if</span> <span class="o">!</span><span class="k">self</span><span class="py">.keys</span><span class="nf">.is_empty</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nd">covered_by!</span><span class="p">(</span><span class="s">"table_with_two_names"</span><span class="p">);</span>
+    <span class="nd">panic!</span><span class="p">(</span><span class="s">"table header is already specified, can't reset to {:?}"</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -159,17 +159,17 @@ this</a>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="rust"><span></span><span class="tok-cp">#[test]</span><span class="tok-w"></span>
-<span class="tok-k">fn</span> <span class="tok-nf">table_with_two_names</span><span class="tok-p">()</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">covers</span><span class="tok-o">!</span><span class="tok-p">(</span><span class="tok-s">&quot;table_with_two_names&quot;</span><span class="tok-p">);</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-kd">let</span><span class="tok-w"> </span><span class="tok-n">f</span><span class="tok-w"> </span><span class="tok-o">=</span><span class="tok-w"> </span><span class="tok-n">Factory</span><span class="tok-o">::</span><span class="tok-n">new</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-n">check_panics</span><span class="tok-p">(</span><span class="tok-o">||</span><span class="tok-w"> </span><span class="tok-p">{</span><span class="tok-w"></span>
-<span class="tok-w">        </span><span class="tok-n">f</span><span class="tok-p">.</span><span class="tok-n">table</span><span class="tok-p">()</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-n">with_name</span><span class="tok-p">(</span><span class="tok-s">&quot;foo&quot;</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-n">with_name</span><span class="tok-p">(</span><span class="tok-s">&quot;bar&quot;</span><span class="tok-p">)</span><span class="tok-w"></span>
-<span class="tok-w">            </span><span class="tok-p">.</span><span class="tok-n">build</span><span class="tok-p">();</span><span class="tok-w"></span>
-<span class="tok-w">    </span><span class="tok-p">})</span><span class="tok-w"></span>
-<span class="tok-p">}</span><span class="tok-w"></span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><span class="err">#</span><span class="p">[</span><span class="n">test</span><span class="p">]</span>
+<span class="k">fn</span> <span class="nf">table_with_two_names</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nd">covers!</span><span class="p">(</span><span class="s">"table_with_two_names"</span><span class="p">);</span>
+    <span class="k">let</span> <span class="n">f</span> <span class="o">=</span> <span class="nn">Factory</span><span class="p">::</span><span class="nf">new</span><span class="p">();</span>
+    <span class="nf">check_panics</span><span class="p">(||</span> <span class="p">{</span>
+        <span class="n">f</span><span class="nf">.table</span><span class="p">()</span>
+            <span class="nf">.with_name</span><span class="p">(</span><span class="s">"foo"</span><span class="p">)</span>
+            <span class="nf">.with_name</span><span class="p">(</span><span class="s">"bar"</span><span class="p">)</span>
+            <span class="nf">.build</span><span class="p">();</span>
+    <span class="p">})</span>
+<span class="p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
