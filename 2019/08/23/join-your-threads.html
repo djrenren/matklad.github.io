@@ -100,13 +100,21 @@ However, <em>just</em> calling <code>JoinHandle::join</code> is not enough:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">let</span> <span class="n">thread</span> <span class="o">=</span> <span class="nn">std</span><span class="p">::</span><span class="nn">thread</span><span class="p">::</span><span class="nf">spawn</span><span class="p">(||</span> <span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="k">let</span> <span class="n">thread</span> <span class="o">=</span> <span class="nn">std</span><span class="p">::</span><span class="nn">thread</span><span class="p">::</span><span class="nf">spawn</span><span class="p">(||</span> <span class="p">{</span>
     <span class="cm">/* useful work */</span>
 <span class="p">});</span>
 
 <span class="c">// ...</span>
 
-<span class="n">thread</span><span class="nf">.join</span><span class="p">()</span><span class="nf">.unwrap</span><span class="p">();</span> <span class="c">// propagate the panic</span></code></pre>
+<span class="n">thread</span><span class="nf">.join</span><span class="p">()</span><span class="nf">.unwrap</span><span class="p">();</span> <span class="c">// propagate the panic</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -204,7 +212,17 @@ It was about the usual setup with a worker thread that consumes items from a cha
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">fn</span> <span class="nf">frobnicate</span><span class="p">()</span> <span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+</pre></td><td class="code"><pre><span class="k">fn</span> <span class="nf">frobnicate</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">let</span> <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">receiver</span><span class="p">)</span> <span class="o">=</span> <span class="nf">channel</span><span class="p">();</span>
     <span class="k">let</span> <span class="n">worker</span> <span class="o">=</span> <span class="nn">jod_thread</span><span class="p">::</span><span class="nf">spawn</span><span class="p">(</span><span class="k">move</span> <span class="p">||</span> <span class="p">{</span>
         <span class="k">for</span> <span class="n">item</span> <span class="n">receiver</span> <span class="p">{</span>
@@ -213,7 +231,8 @@ It was about the usual setup with a worker thread that consumes items from a cha
     <span class="p">});</span>
 
     <span class="c">// prepare some work and send it via sender</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -226,7 +245,20 @@ This is a deadlock: <code>frobnicate</code> waits for <code>worker</code> to exi
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">fn</span> <span class="nf">frobnicate</span><span class="p">()</span> <span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+</pre></td><td class="code"><pre><span class="k">fn</span> <span class="nf">frobnicate</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">let</span> <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">receiver</span><span class="p">)</span> <span class="o">=</span> <span class="nf">channel</span><span class="p">();</span>
     <span class="k">let</span> <span class="n">worker</span> <span class="o">=</span> <span class="nn">jod_thread</span><span class="p">::</span><span class="nf">spawn</span><span class="p">(</span><span class="k">move</span> <span class="p">||</span> <span class="p">{</span>
         <span class="k">for</span> <span class="n">item</span> <span class="n">receiver</span> <span class="p">{</span>
@@ -238,7 +270,8 @@ This is a deadlock: <code>frobnicate</code> waits for <code>worker</code> to exi
 
     <span class="k">drop</span><span class="p">(</span><span class="n">sender</span><span class="p">);</span>
     <span class="k">drop</span><span class="p">(</span><span class="n">worker</span><span class="p">);</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -291,8 +324,11 @@ Specifically, we&#8217;ll arrange the code in such way that compiler automatical
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">let</span> <span class="n">worker</span> <span class="o">=</span> <span class="nn">jod_thread</span><span class="p">::</span><span class="nf">spawn</span><span class="p">(</span><span class="k">move</span> <span class="p">||</span> <span class="p">{</span> <span class="o">...</span> <span class="p">});</span>
-<span class="k">let</span> <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">receiver</span><span class="p">)</span> <span class="o">=</span> <span class="nf">channel</span><span class="p">();</span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre><span class="k">let</span> <span class="n">worker</span> <span class="o">=</span> <span class="nn">jod_thread</span><span class="p">::</span><span class="nf">spawn</span><span class="p">(</span><span class="k">move</span> <span class="p">||</span> <span class="p">{</span> <span class="o">...</span> <span class="p">});</span>
+<span class="k">let</span> <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">receiver</span><span class="p">)</span> <span class="o">=</span> <span class="nf">channel</span><span class="p">();</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -301,9 +337,13 @@ Instead, we do this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">let</span> <span class="n">worker</span><span class="p">;</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre><span class="k">let</span> <span class="n">worker</span><span class="p">;</span>
 <span class="k">let</span> <span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">receiver</span><span class="p">)</span> <span class="o">=</span> <span class="nf">channel</span><span class="p">();</span>
-<span class="n">worker</span> <span class="o">=</span> <span class="nn">jod_thread</span><span class="p">::</span><span class="nf">spawn</span><span class="p">(</span><span class="k">move</span> <span class="p">||</span> <span class="p">{</span> <span class="o">...</span> <span class="p">});</span></code></pre>
+<span class="n">worker</span> <span class="o">=</span> <span class="nn">jod_thread</span><span class="p">::</span><span class="nf">spawn</span><span class="p">(</span><span class="k">move</span> <span class="p">||</span> <span class="p">{</span> <span class="o">...</span> <span class="p">});</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">

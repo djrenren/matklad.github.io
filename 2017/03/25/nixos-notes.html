@@ -134,7 +134,23 @@ Rust). NixOS has a super convenient mechanism to do this:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="nix"><span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="nix"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre><span class="p">{</span>
   <span class="nv">packageOverrides</span> <span class="o">=</span> <span class="nv">pkgs</span><span class="p">:</span> <span class="kr">rec</span> <span class="p">{</span>
     <span class="nv">idea-community</span> <span class="o">=</span> <span class="kd">let</span>
       <span class="nv">version</span> <span class="o">=</span> <span class="s2">"2017.1"</span><span class="p">;</span>
@@ -149,7 +165,8 @@ Rust). NixOS has a super convenient mechanism to do this:
         <span class="p">};</span>
       <span class="p">});</span>
   <span class="p">};</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">

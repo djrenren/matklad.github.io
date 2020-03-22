@@ -167,14 +167,23 @@ concurrency:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="n">thread</span><span class="p">;</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre><span class="k">use</span> <span class="nn">std</span><span class="p">::</span><span class="n">thread</span><span class="p">;</span>
 
 <span class="k">fn</span> <span class="nf">unstructured</span><span class="p">()</span> <span class="p">{</span>
     <span class="nn">thread</span><span class="p">::</span><span class="nf">spawn</span><span class="p">(||</span> <span class="p">{</span>
         <span class="nf">do_stuff</span><span class="p">()</span>
     <span class="p">});</span>
     <span class="c">// The thread is "leaked" out of `unstructured` function</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -183,7 +192,17 @@ never escape it:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">extern</span> <span class="n">crate</span> <span class="n">crossbeam</span><span class="p">;</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+</pre></td><td class="code"><pre><span class="k">extern</span> <span class="n">crate</span> <span class="n">crossbeam</span><span class="p">;</span>
 
 <span class="k">fn</span> <span class="nf">structured</span><span class="p">()</span> <span class="p">{</span>
     <span class="nn">crossbeam</span><span class="p">::</span><span class="nf">scope</span><span class="p">(|</span><span class="n">scope</span><span class="p">|</span> <span class="p">{</span>
@@ -192,7 +211,8 @@ never escape it:</p>
         <span class="p">})</span>
     <span class="p">});</span>
     <span class="c">// The thread is finished and joined at this point.</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -213,12 +233,19 @@ behavior of the following program?</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">fn</span> <span class="nf">everything_is_terrible</span><span class="p">()</span> <span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="k">fn</span> <span class="nf">everything_is_terrible</span><span class="p">()</span> <span class="p">{</span>
     <span class="nn">crossbeam</span><span class="p">::</span><span class="nf">scope</span><span class="p">(|</span><span class="n">scope</span><span class="p">|</span> <span class="p">{</span>
         <span class="n">scope</span><span class="nf">.spawn</span><span class="p">(||</span> <span class="nf">do_work</span><span class="p">());</span>
         <span class="n">scope</span><span class="nf">.spawn</span><span class="p">(||</span> <span class="nd">panic!</span><span class="p">(</span><span class="s">"this hurts"</span><span class="p">));</span>
     <span class="p">});</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -246,7 +273,17 @@ partition (actual processing was in native code, so GIL was avoided):</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="python"><span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">()</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+<pre class="rouge highlight"><code data-lang="python"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+</pre></td><td class="code"><pre><span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">()</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
     <span class="n">futures</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">task_type</span><span class="p">,</span> <span class="n">hosts</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">tasks</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">task_id</span><span class="p">,</span> <span class="n">_host</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hosts</span><span class="p">):</span>
@@ -255,7 +292,8 @@ partition (actual processing was in native code, so GIL was avoided):</p>
 
     <span class="c1"># Re-raise the exception.
 </span>    <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">):</span>
-        <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span></code></pre>
+        <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">

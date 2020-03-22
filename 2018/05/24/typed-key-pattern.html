@@ -83,7 +83,16 @@ even just <a href="https://github.com/softprops/envy">environment variables</a>!
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="nd">#[derive(Deserialize)]</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="nd">#[derive(Deserialize)]</span>
 <span class="k">struct</span> <span class="n">Config</span> <span class="p">{</span>
     <span class="n">foo</span><span class="p">:</span> <span class="n">Foo</span>
 <span class="p">}</span>
@@ -91,7 +100,8 @@ even just <a href="https://github.com/softprops/envy">environment variables</a>!
 <span class="k">fn</span> <span class="nf">parse_config</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="o">&amp;</span><span class="nb">str</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Result</span><span class="o">&lt;</span><span class="n">Config</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="k">let</span> <span class="n">config</span> <span class="o">=</span> <span class="nn">serde_json</span><span class="p">::</span><span class="nf">from_str</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
     <span class="nf">Ok</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -130,7 +140,19 @@ string literal and specify its type on the call site:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">impl</span> <span class="n">Config</span> <span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="k">impl</span> <span class="n">Config</span> <span class="p">{</span>
     <span class="k">fn</span> <span class="n">get</span><span class="o">&lt;</span><span class="n">T</span><span class="p">:</span> <span class="n">Deserialize</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="o">&amp;</span><span class="nb">str</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Result</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
         <span class="k">let</span> <span class="n">json_value</span> <span class="o">=</span> <span class="k">self</span><span class="py">.map</span><span class="nf">.get</span><span class="p">(</span><span class="s">"key"</span><span class="p">)</span>
             <span class="nf">.ok_or_else</span><span class="p">(||</span> <span class="nd">bail!</span><span class="p">(</span><span class="s">"key is missing: `{}`"</span><span class="p">,</span> <span class="n">key</span><span class="p">))</span><span class="o">?</span><span class="p">;</span>
@@ -141,7 +163,8 @@ string literal and specify its type on the call site:</p>
 <span class="o">...</span>
 
 
-<span class="k">let</span> <span class="n">foo</span> <span class="o">=</span> <span class="n">config</span><span class="py">.get</span><span class="p">::</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"foo"</span><span class="p">)</span><span class="o">?</span><span class="p">;</span></code></pre>
+<span class="k">let</span> <span class="n">foo</span> <span class="o">=</span> <span class="n">config</span><span class="py">.get</span><span class="p">::</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"foo"</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -154,11 +177,17 @@ variable:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">const</span> <span class="n">FOO</span><span class="p">:</span> <span class="o">&amp;</span><span class="nb">str</span> <span class="o">=</span> <span class="s">"foo"</span><span class="p">;</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="k">const</span> <span class="n">FOO</span><span class="p">:</span> <span class="o">&amp;</span><span class="nb">str</span> <span class="o">=</span> <span class="s">"foo"</span><span class="p">;</span>
 
 <span class="o">...</span>
 
-<span class="k">let</span> <span class="n">foo</span> <span class="o">=</span> <span class="n">config</span><span class="py">.get</span><span class="p">::</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span><span class="p">(</span><span class="n">FOO</span><span class="p">)</span><span class="o">?</span><span class="p">;</span></code></pre>
+<span class="k">let</span> <span class="n">foo</span> <span class="o">=</span> <span class="n">config</span><span class="py">.get</span><span class="p">::</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span><span class="p">(</span><span class="n">FOO</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -201,7 +230,21 @@ type <code>Foo</code>, and make it impossible to use it for, say,
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">pub</span> <span class="k">struct</span> <span class="n">Key</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="k">pub</span> <span class="k">struct</span> <span class="n">Key</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="n">name</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'static</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">marker</span><span class="p">:</span> <span class="n">PhantomData</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span>
 <span class="p">}</span>
@@ -214,7 +257,8 @@ type <code>Foo</code>, and make it impossible to use it for, say,
     <span class="k">pub</span> <span class="k">fn</span> <span class="nf">name</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="o">&amp;</span><span class="nv">'static</span> <span class="nb">str</span> <span class="p">{</span>
         <span class="k">self</span><span class="py">.name</span>
     <span class="p">}</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -222,7 +266,9 @@ type <code>Foo</code>, and make it impossible to use it for, say,
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">const</span> <span class="n">FOO</span><span class="p">:</span> <span class="n">Key</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span> <span class="o">=</span> <span class="nn">Key</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="s">"foo"</span><span class="p">);</span></code></pre>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
+</pre></td><td class="code"><pre><span class="k">const</span> <span class="n">FOO</span><span class="p">:</span> <span class="n">Key</span><span class="o">&lt;</span><span class="n">Foo</span><span class="o">&gt;</span> <span class="o">=</span> <span class="nn">Key</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="s">"foo"</span><span class="p">);</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -230,7 +276,19 @@ type <code>Foo</code>, and make it impossible to use it for, say,
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">impl</span> <span class="n">Config</span> <span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="k">impl</span> <span class="n">Config</span> <span class="p">{</span>
     <span class="k">fn</span> <span class="n">get</span><span class="o">&lt;</span><span class="n">T</span><span class="p">:</span> <span class="n">Deserialize</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="k">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Key</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Result</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
         <span class="k">let</span> <span class="n">json_value</span> <span class="o">=</span> <span class="k">self</span><span class="py">.map</span><span class="nf">.get</span><span class="p">(</span><span class="n">key</span><span class="nf">.name</span><span class="p">())</span>
             <span class="nf">.ok_or_else</span><span class="p">(||</span> <span class="nd">bail!</span><span class="p">(</span><span class="s">"key is missing: `{}`"</span><span class="p">,</span> <span class="n">key</span><span class="p">))</span><span class="o">?</span><span class="p">;</span>
@@ -241,7 +299,8 @@ type <code>Foo</code>, and make it impossible to use it for, say,
 <span class="o">...</span>
 
 
-<span class="k">let</span> <span class="n">foo</span> <span class="o">=</span> <span class="n">config</span><span class="nf">.get</span><span class="p">(</span><span class="n">FOO</span><span class="p">)</span><span class="o">?</span><span class="p">;</span></code></pre>
+<span class="k">let</span> <span class="n">foo</span> <span class="o">=</span> <span class="n">config</span><span class="nf">.get</span><span class="p">(</span><span class="n">FOO</span><span class="p">)</span><span class="o">?</span><span class="p">;</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">

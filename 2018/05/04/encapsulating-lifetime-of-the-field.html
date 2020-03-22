@@ -66,13 +66,21 @@ struct. It could look like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">struct</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="k">struct</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="n">buff</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'a</span> <span class="nb">String</span>
 <span class="p">}</span>
 
 <span class="k">struct</span> <span class="n">Context</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="n">Foo</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -92,13 +100,21 @@ struct. It could look like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">struct</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="code"><pre><span class="k">struct</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="n">buff</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'a</span> <span class="nb">String</span>
 <span class="p">}</span>
 
 <span class="k">struct</span> <span class="n">Context</span><span class="o">&lt;</span><span class="nv">'f</span><span class="p">,</span> <span class="nv">'a</span><span class="p">:</span> <span class="nv">'f</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -130,7 +146,38 @@ actually works out in practice.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">struct</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+</pre></td><td class="code"><pre><span class="k">struct</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="n">buff</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'a</span> <span class="nb">String</span>
 <span class="p">}</span>
 
@@ -160,7 +207,8 @@ actually works out in practice.</p>
 <span class="k">fn</span> <span class="n">test</span><span class="o">&lt;</span><span class="nv">'f</span><span class="p">,</span> <span class="nv">'a</span><span class="o">&gt;</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">let</span> <span class="n">ctx</span> <span class="o">=</span> <span class="nn">Context</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">foo</span><span class="p">);</span>
     <span class="n">ctx</span><span class="nf">.len</span><span class="p">();</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -177,7 +225,35 @@ both <code>&amp;</code> and <code>Foo</code>: it fits syntactically, so why not 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">struct</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+</pre></td><td class="code"><pre><span class="k">struct</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="n">buff</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'a</span> <span class="nb">String</span>
 <span class="p">}</span>
 
@@ -204,7 +280,8 @@ both <code>&amp;</code> and <code>Foo</code>: it fits syntactically, so why not 
 <span class="k">fn</span> <span class="n">test</span><span class="o">&lt;</span><span class="nv">'f</span><span class="p">,</span> <span class="nv">'a</span><span class="o">&gt;</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">let</span> <span class="n">ctx</span> <span class="o">=</span> <span class="nn">Context</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">foo</span><span class="p">);</span>
     <span class="n">ctx</span><span class="nf">.len</span><span class="p">();</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -217,10 +294,15 @@ happens in the <code>new</code> method, which could be written more explicitly a
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">fn</span> <span class="n">new</span><span class="o">&lt;</span><span class="nv">'a</span><span class="p">:</span> <span class="nv">'f</span><span class="o">&gt;</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Self</span> <span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="k">fn</span> <span class="n">new</span><span class="o">&lt;</span><span class="nv">'a</span><span class="p">:</span> <span class="nv">'f</span><span class="o">&gt;</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="n">Self</span> <span class="p">{</span>
     <span class="k">let</span> <span class="n">foo1</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">foo</span><span class="p">;</span>
     <span class="n">Context</span> <span class="p">{</span> <span class="n">foo</span><span class="p">:</span> <span class="n">foo1</span> <span class="p">}</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -252,7 +334,35 @@ variance discussion :-)</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">struct</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+</pre></td><td class="code"><pre><span class="k">struct</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="n">buff</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'a</span> <span class="k">mut</span> <span class="nb">String</span>
 <span class="p">}</span>
 
@@ -279,7 +389,8 @@ variance discussion :-)</p>
 <span class="k">fn</span> <span class="n">test</span><span class="o">&lt;</span><span class="nv">'f</span><span class="p">,</span> <span class="nv">'a</span><span class="o">&gt;</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">let</span> <span class="k">mut</span> <span class="n">ctx</span> <span class="o">=</span> <span class="nn">Context</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">foo</span><span class="p">);</span>
     <span class="n">ctx</span><span class="nf">.push</span><span class="p">(</span><span class="sc">'9'</span><span class="p">);</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -290,7 +401,21 @@ variance discussion :-)</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">struct</span> <span class="n">Context</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span> <span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="k">struct</span> <span class="n">Context</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span>  <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span>
 <span class="p">}</span>
 
@@ -303,7 +428,8 @@ variance discussion :-)</p>
     <span class="k">fn</span> <span class="nf">push</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span> <span class="k">self</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="nb">char</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">self</span><span class="py">.foo</span><span class="nf">.push</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
     <span class="p">}</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -331,9 +457,13 @@ variance discussion :-)</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">struct</span> <span class="n">Context</span><span class="o">&lt;</span><span class="nv">'f</span><span class="p">,</span> <span class="nv">'a</span><span class="p">:</span> <span class="nv">'f</span><span class="o">&gt;</span> <span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre><span class="k">struct</span> <span class="n">Context</span><span class="o">&lt;</span><span class="nv">'f</span><span class="p">,</span> <span class="nv">'a</span><span class="p">:</span> <span class="nv">'f</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span>  <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -344,9 +474,13 @@ would be something like</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">struct</span> <span class="n">Context</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span> <span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="code"><pre><span class="k">struct</span> <span class="n">Context</span><span class="o">&lt;</span><span class="nv">'f</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span> <span class="k">for</span><span class="o">&lt;</span><span class="nv">'a</span><span class="p">:</span> <span class="n">f</span><span class="o">&gt;</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -374,7 +508,46 @@ we <strong>can</strong> use a trait here!</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">struct</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+</pre></td><td class="code"><pre><span class="k">struct</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="n">buff</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'a</span> <span class="k">mut</span> <span class="nb">String</span>
 <span class="p">}</span>
 
@@ -412,7 +585,8 @@ we <strong>can</strong> use a trait here!</p>
 <span class="k">fn</span> <span class="n">test</span><span class="o">&lt;</span><span class="nv">'f</span><span class="p">,</span> <span class="nv">'a</span><span class="o">&gt;</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">let</span> <span class="k">mut</span> <span class="n">ctx</span> <span class="o">=</span> <span class="nn">Context</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">foo</span><span class="p">);</span>
     <span class="n">ctx</span><span class="nf">.push</span><span class="p">(</span><span class="sc">'9'</span><span class="p">);</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -445,7 +619,46 @@ least to some extent:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">struct</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+</pre></td><td class="code"><pre><span class="k">struct</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="n">buff</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'a</span> <span class="k">mut</span> <span class="nb">String</span>
 <span class="p">}</span>
 
@@ -483,7 +696,8 @@ least to some extent:</p>
 <span class="k">fn</span> <span class="n">test</span><span class="o">&lt;</span><span class="nv">'f</span><span class="p">,</span> <span class="nv">'a</span><span class="o">&gt;</span><span class="p">(</span><span class="n">foo</span><span class="p">:</span> <span class="o">&amp;</span><span class="nv">'f</span> <span class="k">mut</span> <span class="n">Foo</span><span class="o">&lt;</span><span class="nv">'a</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">let</span> <span class="k">mut</span> <span class="n">ctx</span> <span class="o">=</span> <span class="nn">Context</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">foo</span><span class="p">);</span>
     <span class="n">ctx</span><span class="nf">.push</span><span class="p">(</span><span class="sc">'9'</span><span class="p">);</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">

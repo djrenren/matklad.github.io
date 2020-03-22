@@ -195,12 +195,19 @@ The nesting is undoubtedly there, but usually it is very boring, and calling it 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">let</span> <span class="n">d</span> <span class="o">=</span> <span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="code"><pre><span class="k">let</span> <span class="n">d</span> <span class="o">=</span> <span class="p">{</span>
     <span class="k">let</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
     <span class="k">let</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
     <span class="k">let</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
     <span class="n">b</span><span class="o">*</span><span class="n">b</span> <span class="o">-</span> <span class="mi">4</span><span class="o">*</span><span class="n">a</span><span class="o">*</span><span class="n">c</span>
-<span class="p">};</span></code></pre>
+<span class="p">};</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -228,11 +235,17 @@ Note how the rarer option is more verbose, and how it is expressed as a modifier
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">enum</span> <span class="n">Expr</span> <span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="k">enum</span> <span class="n">Expr</span> <span class="p">{</span>
     <span class="nf">Int</span><span class="p">(</span><span class="nb">i32</span><span class="p">),</span>
     <span class="nf">Bool</span><span class="p">(</span><span class="nb">bool</span><span class="p">),</span>
     <span class="n">Sum</span> <span class="p">{</span> <span class="n">lhs</span><span class="p">:</span> <span class="nb">Box</span><span class="o">&lt;</span><span class="n">Expr</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">rhs</span><span class="p">:</span> <span class="nb">Box</span><span class="o">&lt;</span><span class="n">Expr</span><span class="o">&gt;</span> <span class="p">},</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -240,10 +253,15 @@ Note how the rarer option is more verbose, and how it is expressed as a modifier
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">enum</span> <span class="n">Type</span> <span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="code"><pre><span class="k">enum</span> <span class="n">Type</span> <span class="p">{</span>
     <span class="n">Int</span><span class="p">,</span>
     <span class="n">Bool</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -255,11 +273,17 @@ This makes matching less verbose and completely dodges the sad Rust ambiguity be
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">let</span> <span class="n">x</span><span class="p">:</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="nb">i32</span><span class="o">&gt;</span> <span class="o">=</span> <span class="nf">Some</span><span class="p">(</span><span class="mi">92</span><span class="p">);</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="code"><pre><span class="k">let</span> <span class="n">x</span><span class="p">:</span> <span class="nb">Option</span><span class="o">&lt;</span><span class="nb">i32</span><span class="o">&gt;</span> <span class="o">=</span> <span class="nf">Some</span><span class="p">(</span><span class="mi">92</span><span class="p">);</span>
 <span class="k">match</span> <span class="n">x</span> <span class="p">{</span>
     <span class="nb">None</span> <span class="k">=&gt;</span> <span class="mi">1</span><span class="p">,</span>
     <span class="n">none</span> <span class="k">=&gt;</span> <span class="mi">2</span><span class="p">,</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 </div>
@@ -272,7 +296,20 @@ This makes matching less verbose and completely dodges the sad Rust ambiguity be
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="nd">#[derive(Clone,</span> <span class="nd">Copy)]</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+</pre></td><td class="code"><pre><span class="nd">#[derive(Clone,</span> <span class="nd">Copy)]</span>
 <span class="k">struct</span> <span class="n">Point</span> <span class="p">{</span>
     <span class="n">x</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
     <span class="n">y</span><span class="p">:</span> <span class="nb">f64</span><span class="p">,</span>
@@ -284,7 +321,8 @@ This makes matching less verbose and completely dodges the sad Rust ambiguity be
         <span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">*</span><span class="n">y</span><span class="p">)</span><span class="nf">.sqrt</span><span class="p">()</span>
     <span class="p">}</span>
     <span class="o">...</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -427,7 +465,19 @@ I hope some day we&#8217;ll be able to call custom user-provided <code>Debug</co
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="nd">#[derive(</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+</pre></td><td class="code"><pre><span class="nd">#[derive(</span>
     <span class="nd">Debug,</span>
     <span class="nd">Clone,</span> <span class="nd">Copy,</span>
     <span class="nd">PartialEq,</span> <span class="nd">Eq,</span>
@@ -438,7 +488,8 @@ I hope some day we&#8217;ll be able to call custom user-provided <code>Debug</co
 <span class="k">struct</span> <span class="n">Point</span> <span class="p">{</span>
     <span class="n">x</span><span class="p">:</span> <span class="nb">i64</span><span class="p">,</span>
     <span class="n">y</span><span class="p">:</span> <span class="nb">i64</span><span class="p">,</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 </div>

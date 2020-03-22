@@ -87,14 +87,23 @@ shortcuts, with the following config:</p>
 <div class="listingblock">
 <div class="title">~/.xbindkeysrc</div>
 <div class="content">
-<pre class="rouge highlight"><code>"jumpapp -m kitty"
+<pre class="rouge highlight"><code><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="code"><pre>"jumpapp -m kitty"
   F1
 
 "jumpapp -m firefox"
   F2
 
 "jumpapp -m code"
-  F3</code></pre>
+  F3
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -259,8 +268,11 @@ The killer feature for me is autosuggestions: completion of the commands based o
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code>02:43:39|~/.config
-λ</code></pre>
+<pre class="rouge highlight"><code><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre>02:43:39|~/.config
+λ
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -303,7 +315,23 @@ post</a> was instrumental for me to figure this stuff out. Thanks Chris!</p>
 <div class="listingblock">
 <div class="title">~/.local/share/kwin/scripts/SmartCloseWindow/metadata.desktop</div>
 <div class="content">
-<pre class="rouge highlight"><code>[Desktop Entry]
+<pre class="rouge highlight"><code><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="code"><pre>[Desktop Entry]
 Name=Smart Close Window
 Comment=
 Icon=preferences-system-windows-script-test
@@ -318,13 +346,25 @@ X-KDE-PluginInfo-Name=SmartCloseWindow # Note, the same name as the dir
 X-KDE-PluginInfo-Author=matklad
 X-KDE-PluginInfo-Email=...
 X-KDE-PluginInfo-License=GPL
-X-KDE-PluginInfo-Version=3</code></pre>
+X-KDE-PluginInfo-Version=3
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">~/.local/share/kwin/scripts/SmartCloseWindow/contents/code/main.js</div>
 <div class="content">
-<pre class="rouge highlight"><code>registerShortcut("Smart Close Window.",
+<pre class="rouge highlight"><code><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+</pre></td><td class="code"><pre>registerShortcut("Smart Close Window.",
     "Smart Close Window.",
     "alt+f4",
     function () {
@@ -334,7 +374,8 @@ X-KDE-PluginInfo-Version=3</code></pre>
         } else {
             c.minimized = true;
         }
-    });</code></pre>
+    });
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">

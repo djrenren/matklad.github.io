@@ -139,7 +139,68 @@ The source code for the benchmark is here:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="rust"><span class="k">fn</span> <span class="n">run_bench</span><span class="o">&lt;</span><span class="n">M</span><span class="p">:</span> <span class="n">Mutex</span><span class="o">&gt;</span><span class="p">(</span><span class="n">options</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">Options</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nn">time</span><span class="p">::</span><span class="n">Duration</span> <span class="p">{</span>
+<pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+</pre></td><td class="code"><pre><span class="k">fn</span> <span class="n">run_bench</span><span class="o">&lt;</span><span class="n">M</span><span class="p">:</span> <span class="n">Mutex</span><span class="o">&gt;</span><span class="p">(</span><span class="n">options</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">Options</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nn">time</span><span class="p">::</span><span class="n">Duration</span> <span class="p">{</span>
     <span class="k">let</span> <span class="n">locks</span> <span class="o">=</span> <span class="o">&amp;</span><span class="p">(</span><span class="mi">0</span><span class="o">..</span><span class="n">options</span><span class="py">.n_locks</span><span class="p">)</span> <i class="conum" data-value="3"></i><b>(3)</b>
         <span class="nf">.map</span><span class="p">(|</span><span class="mi">_</span><span class="p">|</span> <span class="nn">CachePadded</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">M</span><span class="p">::</span><span class="nf">default</span><span class="p">()))</span>
         <span class="py">.collect</span><span class="p">::</span><span class="o">&lt;</span><span class="nb">Vec</span><span class="o">&lt;</span><span class="mi">_</span><span class="o">&gt;&gt;</span><span class="p">();</span>
@@ -199,7 +260,8 @@ The source code for the benchmark is here:</p>
         <span class="n">random</span> <span class="o">^=</span> <span class="n">random</span> <span class="o">&lt;&lt;</span> <span class="mi">5</span><span class="p">;</span>
         <span class="n">random</span>
     <span class="p">})</span>
-<span class="p">}</span></code></pre>
+<span class="p">}</span>
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -249,7 +311,27 @@ Finally, we run the whole suite twice, to sanity check that the results are repr
 <div class="listingblock">
 <div class="title">Extreme Contention:</div>
 <div class="content">
-<pre class="rouge highlight"><code>12:31:05|~/projects/lock-bench|master⚡*
+<pre class="rouge highlight"><code><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="code"><pre>12:31:05|~/projects/lock-bench|master⚡*
 λ cargo run --release 32 2 10000 100
     Finished release [optimized] target(s) in 0.01s
      Running `target/release/lock-bench 32 2 10000 100`
@@ -268,13 +350,34 @@ AmdSpinlock          avg 127ms  min 50ms  max 219ms
 std::sync::Mutex     avg  98ms  min 68ms  max 125ms
 parking_lot::Mutex   avg  68ms  min 58ms  max  71ms
 spin::Mutex          avg 139ms  min 54ms  max 193ms
-AmdSpinlock          avg 127ms  min 50ms  max 210ms</code></pre>
+AmdSpinlock          avg 127ms  min 50ms  max 210ms
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Heavy contention:</div>
 <div class="content">
-<pre class="rouge highlight"><code>12:34:39|~/projects/lock-bench|master⚡*
+<pre class="rouge highlight"><code><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="code"><pre>12:34:39|~/projects/lock-bench|master⚡*
 λ cargo run --release 32 64 10000 100
     Finished release [optimized] target(s) in 0.01s
      Running `target/release/lock-bench 32 64 10000 100`
@@ -293,13 +396,34 @@ AmdSpinlock          avg 40ms  min  6ms  max 123ms
 std::sync::Mutex     avg 21ms  min 20ms  max  24ms
 parking_lot::Mutex   avg  9ms  min  6ms  max  12ms
 spin::Mutex          avg 48ms  min  7ms  max 138ms
-AmdSpinlock          avg 40ms  min  8ms  max 110ms</code></pre>
+AmdSpinlock          avg 40ms  min  8ms  max 110ms
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Light contention:</div>
 <div class="content">
-<pre class="rouge highlight"><code>12:29:01|~/projects/lock-bench|master⚡*
+<pre class="rouge highlight"><code><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="code"><pre>12:29:01|~/projects/lock-bench|master⚡*
 λ cargo run --release 32 1000 10000 100
     Finished release [optimized] target(s) in 0.01s
      Running `target/release/lock-bench 32 1000 10000 100`
@@ -318,13 +442,34 @@ AmdSpinlock          avg 39ms  min 2ms   max 127ms
 std::sync::Mutex     avg 13ms  min 12ms  max  15ms
 parking_lot::Mutex   avg  6ms  min  5ms  max   8ms
 spin::Mutex          avg 39ms  min  4ms  max 102ms
-AmdSpinlock          avg 37ms  min  5ms  max 103ms</code></pre>
+AmdSpinlock          avg 37ms  min  5ms  max 103ms
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">No contention</div>
 <div class="content">
-<pre class="rouge highlight"><code>12:26:25|~/projects/lock-bench|master⚡*
+<pre class="rouge highlight"><code><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="code"><pre>12:26:25|~/projects/lock-bench|master⚡*
 λ cargo run --release 32 1000000 10000 100
     Finished release [optimized] target(s) in 0.01s
      Running `target/release/lock-bench 32 1000000 10000 100`
@@ -343,7 +488,8 @@ AmdSpinlock          avg  6ms  min 5ms   max 10ms
 std::sync::Mutex     avg 15ms  min 8ms   max 27ms
 parking_lot::Mutex   avg  6ms  min 4ms   max  9ms
 spin::Mutex          avg  5ms  min 4ms   max  7ms
-AmdSpinlock          avg  6ms  min 5ms   max  7ms</code></pre>
+AmdSpinlock          avg  6ms  min 5ms   max  7ms
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 </div>
@@ -359,8 +505,11 @@ AmdSpinlock          avg  6ms  min 5ms   max  7ms</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code>parking_lot::Mutex  min 6ms  max  11ms
-AmdSpinlock         min 6ms  max 123ms</code></pre>
+<pre class="rouge highlight"><code><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre>parking_lot::Mutex  min 6ms  max  11ms
+AmdSpinlock         min 6ms  max 123ms
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -372,8 +521,11 @@ That is, individual lock/unlock operations probably have an even higher spread.<
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code>Parking_lot::Mutex   avg 6ms  min 4ms  max 9ms
-spin::Mutex          avg 5ms  min 4ms  max 7ms</code></pre>
+<pre class="rouge highlight"><code><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre>Parking_lot::Mutex   avg 6ms  min 4ms  max 9ms
+spin::Mutex          avg 5ms  min 4ms  max 7ms
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -381,8 +533,11 @@ spin::Mutex          avg 5ms  min 4ms  max 7ms</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code>parking_lot::Mutex   avg 10ms  max  11ms
-spin::Mutex          avg 55ms  max 161ms</code></pre>
+<pre class="rouge highlight"><code><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre>parking_lot::Mutex   avg 10ms  max  11ms
+spin::Mutex          avg 55ms  max 161ms
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -407,8 +562,11 @@ With mutexes, there is a queue of sleeping threads for each lock, and the kernel
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code>parking_lot::Mutex   avg 10ms  min 6ms
-spin::Mutex          avg 55ms  min 7ms</code></pre>
+<pre class="rouge highlight"><code><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre>parking_lot::Mutex   avg 10ms  min 6ms
+spin::Mutex          avg 55ms  min 7ms
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -419,8 +577,11 @@ spin::Mutex          avg 55ms  min 7ms</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code>parking_lot::Mutex   avg  6ms  min 3ms   max   8ms
-spin::Mutex          avg 37ms  min 4ms   max 115ms</code></pre>
+<pre class="rouge highlight"><code><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
+2
+</pre></td><td class="code"><pre>parking_lot::Mutex   avg  6ms  min 3ms   max   8ms
+spin::Mutex          avg 37ms  min 4ms   max 115ms
+</pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
 <div class="paragraph">
