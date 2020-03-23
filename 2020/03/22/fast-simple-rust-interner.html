@@ -496,11 +496,11 @@ That way, we void a bounds check and/or <code>.unwrap</code> when accessing the 
 <div class="paragraph">
 <p>We also use <code>&amp;'static str</code> to fake interior references.
 <a href="https://github.com/rust-lang/miri">Miri</a> (rust in-progress UB checker) is not entirely happy about this.
-I haven&#8217;t dug into this yet, it seems like it might be another instance of
-<a href="https://github.com/rust-lang/rust/pull/61114">rust-lang/rust#61114</a> on the first sight.
+I haven&#8217;t dug into this yet, it might be another instance of
+<a href="https://github.com/rust-lang/rust/pull/61114">rust-lang/rust#61114</a>.
 To be on the safe side, we can use <code>*const str</code> instead, with a bit of boilerplate to delegate <code>PartialEq</code> and <code>Hash</code>.
 Some kind of (hypothetical) <code>'unsafe</code> lifetime could also be useful here!
-The critical detail that makes our use of fake <code>'static</code> here is that <code>alloc</code> function is private.
+The critical detail that makes our use of fake <code>'static</code> sound here is that the <code>alloc</code> function is private.
 The public <code>lookup</code> function shortens the lifetime to that of <code>&amp;self</code> (via lifetime elision).</p>
 </div>
 <div class="paragraph">
