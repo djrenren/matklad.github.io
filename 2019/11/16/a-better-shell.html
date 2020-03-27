@@ -136,20 +136,6 @@ I want to <code>cat</code> images and PDFs in my terminal (and html, obviously).
 <div class="paragraph">
 <p>Like, <code>cargo test</code> is being run by my shell (fish), the split is handled by the terminal emulator (kitty), which launches a fresh instance of fish and arranges the working directory to be saved.</p>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>Hm, aren&#8217;t cats supposed to eat fishes?</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
 <div class="paragraph">
 <p>As a user, I don&#8217;t care about this terminal/terminal emulator/shell split.
 I want to launch a program, and just type commands.
@@ -285,6 +271,20 @@ Emacs is definitely in the same class of &#8220;application containers&#8221;, b
 </div>
 <div class="paragraph">
 <p>If you build some like this, please sign me up!</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="addendum-2020-03-27"><a class="anchor" href="#addendum-2020-03-27"></a>Addendum (2020-03-27)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A "terminals are a mess" story from today.
+Implementing it was easy, as kitty has a nice plugin API.
+After that I&#8217;ve realized that I need to remap <code>kill_line</code> from <span class="keyseq"><kbd>ctrl</kbd>+<kbd>k</kbd></span> to <span class="keyseq"><kbd>ctrl</kbd>+<kbd>shift</kbd>+<kbd>k</kbd></span>.
+It took me a while to realize that searching for <code>kill_line</code> in kitty is futile&#8201;&#8212;&#8201;editing is handled by the shell.
+Ok, so it looks like I can just remap the key in fish, by <code>bind \cK kill_line</code>, except that, no, <kbd>ctrl</kbd> shortcuts do not work with <kbd>Shift</kbd> because of some obscure terminal limitation.
+So, let&#8217;s go back to kitty and add a <span class="keyseq"><kbd>ctrl</kbd>+<kbd>shift</kbd>+<kbd>k</kbd></span> shortcut that sends <code>^k</code> to the fish!
+<a href="https://github.com/matklad/config/commit/fa1bbcb1813242a571f3aba44f7d986db45ef7cc">An hour wasted</a>.</p>
 </div>
 </div>
 </div>
