@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="/css/asciidoctor.css">
   <link rel="stylesheet" href="/css/rouge-github.css">
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CDroid+Sans+Mono:400,700">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Serif:400,400italic,700,700italic%7COpen+Sans:300">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
 
   <link rel="canonical" href="https://matklad.github.io//2020/03/22/fast-simple-rust-interner.html">
@@ -21,6 +21,16 @@
     href="https://matklad.github.io//feed.xml">
 
   <style>
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/css/JetBrainsMono-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/css/JetBrainsMono-Bold.woff2') format('woff2');;
+  font-weight: bold;
+}
+
 * { box-sizing: border-box; }
 
 h1, h2, h3 { font-weight: 300; }
@@ -112,7 +122,7 @@ It can give the following benefits:</p>
 <p>If all strings are canonicalized, comparison can be done in <code>O(1)</code> (instead of <code>O(n)</code>) by using pointer equality.</p>
 </li>
 <li>
-<p>Interned strings themselves can be represented with an index (buddy <code>u32</code>) instead of a <code>(ptr, len)</code> pair.
+<p>Interned strings themselves can be represented with an index (typically <code>u32</code>) instead of a <code>(ptr, len)</code> pair.
 This makes data structures which embed strings more compact.</p>
 </li>
 </ul>
@@ -189,7 +199,7 @@ To map from an index back to the string, we also store strings in a <code>Vec</c
 <div class="ulist">
 <ul>
 <li>
-<p>It allocates a lot&#8201;&#8212;&#8201;each interned string is <strong>two</strong> separate allocations.</p>
+<p>It allocates a lot&#8201;&#8212;&#8201;each interned string is <em>two</em> separate allocations.</p>
 </li>
 <li>
 <p>Using a <code>HashMap</code> feels like cheating, surely there should be a better, more classical data structure!</p>
@@ -200,8 +210,8 @@ To map from an index back to the string, we also store strings in a <code>Vec</c
 <p>So I&#8217;ve spent a part of the evening cobbling together a non-allocating <a href="https://en.wikipedia.org/wiki/Trie">trie</a>-based interner.
 The result: trie does indeed asymptotically reduce the number of allocations from <code>O(n)</code> to <code>O(log(n))</code>.
 Unfortunately, it is slower, larger and way more complex than the above snippet.
-Minimizing allocations <strong>is</strong> important, but allocators are pretty fast, and that shouldn&#8217;t be done at the expense of everything else.
-Also, Rust <code>HashMap</code> (implemented by <a href="https://github.com/Amanieu/">@Amanieu</a> based on <a href="https://abseil.io/blog/20180927-swisstables">Swiss Table</a>) is <em><strong>fast</strong></em>.</p>
+Minimizing allocations <em>is</em> important, but allocators are pretty fast, and that shouldn&#8217;t be done at the expense of everything else.
+Also, Rust <code>HashMap</code> (implemented by <a href="https://github.com/Amanieu/">@Amanieu</a> based on <a href="https://abseil.io/blog/20180927-swisstables">Swiss Table</a>) is <em>fast</em>.</p>
 </div>
 <details>
 <summary class="title">For the curious, the Trie design I&#8217;ve used</summary>
@@ -343,7 +353,7 @@ In the trie, I concatenate all interned strings into one giant <code>String</cod
 </div>
 <div class="paragraph">
 <p>The problem here is that we can&#8217;t actually write implementations of <code>Eq</code> and <code>Hash</code> for <code>Span</code> to make this work.
-In theory, this is possible: to compare two <code>Span</code>s, you resolve them to <code>&amp;str</code>s via <code>buf</code>, and then compare the strings.
+In theory, this is possible: to compare two <code>Spans</code>, you resolve them to <code>&amp;str</code> via <code>buf</code>, and then compare the strings.
 However, Rust API does not allow to express this idea.
 Moreover, even if <code>HashMap</code> allowed supplying a key closure at <em>construction</em> time, it wouldn&#8217;t help!</p>
 </div>
@@ -393,7 +403,7 @@ The trick is to add strings to <code>buf</code> in such a way that they are neve
 That way, we can just store <code>&amp;str</code> in the <code>HashMap</code>.
 To achieve address stability, we use another trick from the <a href="https://crates.io/crates/typed_arena"><code>typed_arena</code></a> crate.
 If the <code>buf</code> is full (so that adding a new string would invalidate old pointers), we allocate a new buffer, twice as large,
-<strong>without</strong> coping the contents of the old one.</p>
+<em>without</em> coping the contents of the old one.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s the full implementation:</p>
