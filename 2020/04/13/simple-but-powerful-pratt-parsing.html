@@ -803,7 +803,8 @@ So let&#8217;s recursively call <code>expr_bp</code> starting at <code>b</code>,
 This necessitates the addition of <code>min_bp</code> argument to the main function.</p>
 </div>
 <div class="paragraph">
-<p>And lo, we have a fully functioning minimal Prat parser:</p>
+<p>And lo, we have a fully functioning minimal Prat parser:
+And lo, we have a fully functioning minimal Prat parser:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1839,7 +1840,7 @@ What associativity even is in this case?</p>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="rust"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno">1
-</pre></td><td class="code"><pre><span class="p">(</span><span class="n">a</span> <span class="o">?</span><span class="p">:</span> <span class="n">c</span><span class="p">)</span> <span class="o">?</span><span class="p">:</span> <span class="n">e</span>
+</pre></td><td class="code"><pre><span class="n">a</span> <span class="o">?</span><span class="p">:</span> <span class="p">(</span><span class="n">c</span> <span class="o">?</span><span class="p">:</span> <span class="n">e</span><span class="p">)</span>
 </pre></td></tr></tbody></table></code></pre>
 </div>
 </div>
