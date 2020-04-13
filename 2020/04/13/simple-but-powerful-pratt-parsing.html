@@ -471,7 +471,7 @@ power:  0          3    3.1    0
 Or, in terms of the syntax tree, the second <code>+</code> really likes its right operand more than the left one, so it rushes to get hold of <code>C</code>. While he does that, the first <code>+</code> captures both <code>A</code> and <code>B</code>, as they are uncontested.</p>
 </div>
 <div class="paragraph">
-<p>What Pratt parsing does is that it finds these badass, stronger than neighbors operators, by processing the string left to write. We are almost at a point where we finally start writing some code, but let&#8217;s first look at the other running example. We will use function composition operator, <code>.</code> (dot) as a <em>right</em> associative operator with a high binding power. That is, <code><em>f</em> . <em>g</em> . <em>h</em></code> is parsed as <code><em>f</em> . (<em>g</em> . <em>h</em>)</code>, or, in terms of power</p>
+<p>What Pratt parsing does is that it finds these badass, stronger than neighbors operators, by processing the string left to right. We are almost at a point where we finally start writing some code, but let&#8217;s first look at the other running example. We will use function composition operator, <code>.</code> (dot) as a <em>right</em> associative operator with a high binding power. That is, <code><em>f</em> . <em>g</em> . <em>h</em></code> is parsed as <code><em>f</em> . (<em>g</em> . <em>h</em>)</code>, or, in terms of power</p>
 </div>
 <div class="listingblock">
 <div class="content">
