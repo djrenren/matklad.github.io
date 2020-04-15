@@ -6,9 +6,16 @@
 </description>
     <link>https://matklad.github.io//</link>
     <atom:link href="https://matklad.github.io//feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 14 Apr 2020 07:06:28 +0000</pubDate>
-    <lastBuildDate>Tue, 14 Apr 2020 07:06:28 +0000</lastBuildDate>
+    <pubDate>Wed, 15 Apr 2020 09:53:50 +0000</pubDate>
+    <lastBuildDate>Wed, 15 Apr 2020 09:53:50 +0000</lastBuildDate>
     <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>From Pratt to Dijkstra</title>
+        <pubDate>Wed, 15 Apr 2020 00:00:00 +0000</pubDate>
+        <link>https://matklad.github.io//2020/04/15/from-pratt-to-dijkstra.html</link>
+        <guid isPermaLink="true">https://matklad.github.io//2020/04/15/from-pratt-to-dijkstra.html</guid>
+      </item>
     
       <item>
         <title>Simple but Powerful Pratt Parsing</title>
@@ -71,13 +78,6 @@
         <pubDate>Thu, 25 Jul 2019 00:00:00 +0000</pubDate>
         <link>https://matklad.github.io//2019/07/25/unsafe-as-a-type-system.html</link>
         <guid isPermaLink="true">https://matklad.github.io//2019/07/25/unsafe-as-a-type-system.html</guid>
-      </item>
-    
-      <item>
-        <title>Perils of Constructors</title>
-        <pubDate>Tue, 16 Jul 2019 00:00:00 +0000</pubDate>
-        <link>https://matklad.github.io//2019/07/16/perils-of-constructors.html</link>
-        <guid isPermaLink="true">https://matklad.github.io//2019/07/16/perils-of-constructors.html</guid>
       </item>
     
   </channel>
