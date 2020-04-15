@@ -111,7 +111,29 @@ Spoiler: they are the same algorithm, the difference is implementation style wit
 </div>
 <div class="paragraph">
 <p>Unlike the previous educational post, this one is going to be an excruciatingly boring pile of technicalities&#8201;&#8212;&#8201;we&#8217;ll just slowly and mechanically refactor our way to victory.
-Really, the most exciting bit about this post is the conclusion, and you already know it</p>
+Specifically,</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>We start with refactoring Pratt parser to minimize control flow variations.</p>
+</li>
+<li>
+<p>Then, having arrived at the code with only one <code>return</code> and only one recursive call, we replace recursion with an explicit stack.</p>
+</li>
+<li>
+<p>Finally, we streamline control in the iterative version.</p>
+</li>
+<li>
+<p>At this point, we have a bona fide shunting yard algorithm.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>To further reveal the connection, we further verify that the original recursive and the iterative formulation produce syntax nodes in the same order.</p>
+</div>
+<div class="paragraph">
+<p>Really, the most exciting bit about this post is the conclusion, and you already know it :)</p>
 </div>
 </div>
 </div>
