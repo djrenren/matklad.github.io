@@ -799,7 +799,7 @@ Can we add a lookahead?
 Looks like no&#8201;&#8212;&#8201;we&#8217;d have to look past all of <code>b</code>, <code>c</code> and <code>d</code> to find the next operator with lower binding power, which sounds pretty unbounded.
 But we are onto something!
 Our current right priority is <code>2</code>, and, to be able to fold the expression, we need to find the next operator with lower priority.
-So let&#8217;s recursively call <code>expr_bp</code> starting at <code>b</code>, but also tell it to stop as soon as <code>bp</code> drops bellow <code>2</code>.
+So let&#8217;s recursively call <code>expr_bp</code> starting at <code>b</code>, but also tell it to stop as soon as <code>bp</code> drops below <code>2</code>.
 This necessitates the addition of <code>min_bp</code> argument to the main function.</p>
 </div>
 <div class="paragraph">
