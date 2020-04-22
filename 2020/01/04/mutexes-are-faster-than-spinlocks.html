@@ -251,69 +251,63 @@ The source code for the benchmark is here:</p>
 56
 57
 58
-59
-60
-61
 </pre></td><td class="code"><pre><span class="k">fn</span> <span class="n">run_bench</span><span class="o">&lt;</span><span class="n">M</span><span class="p">:</span> <span class="n">Mutex</span><span class="o">&gt;</span><span class="p">(</span><span class="n">options</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">Options</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nn">time</span><span class="p">::</span><span class="n">Duration</span> <span class="p">{</span>
-    <span class="k">let</span> <span class="n">locks</span> <span class="o">=</span> <span class="o">&amp;</span><span class="p">(</span><span class="mi">0</span><span class="o">..</span><span class="n">options</span><span class="py">.n_locks</span><span class="p">)</span> <i class="conum" data-value="3"></i><b>(3)</b>
-        <span class="nf">.map</span><span class="p">(|</span><span class="mi">_</span><span class="p">|</span> <span class="nn">CachePadded</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">M</span><span class="p">::</span><span class="nf">default</span><span class="p">()))</span>
-        <span class="py">.collect</span><span class="p">::</span><span class="o">&lt;</span><span class="nb">Vec</span><span class="o">&lt;</span><span class="mi">_</span><span class="o">&gt;&gt;</span><span class="p">();</span>
+  <span class="k">let</span> <span class="n">locks</span> <span class="o">=</span> <span class="o">&amp;</span><span class="p">(</span><span class="mi">0</span><span class="o">..</span><span class="n">options</span><span class="py">.n_locks</span><span class="p">)</span> <i class="conum" data-value="3"></i><b>(3)</b>
+      <span class="nf">.map</span><span class="p">(|</span><span class="mi">_</span><span class="p">|</span> <span class="nn">CachePadded</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="nn">M</span><span class="p">::</span><span class="nf">default</span><span class="p">()))</span>
+      <span class="py">.collect</span><span class="p">::</span><span class="o">&lt;</span><span class="nb">Vec</span><span class="o">&lt;</span><span class="mi">_</span><span class="o">&gt;&gt;</span><span class="p">();</span>
 
-    <span class="k">let</span> <span class="n">start_barrier</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nn">Barrier</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span>
-        <span class="n">options</span><span class="py">.n_threads</span> <span class="k">as</span> <span class="nb">usize</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="p">);</span>
-    <span class="k">let</span> <span class="n">end_barrier</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nn">Barrier</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span>
-        <span class="n">options</span><span class="py">.n_threads</span> <span class="k">as</span> <span class="nb">usize</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="p">);</span>
+  <span class="k">let</span> <span class="n">start_barrier</span> <span class="o">=</span>
+    <span class="o">&amp;</span><span class="nn">Barrier</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">options</span><span class="py">.n_threads</span> <span class="k">as</span> <span class="nb">usize</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+  <span class="k">let</span> <span class="n">end_barrier</span> <span class="o">=</span>
+    <span class="o">&amp;</span><span class="nn">Barrier</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="n">options</span><span class="py">.n_threads</span> <span class="k">as</span> <span class="nb">usize</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
 
-    <span class="nf">scope</span><span class="p">(|</span><span class="n">scope</span><span class="p">|</span> <span class="p">{</span>
-        <span class="k">let</span> <span class="n">thread_seeds</span> <span class="o">=</span> <span class="nf">random_numbers</span><span class="p">(</span><span class="mi">0x6F4A955E</span><span class="p">)</span><span class="nf">.scan</span><span class="p">(</span>
-            <span class="mi">0x9BA2BF27</span><span class="p">,</span>
-            <span class="p">|</span><span class="n">state</span><span class="p">,</span> <span class="n">n</span><span class="p">|</span> <span class="p">{</span>
-                <span class="o">*</span><span class="n">state</span> <span class="o">^=</span> <span class="n">n</span><span class="p">;</span>
-                <span class="nf">Some</span><span class="p">(</span><span class="o">*</span><span class="n">state</span><span class="p">)</span>
-            <span class="p">},</span>
-        <span class="p">)</span><span class="nf">.take</span><span class="p">(</span><span class="n">options</span><span class="py">.n_threads</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">);</span>
+  <span class="nf">scope</span><span class="p">(|</span><span class="n">scope</span><span class="p">|</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="n">thread_seeds</span> <span class="o">=</span> <span class="nf">random_numbers</span><span class="p">(</span><span class="mi">0x6F4A955E</span><span class="p">)</span>
+      <span class="nf">.scan</span><span class="p">(</span><span class="mi">0x9BA2BF27</span><span class="p">,</span> <span class="p">|</span><span class="n">state</span><span class="p">,</span> <span class="n">n</span><span class="p">|</span> <span class="p">{</span>
+        <span class="o">*</span><span class="n">state</span> <span class="o">^=</span> <span class="n">n</span><span class="p">;</span>
+        <span class="nf">Some</span><span class="p">(</span><span class="o">*</span><span class="n">state</span><span class="p">)</span>
+      <span class="p">})</span>
+      <span class="nf">.take</span><span class="p">(</span><span class="n">options</span><span class="py">.n_threads</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">);</span>
 
-        <span class="k">for</span> <span class="n">thread_seed</span> <span class="n">in</span> <span class="n">thread_seeds</span> <span class="p">{</span>
-            <span class="n">scope</span><span class="nf">.spawn</span><span class="p">(</span><span class="k">move</span> <span class="p">|</span><span class="mi">_</span><span class="p">|</span> <span class="p">{</span>
-                <span class="n">start_barrier</span><span class="nf">.wait</span><span class="p">();</span>
-                <span class="k">let</span> <span class="n">indexes</span> <span class="o">=</span> <span class="nf">random_numbers</span><span class="p">(</span><span class="n">thread_seed</span><span class="p">)</span>
-                    <span class="nf">.map</span><span class="p">(|</span><span class="n">it</span><span class="p">|</span> <span class="n">it</span> <span class="o">%</span> <span class="n">options</span><span class="py">.n_locks</span><span class="p">)</span>
-                    <span class="nf">.map</span><span class="p">(|</span><span class="n">it</span><span class="p">|</span> <span class="n">it</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">)</span>
-                    <span class="nf">.take</span><span class="p">(</span><span class="n">options</span><span class="py">.n_ops</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">);</span>
-                <span class="k">for</span> <span class="n">idx</span> <span class="n">in</span> <span class="n">indexes</span> <span class="p">{</span>
-                    <span class="n">locks</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="nf">.with_lock</span><span class="p">(|</span><span class="n">cnt</span><span class="p">|</span> <span class="o">*</span><span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">);</span> <i class="conum" data-value="1"></i><b>(1)</b>
-                <span class="p">}</span>
-                <span class="n">end_barrier</span><span class="nf">.wait</span><span class="p">();</span>
-            <span class="p">});</span>
-        <span class="p">}</span>
-
-        <span class="nn">std</span><span class="p">::</span><span class="nn">thread</span><span class="p">::</span><span class="nf">sleep</span><span class="p">(</span><span class="nn">time</span><span class="p">::</span><span class="nn">Duration</span><span class="p">::</span><span class="nf">from_millis</span><span class="p">(</span><span class="mi">100</span><span class="p">));</span>
+    <span class="k">for</span> <span class="n">thread_seed</span> <span class="n">in</span> <span class="n">thread_seeds</span> <span class="p">{</span>
+      <span class="n">scope</span><span class="nf">.spawn</span><span class="p">(</span><span class="k">move</span> <span class="p">|</span><span class="mi">_</span><span class="p">|</span> <span class="p">{</span>
         <span class="n">start_barrier</span><span class="nf">.wait</span><span class="p">();</span>
-        <span class="k">let</span> <span class="n">start</span> <span class="o">=</span> <span class="nn">time</span><span class="p">::</span><span class="nn">Instant</span><span class="p">::</span><span class="nf">now</span><span class="p">();</span>
-        <span class="n">end_barrier</span><span class="nf">.wait</span><span class="p">();</span>
-        <span class="k">let</span> <span class="n">elapsed</span> <span class="o">=</span> <span class="n">start</span><span class="nf">.elapsed</span><span class="p">();</span>
-
-        <span class="k">let</span> <span class="k">mut</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="k">for</span> <span class="n">lock</span> <span class="n">in</span> <span class="n">locks</span><span class="nf">.iter</span><span class="p">()</span> <span class="p">{</span>
-            <span class="n">lock</span><span class="nf">.with_lock</span><span class="p">(|</span><span class="n">cnt</span><span class="p">|</span> <span class="n">total</span> <span class="o">+=</span> <span class="o">*</span><span class="n">cnt</span><span class="p">);</span>
+        <span class="k">let</span> <span class="n">indexes</span> <span class="o">=</span> <span class="nf">random_numbers</span><span class="p">(</span><span class="n">thread_seed</span><span class="p">)</span>
+          <span class="nf">.map</span><span class="p">(|</span><span class="n">it</span><span class="p">|</span> <span class="n">it</span> <span class="o">%</span> <span class="n">options</span><span class="py">.n_locks</span><span class="p">)</span>
+          <span class="nf">.map</span><span class="p">(|</span><span class="n">it</span><span class="p">|</span> <span class="n">it</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">)</span>
+          <span class="nf">.take</span><span class="p">(</span><span class="n">options</span><span class="py">.n_ops</span> <span class="k">as</span> <span class="nb">usize</span><span class="p">);</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="n">in</span> <span class="n">indexes</span> <span class="p">{</span>
+          <span class="n">locks</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="nf">.with_lock</span><span class="p">(|</span><span class="n">cnt</span><span class="p">|</span> <span class="o">*</span><span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">);</span> <i class="conum" data-value="1"></i><b>(1)</b>
         <span class="p">}</span>
-        <span class="nd">assert_eq!</span><span class="p">(</span><span class="n">total</span><span class="p">,</span> <span class="n">options</span><span class="py">.n_threads</span> <span class="o">*</span> <span class="n">options</span><span class="py">.n_ops</span><span class="p">);</span> <i class="conum" data-value="2"></i><b>(2)</b>
+        <span class="n">end_barrier</span><span class="nf">.wait</span><span class="p">();</span>
+      <span class="p">});</span>
+    <span class="p">}</span>
 
-        <span class="n">elapsed</span>
-    <span class="p">})</span>
-    <span class="nf">.unwrap</span><span class="p">()</span>
+    <span class="nn">std</span><span class="p">::</span><span class="nn">thread</span><span class="p">::</span><span class="nf">sleep</span><span class="p">(</span><span class="nn">time</span><span class="p">::</span><span class="nn">Duration</span><span class="p">::</span><span class="nf">from_millis</span><span class="p">(</span><span class="mi">100</span><span class="p">));</span>
+    <span class="n">start_barrier</span><span class="nf">.wait</span><span class="p">();</span>
+    <span class="k">let</span> <span class="n">start</span> <span class="o">=</span> <span class="nn">time</span><span class="p">::</span><span class="nn">Instant</span><span class="p">::</span><span class="nf">now</span><span class="p">();</span>
+    <span class="n">end_barrier</span><span class="nf">.wait</span><span class="p">();</span>
+    <span class="k">let</span> <span class="n">elapsed</span> <span class="o">=</span> <span class="n">start</span><span class="nf">.elapsed</span><span class="p">();</span>
+
+    <span class="k">let</span> <span class="k">mut</span> <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="n">lock</span> <span class="n">in</span> <span class="n">locks</span><span class="nf">.iter</span><span class="p">()</span> <span class="p">{</span>
+      <span class="n">lock</span><span class="nf">.with_lock</span><span class="p">(|</span><span class="n">cnt</span><span class="p">|</span> <span class="n">total</span> <span class="o">+=</span> <span class="o">*</span><span class="n">cnt</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nd">assert_eq!</span><span class="p">(</span><span class="n">total</span><span class="p">,</span> <span class="n">options</span><span class="py">.n_threads</span> <span class="o">*</span> <span class="n">options</span><span class="py">.n_ops</span><span class="p">);</span> <i class="conum" data-value="2"></i><b>(2)</b>
+
+    <span class="n">elapsed</span>
+  <span class="p">})</span>
+  <span class="nf">.unwrap</span><span class="p">()</span>
 <span class="p">}</span>
 
 <span class="k">fn</span> <span class="nf">random_numbers</span><span class="p">(</span><span class="n">seed</span><span class="p">:</span> <span class="nb">u32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="k">impl</span> <span class="n">Iterator</span><span class="o">&lt;</span><span class="n">Item</span> <span class="o">=</span> <span class="nb">u32</span><span class="o">&gt;</span> <span class="p">{</span> <i class="conum" data-value="4"></i><b>(4)</b>
-    <span class="k">let</span> <span class="k">mut</span> <span class="n">random</span> <span class="o">=</span> <span class="n">seed</span><span class="p">;</span>
-    <span class="nn">iter</span><span class="p">::</span><span class="nf">repeat_with</span><span class="p">(</span><span class="k">move</span> <span class="p">||</span> <span class="p">{</span>
-        <span class="n">random</span> <span class="o">^=</span> <span class="n">random</span> <span class="o">&lt;&lt;</span> <span class="mi">13</span><span class="p">;</span>
-        <span class="n">random</span> <span class="o">^=</span> <span class="n">random</span> <span class="o">&gt;&gt;</span> <span class="mi">17</span><span class="p">;</span>
-        <span class="n">random</span> <span class="o">^=</span> <span class="n">random</span> <span class="o">&lt;&lt;</span> <span class="mi">5</span><span class="p">;</span>
-        <span class="n">random</span>
-    <span class="p">})</span>
+  <span class="k">let</span> <span class="k">mut</span> <span class="n">random</span> <span class="o">=</span> <span class="n">seed</span><span class="p">;</span>
+  <span class="nn">iter</span><span class="p">::</span><span class="nf">repeat_with</span><span class="p">(</span><span class="k">move</span> <span class="p">||</span> <span class="p">{</span>
+    <span class="n">random</span> <span class="o">^=</span> <span class="n">random</span> <span class="o">&lt;&lt;</span> <span class="mi">13</span><span class="p">;</span>
+    <span class="n">random</span> <span class="o">^=</span> <span class="n">random</span> <span class="o">&gt;&gt;</span> <span class="mi">17</span><span class="p">;</span>
+    <span class="n">random</span> <span class="o">^=</span> <span class="n">random</span> <span class="o">&lt;&lt;</span> <span class="mi">5</span><span class="p">;</span>
+    <span class="n">random</span>
+  <span class="p">})</span>
 <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre>
 </div>

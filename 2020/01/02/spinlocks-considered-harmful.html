@@ -189,7 +189,7 @@ A popular request is to add a spin-lock based implementation for use in <code>#[
 </pre></td><td class="code"><pre><span class="k">static</span> <span class="n">LOCKED</span><span class="p">:</span> <span class="n">AtomicBool</span> <span class="o">=</span> <span class="nn">AtomicBool</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
 
 <span class="k">while</span> <span class="n">LOCKED</span><span class="nf">.compare_and_swap</span><span class="p">(</span><span class="k">false</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="nn">Ordering</span><span class="p">::</span><span class="n">Acquire</span><span class="p">)</span> <span class="p">{</span> <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="nn">std</span><span class="p">::</span><span class="nn">sync</span><span class="p">::</span><span class="nn">atomic</span><span class="p">::</span><span class="nf">spin_loop_hint</span><span class="p">();</span> <i class="conum" data-value="4"></i><b>(4)</b>
+  <span class="nn">std</span><span class="p">::</span><span class="nn">sync</span><span class="p">::</span><span class="nn">atomic</span><span class="p">::</span><span class="nf">spin_loop_hint</span><span class="p">();</span> <i class="conum" data-value="4"></i><b>(4)</b>
 <span class="p">}</span>
 
 <span class="cm">/* Critical section */</span>  <i class="conum" data-value="2"></i><b>(2)</b>
@@ -242,7 +242,7 @@ A popular request is to add a spin-lock based implementation for use in <code>#[
 </pre></td><td class="code"><pre><span class="k">static</span> <span class="n">LOCKED</span><span class="p">:</span> <span class="n">AtomicBool</span> <span class="o">=</span> <span class="nn">AtomicBool</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="k">false</span><span class="p">);</span>
 
 <span class="k">while</span> <span class="n">LOCKED</span><span class="nf">.compare_and_swap</span><span class="p">(</span><span class="k">false</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="nn">Ordering</span><span class="p">::</span><span class="n">Acquire</span><span class="p">)</span>
-    <span class="nf">park_this_thread</span><span class="p">(</span><span class="o">&amp;</span><span class="n">LOCKED</span><span class="p">);</span>
+  <span class="nf">park_this_thread</span><span class="p">(</span><span class="o">&amp;</span><span class="n">LOCKED</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="cm">/* Critical section */</span>
@@ -373,52 +373,50 @@ I don&#8217;t pick on <code>getrandom</code> specifically here: the pattern is p
 43
 44
 45
-46
 </pre></td><td class="code"><pre><span class="k">pub</span> <span class="k">struct</span> <span class="nf">LazyUsize</span><span class="p">(</span><span class="n">AtomicUsize</span><span class="p">);</span>
 
 <span class="k">impl</span> <span class="n">LazyUsize</span> <span class="p">{</span>
-    <span class="c">// Synchronously runs the init() function. Only one caller</span>
-    <span class="c">// will have their init() function running at a time, and</span>
-    <span class="c">// exactly one successful call will be run. init() returning</span>
-    <span class="c">// UNINIT or ACTIVE will be considered a failure, and future</span>
-    <span class="c">// calls to sync_init will rerun their init() function.</span>
+  <span class="c">// Synchronously runs the init() function. Only one caller</span>
+  <span class="c">// will have their init() function running at a time, and</span>
+  <span class="c">// exactly one successful call will be run. init() returning</span>
+  <span class="c">// UNINIT or ACTIVE will be considered a failure, and future</span>
+  <span class="c">// calls to sync_init will rerun their init() function.</span>
 
-    <span class="k">pub</span> <span class="k">fn</span> <span class="nf">sync_init</span><span class="p">(</span>
-        <span class="o">&amp;</span><span class="k">self</span><span class="p">,</span>
-        <span class="n">init</span><span class="p">:</span> <span class="k">impl</span> <span class="nf">FnOnce</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="nb">usize</span><span class="p">,</span>
-        <span class="k">mut</span> <span class="n">wait</span><span class="p">:</span> <span class="k">impl</span> <span class="nf">FnMut</span><span class="p">(),</span>
-    <span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">usize</span> <span class="p">{</span>
-        <span class="c">// Common and fast path with no contention.</span>
-        <span class="c">// Don't wast time on CAS.</span>
-        <span class="k">match</span> <span class="k">self</span><span class="err">.</span><span class="mi">0</span><span class="nf">.load</span><span class="p">(</span><span class="n">Relaxed</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nn">Self</span><span class="p">::</span><span class="n">UNINIT</span> <span class="p">|</span> <span class="nn">Self</span><span class="p">::</span><span class="n">ACTIVE</span> <span class="k">=&gt;</span> <span class="p">{}</span>
-            <span class="n">val</span> <span class="k">=&gt;</span> <span class="k">return</span> <span class="n">val</span><span class="p">,</span>
-        <span class="p">}</span>
-        <span class="c">// Relaxed ordering is fine,</span>
-        <span class="c">// as we only have a single atomic variable.</span>
-        <span class="k">loop</span> <span class="p">{</span>
-            <span class="k">match</span> <span class="k">self</span><span class="err">.</span><span class="mi">0</span><span class="nf">.compare_and_swap</span><span class="p">(</span>
-                <span class="nn">Self</span><span class="p">::</span><span class="n">UNINIT</span><span class="p">,</span>
-                <span class="nn">Self</span><span class="p">::</span><span class="n">ACTIVE</span><span class="p">,</span>
-                <span class="n">Relaxed</span><span class="p">,</span>
-            <span class="p">)</span> <span class="p">{</span>
-                <span class="nn">Self</span><span class="p">::</span><span class="n">UNINIT</span> <span class="k">=&gt;</span> <span class="p">{</span>
-                    <span class="k">let</span> <span class="n">val</span> <span class="o">=</span> <span class="nf">init</span><span class="p">();</span>
-                    <span class="k">self</span><span class="err">.</span><span class="mi">0</span><span class="nf">.store</span><span class="p">(</span>
-                        <span class="k">match</span> <span class="n">val</span> <span class="p">{</span>
-                            <span class="p">|</span> <span class="nn">Self</span><span class="p">::</span><span class="n">UNINIT</span><span class="p">,</span>
-                            <span class="p">|</span> <span class="nn">Self</span><span class="p">::</span><span class="n">ACTIVE</span> <span class="k">=&gt;</span> <span class="nn">Self</span><span class="p">::</span><span class="n">UNINIT</span><span class="p">,</span>
-                            <span class="n">val</span> <span class="k">=&gt;</span> <span class="n">val</span><span class="p">,</span>
-                        <span class="p">},</span>
-                        <span class="n">Relaxed</span><span class="p">,</span>
-                    <span class="p">);</span>
-                    <span class="k">return</span> <span class="n">val</span><span class="p">;</span>
-                <span class="p">}</span>
-                <span class="nn">Self</span><span class="p">::</span><span class="n">ACTIVE</span> <span class="k">=&gt;</span> <span class="nf">wait</span><span class="p">(),</span>
-                <span class="n">val</span> <span class="k">=&gt;</span> <span class="k">return</span> <span class="n">val</span><span class="p">,</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
+  <span class="k">pub</span> <span class="k">fn</span> <span class="nf">sync_init</span><span class="p">(</span>
+    <span class="o">&amp;</span><span class="k">self</span><span class="p">,</span>
+    <span class="n">init</span><span class="p">:</span> <span class="k">impl</span> <span class="nf">FnOnce</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="nb">usize</span><span class="p">,</span>
+    <span class="k">mut</span> <span class="n">wait</span><span class="p">:</span> <span class="k">impl</span> <span class="nf">FnMut</span><span class="p">(),</span>
+  <span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">usize</span> <span class="p">{</span>
+    <span class="c">// Common and fast path with no contention.</span>
+    <span class="c">// Don't wast time on CAS.</span>
+    <span class="k">match</span> <span class="k">self</span><span class="err">.</span><span class="mi">0</span><span class="nf">.load</span><span class="p">(</span><span class="n">Relaxed</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nn">Self</span><span class="p">::</span><span class="n">UNINIT</span> <span class="p">|</span> <span class="nn">Self</span><span class="p">::</span><span class="n">ACTIVE</span> <span class="k">=&gt;</span> <span class="p">{}</span>
+      <span class="n">val</span> <span class="k">=&gt;</span> <span class="k">return</span> <span class="n">val</span><span class="p">,</span>
     <span class="p">}</span>
+    <span class="c">// Relaxed ordering is fine,</span>
+    <span class="c">// as we only have a single atomic variable.</span>
+    <span class="k">loop</span> <span class="p">{</span>
+      <span class="k">match</span> <span class="k">self</span><span class="err">.</span><span class="mi">0</span><span class="nf">.compare_and_swap</span><span class="p">(</span>
+        <span class="nn">Self</span><span class="p">::</span><span class="n">UNINIT</span><span class="p">,</span>
+        <span class="nn">Self</span><span class="p">::</span><span class="n">ACTIVE</span><span class="p">,</span>
+        <span class="n">Relaxed</span><span class="p">,</span>
+      <span class="p">)</span> <span class="p">{</span>
+        <span class="nn">Self</span><span class="p">::</span><span class="n">UNINIT</span> <span class="k">=&gt;</span> <span class="p">{</span>
+          <span class="k">let</span> <span class="n">val</span> <span class="o">=</span> <span class="nf">init</span><span class="p">();</span>
+          <span class="k">self</span><span class="err">.</span><span class="mi">0</span><span class="nf">.store</span><span class="p">(</span>
+            <span class="k">match</span> <span class="n">val</span> <span class="p">{</span>
+              <span class="nn">Self</span><span class="p">::</span><span class="n">UNINIT</span> <span class="p">|</span> <span class="nn">Self</span><span class="p">::</span><span class="n">ACTIVE</span> <span class="k">=&gt;</span> <span class="nn">Self</span><span class="p">::</span><span class="n">UNINIT</span><span class="p">,</span>
+              <span class="n">val</span> <span class="k">=&gt;</span> <span class="n">val</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="n">Relaxed</span><span class="p">,</span>
+          <span class="p">);</span>
+          <span class="k">return</span> <span class="n">val</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nn">Self</span><span class="p">::</span><span class="n">ACTIVE</span> <span class="k">=&gt;</span> <span class="nf">wait</span><span class="p">(),</span>
+        <span class="n">val</span> <span class="k">=&gt;</span> <span class="k">return</span> <span class="n">val</span><span class="p">,</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
 <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre>
 </div>
@@ -464,12 +462,16 @@ We can trick the static linker into using a function which we define ourselves:<
 5
 6
 7
+8
+9
 </pre></td><td class="code"><pre><span class="nd">#[no_mangle]</span>
-<span class="k">pub</span> <span class="k">extern</span> <span class="s">"C"</span> <span class="k">fn</span> <span class="nf">poll</span><span class="p">(</span><span class="mi">_</span><span class="n">fds</span><span class="p">:</span> <span class="o">*</span><span class="k">const</span> <span class="nb">u8</span><span class="p">,</span> <span class="mi">_</span><span class="n">nfds</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span> <span class="mi">_</span><span class="n">timeout</span><span class="p">:</span> <span class="nb">i32</span><span class="p">)</span>
-    <span class="k">-&gt;</span> <span class="nb">u32</span>
-<span class="p">{</span>
-    <span class="nf">sleep_ms</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
-    <span class="mi">1</span>
+<span class="k">pub</span> <span class="k">extern</span> <span class="s">"C"</span> <span class="k">fn</span> <span class="nf">poll</span><span class="p">(</span>
+  <span class="mi">_</span><span class="n">fds</span><span class="p">:</span> <span class="o">*</span><span class="k">const</span> <span class="nb">u8</span><span class="p">,</span>
+  <span class="mi">_</span><span class="n">nfds</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span>
+  <span class="mi">_</span><span class="n">timeout</span><span class="p">:</span> <span class="nb">i32</span><span class="p">,</span>
+<span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">u32</span> <span class="p">{</span>
+  <span class="nf">sleep_ms</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+  <span class="mi">1</span>
 <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre>
 </div>
@@ -510,15 +512,25 @@ Internally, on Linux the macro calls <code>__get_errno_location</code> function 
  8
  9
 10
+11
+12
+13
+14
+15
 </pre></td><td class="code"><pre><span class="nd">#[no_mangle]</span>
-<span class="k">pub</span> <span class="k">extern</span> <span class="s">"C"</span> <span class="k">fn</span> <span class="nf">syscall</span><span class="p">(</span><span class="mi">_</span><span class="n">syscall</span><span class="p">:</span> <span class="nb">u64</span><span class="p">,</span> <span class="mi">_</span><span class="n">buf</span><span class="p">:</span> <span class="o">*</span><span class="k">const</span> <span class="nb">u8</span><span class="p">,</span> <span class="mi">_</span><span class="n">len</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span> <span class="mi">_</span><span class="n">flags</span><span class="p">:</span> <span class="nb">u32</span><span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">isize</span> <span class="p">{</span>
-    <span class="k">extern</span> <span class="s">"C"</span> <span class="p">{</span>
-        <span class="k">fn</span> <span class="mi">__</span><span class="nf">errno_location</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="o">*</span><span class="k">mut</span> <span class="nb">i32</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">unsafe</span> <span class="p">{</span>
-        <span class="o">*</span><span class="mi">__</span><span class="nf">errno_location</span><span class="p">()</span> <span class="o">=</span> <span class="mi">38</span><span class="p">;</span> <span class="c">// ENOSYS</span>
-    <span class="p">}</span>
-    <span class="o">-</span><span class="mi">1</span>
+<span class="k">pub</span> <span class="k">extern</span> <span class="s">"C"</span> <span class="k">fn</span> <span class="nf">syscall</span><span class="p">(</span>
+  <span class="mi">_</span><span class="n">syscall</span><span class="p">:</span> <span class="nb">u64</span><span class="p">,</span>
+  <span class="mi">_</span><span class="n">buf</span><span class="p">:</span> <span class="o">*</span><span class="k">const</span> <span class="nb">u8</span><span class="p">,</span>
+  <span class="mi">_</span><span class="n">len</span><span class="p">:</span> <span class="nb">usize</span><span class="p">,</span>
+  <span class="mi">_</span><span class="n">flags</span><span class="p">:</span> <span class="nb">u32</span><span class="p">,</span>
+<span class="p">)</span> <span class="k">-&gt;</span> <span class="nb">isize</span> <span class="p">{</span>
+  <span class="k">extern</span> <span class="s">"C"</span> <span class="p">{</span>
+    <span class="k">fn</span> <span class="mi">__</span><span class="nf">errno_location</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="o">*</span><span class="k">mut</span> <span class="nb">i32</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">unsafe</span> <span class="p">{</span>
+    <span class="o">*</span><span class="mi">__</span><span class="nf">errno_location</span><span class="p">()</span> <span class="o">=</span> <span class="mi">38</span><span class="p">;</span> <span class="c">// ENOSYS</span>
+  <span class="p">}</span>
+  <span class="o">-</span><span class="mi">1</span>
 <span class="p">}</span>
 </pre></td></tr></tbody></table></code></pre>
 </div>
@@ -543,9 +555,11 @@ We well be using real time priorities, which require <code>sudo</code>.</p>
 6
 7
 8
+9
 </pre></td><td class="code"><pre>22:37:24|~/projects/spin-of-death|HEAD⚡?
-λ cargo build --release &amp;&amp; time sudo ./target/release/spin-of-death
+λ cargo build --release
     Finished release [optimized] target(s) in 0.01s
+λ time sudo ./target/release/spin-of-death
 ^CCommand terminated by signal 2
 real 136.54s
 user 96.02s
@@ -575,9 +589,11 @@ Also note the impressive system time, as well as load average</p>
 5
 6
 7
+8
 </pre></td><td class="code"><pre>22:32:30|~/projects/spin-of-death|HEAD⚡?
-λ cargo build --release --features os-blocking-getrandom &amp;&amp; time sudo ./target/release/spin-of-death
+λ cargo build --release --features os-blocking-getrandom
     Finished release [optimized] target(s) in 0.01s
+λ time sudo ./target/release/spin-of-death
 real 0.51s <i class="conum" data-value="1"></i><b>(1)</b>
 user 0.01s
 sys  0.04s
@@ -639,13 +655,13 @@ For example, std may continue using a thread local (<a href="https://github.com/
 10
 11
 </pre></td><td class="code"><pre><span class="k">pub</span> <span class="k">fn</span> <span class="nf">get_state</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="nb">usize</span> <span class="p">{</span>
-    <span class="k">static</span> <span class="n">CACHE</span><span class="p">:</span> <span class="n">AtomicUsize</span> <span class="o">=</span> <span class="nn">AtomicUsize</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-    <span class="k">let</span> <span class="k">mut</span> <span class="n">res</span> <span class="o">=</span> <span class="n">CACHE</span><span class="nf">.load</span><span class="p">(</span><span class="nn">Ordering</span><span class="p">::</span><span class="n">Relaxed</span><span class="p">);</span>
-    <span class="k">if</span> <span class="n">res</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="nf">init</span><span class="p">();</span>
-        <span class="n">CACHE</span><span class="nf">.store</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="nn">Ordering</span><span class="p">::</span><span class="n">Relaxed</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="n">res</span>
+  <span class="k">static</span> <span class="n">CACHE</span><span class="p">:</span> <span class="n">AtomicUsize</span> <span class="o">=</span> <span class="nn">AtomicUsize</span><span class="p">::</span><span class="nf">new</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+  <span class="k">let</span> <span class="k">mut</span> <span class="n">res</span> <span class="o">=</span> <span class="n">CACHE</span><span class="nf">.load</span><span class="p">(</span><span class="nn">Ordering</span><span class="p">::</span><span class="n">Relaxed</span><span class="p">);</span>
+  <span class="k">if</span> <span class="n">res</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">{</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="nf">init</span><span class="p">();</span>
+    <span class="n">CACHE</span><span class="nf">.store</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="nn">Ordering</span><span class="p">::</span><span class="n">Relaxed</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="n">res</span>
 <span class="p">}</span>
 
 <span class="k">fn</span> <span class="nf">init</span><span class="p">()</span> <span class="k">-&gt;</span> <span class="nb">usize</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
